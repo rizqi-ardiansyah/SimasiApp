@@ -1,0 +1,48 @@
+.laporan-title {
+    text-align: center;
+    display: block;
+    justify-content: center;
+}
+
+.laporan-title h3 {
+    font-size: 18px;
+}
+
+.laporan-title p {
+    font-size: 14px;
+}
+
+.bg-difabel {
+    background-color: #009688;
+}
+
+.bg-Psakit {
+    color: white;
+    background-color: #cddc39;
+}
+
+.bg-masuk {
+    background-color: #e91e63;
+}
+
+.bg-keluar {
+    color: white;
+    background-color: #673ab7;
+}
+
+.icon-statistik {
+    margin-top: 7px;
+    transform: translateX(8px);
+    opacity: 0.3;
+    width: 87.5px;
+    height: 70px;
+    fill: #343a40 !important;
+}
+
+.login-page {
+    background-image: url("/assets/img/background.png") !important;
+}
+
+.login-box .login-logo img.lgn-logo {
+    width: 80% !important;
+}
