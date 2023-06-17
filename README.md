@@ -68,13 +68,13 @@ The creation of a refugee management system in collaboration with the Regional D
   
   <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/a40fbd3b-e5d9-48d1-b1c9-b97bd766fc11" width="800" />
   
-### 4. Vaccination
+### 4. Refugee Management
 
-- The function of the vaccination feature is to manage the chicken vaccination process which is equipped with a scheduling feature. So that it can help employees to remember the vaccine schedule in the future
+- Refugee management is used to manage refugee data at the command post. This feature also includes data on incoming and outgoing refugees
 
-  *Vaccination data display*
+  *Refugee data display*
 
-  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/803a25f2-518c-418d-a3db-c5eebe1b224f" width="800" />
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/fd3e78b4-d6f1-4015-91f7-fec601a3981a" width="800" />
   
   *Display adds inspection data*
   
