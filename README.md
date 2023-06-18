@@ -76,23 +76,17 @@ The creation of a refugee management system in collaboration with the Regional D
 
   <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/fd3e78b4-d6f1-4015-91f7-fec601a3981a" width="800" />
   
-  *Display adds inspection data*
+  *Display adds refugee data*
   
-  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/f479465b-7dc4-41a5-9382-d8c67a63e44c" width="800" />
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/4b73b604-17c5-4b33-a940-12d362315858" width="800" />
 
-  *Display updates inspection data*
+  *Display updates refugee data*
   
-  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/cb4c0d21-018b-4476-9cbb-17a2f49b25ea" width="800" />
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/faeabeec-2518-46ca-b211-b41c5aeaad53" width="800" />
 
-  *Display deletes inspection data*
+  *Display deletes refugee data*
   
-  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/702efaa3-62cd-4bdf-8f80-c020a275b9e5" width="800" />
-
-### 5. Report
-
-- The report feature will assist employees in accumulating the data that has been obtained and can be printed in excel and pdf format
-
-  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/c326c418-520c-4c90-87f9-da5b6d256ef5" width="800" />
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/8e9890ec-d691-48ca-867b-60add0c151b5" width="800" />
 
 # Installation
 
