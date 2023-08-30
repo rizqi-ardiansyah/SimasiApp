@@ -241,7 +241,7 @@
                             <th>No</th>
                             <th>Nama</th>
                             <th>Kepala Keluarga</th>
-                            <!-- <th>No Telepon</th> -->
+                            <th>No Telepon</th>
                             <th>Alamat</th>
                             <th>Jenis Kelamin</th>
                             <th>Umur</th>
@@ -255,10 +255,11 @@
                             @if ($balita->umur < 5) <?php $l++; ?> <tr>
                                 <td>{{ $l }}</td>
                                 <td>{{ $balita->nama }}</td>
+                                <td>{{ $balita->telpon }}</td>
                                 <td>{{ $balita->namaKepala }}</td>
                                 <td>{{ $balita->lokasi }}</td>
                                 <?php
-                                $getGender = $pengungsi->gender;
+                                $getGender = $balita->gender;
                                 if ($getGender == 0) {
                                     $gender = "Perempuan";
                                 } else if ($getGender == 1) {

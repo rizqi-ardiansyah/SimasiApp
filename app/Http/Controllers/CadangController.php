@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Pagination\LengthAwarePaginator;
+use ZipArchive;
 
 class CadangController extends Controller
 {
@@ -20,6 +21,8 @@ class CadangController extends Controller
      */
     public function index()
     {
+        $zip = new ZipArchive;
+        
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
 
         $files = $disk->files(config('backup.backup.name'));
