@@ -1,66 +1,127 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIMASI (Sistem Manajemen Pengungsi)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The creation of a refugee management system in collaboration with the Regional Disaster Management Agency (BPBD) of Batu City, East Java, was based on an urgent need to increase the efficiency and effectiveness of handling refugees in situations of natural disasters or emergencies.
 
-## About Laravel
+![image](https://github.com/rizqi-ardiansyah/SimasiApp/assets/86498942/733a7f5e-6c65-4976-a51b-83424d2d2b12)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+# Feature
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Login
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Login can be done by the admin or the employee. Admins can access all features, while employees only have a few features
 
-## Learning Laravel
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/2bd4ea5d-df64-4fbe-af87-01ef0548987a" width="800" />
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+  *Default admin account*
+  ```sh
+    Email: pusdalop1@gmail.com
+    Password: password
+    ```
+  *Default employee account*
+  ```sh
+    Email: trc1@gmail.com
+    Password: password
+    ```
+### 2. Dashboard
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- The dashboard display contains several important information such as the total admin, total employees, total disasters, to the chart of refugees
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/b95bf3e5-75f7-4390-a0de-136fa94d8059" width="800" />
+  
+### 3. Disaster Management
 
-## Laravel Sponsors
+- Disaster management is used to manage disasters that occur in the area and find out about disasters that have occurred
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+  *Disaster data display*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/35228a2c-11c4-4bf6-a4a4-4469cddc4580" width="800" />
 
-### Premium Partners
+  *Display adds disaster data*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/3436b177-2fb3-49a4-8616-818a9bd6ed7e" width="800" />
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+  *Display updates disaster data*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/9939a739-6c28-4e5e-b86d-0c9981e55f2c" width="800" />
 
-## Contributing
+  *Display deletes disaster data*
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/f86771bc-98ac-4c94-a2fd-27384b0a1225" width="800" />
 
-## Code of Conduct
+### 4. Post Management
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Post management is a feature that can be used when a disaster is about to happen and has been. This feature is used to manage posts used for refugees. This feature also provides the remaining capacity in the post
 
-## Security Vulnerabilities
+  *Post data display*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/6ed5f3e9-20de-4000-87a1-6b0ac84fad84" width="800" />
+  
+  *Display adds post data*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/6554ce2e-019f-4954-838a-dc0d9017d63b" width="800" />
+  
+  *Display updates post data*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/c91f3416-012c-4f9e-9360-46eaaf0431a4" width="800" />
+  
+  *Display deletes inspection data*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/a40fbd3b-e5d9-48d1-b1c9-b97bd766fc11" width="800" />
+  
+### 4. Refugee Management
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Refugee management is used to manage refugee data at the command post. This feature also includes data on incoming and outgoing refugees
 
-## License
+  *Refugee data display*
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/fd3e78b4-d6f1-4015-91f7-fec601a3981a" width="800" />
+  
+  *Display adds refugee data*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/4b73b604-17c5-4b33-a940-12d362315858" width="800" />
+
+  *Display updates refugee data*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/faeabeec-2518-46ca-b211-b41c5aeaad53" width="800" />
+
+  *Display deletes refugee data*
+  
+  <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/8e9890ec-d691-48ca-867b-60add0c151b5" width="800" />
+
+# Installation
+
+1. Clone the repository
+   
+2. Install composer
+    ```bash
+    composer install
+    ```
+    
+3. Copy file .env.example
+     ```bash
+    cp .env.example .env
+    ```
+     
+5. Generate the key
+    ```bash
+    php artisan key:generate
+    ```
+
+8. Do the migrations first
+    ```sh
+    php artisan:migrate
+    ```
+
+9. Do the seeder first
+    ```sh
+    php artisan db:seed
+    ```
+    
+10. Run projects
+    ```sh
+    php artisan serve
+    ```
+    
+# License
+
+The MIT License (MIT) 2023 - [Rizqi Ardiansyah](https://github.com/rizqi-ardian/). Please have a look at the [LICENSE.md](LICENSE.md) for more details.
