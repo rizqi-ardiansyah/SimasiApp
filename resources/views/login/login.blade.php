@@ -38,7 +38,8 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">{{$title}}</p>
 
-                <form action="/login" method="post">
+                <!-- <form action="/login" method="post"> -->
+                <form action="/simasi/public/login" method="post">
                     @csrf
                     <div class="input-group mb-3">
                         <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="nama@example.com" name="email" autofocus required>

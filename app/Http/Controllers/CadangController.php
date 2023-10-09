@@ -22,7 +22,7 @@ class CadangController extends Controller
     public function index()
     {
         $zip = new ZipArchive;
-        
+
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
 
         $files = $disk->files(config('backup.backup.name'));
@@ -157,6 +157,10 @@ class CadangController extends Controller
         //
     }
 
+    // public function destroy($id)
+    // {
+    //     //
+    // }
     /**
      * Update the specified resource in storage.
      *
@@ -171,14 +175,32 @@ class CadangController extends Controller
 
     public function destroy($file_name)
     {
-        // Gate::authorize('app.backups.destroy');
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
 
-        if ($disk->exists(config('backup.backup.name') . '/' . $file_name)) {
-            $disk->delete(config('backup.backup.name') . '/' . $file_name);
+        if(Storage::exists($file_name)){
+            Storage::delete($file_name);
+            /*
+                Delete Multiple File like this way
+                Storage::delete(['upload/test.png', 'upload/test2.png']);
+            */
         }
+        //  if ($disk->exists(config('backup.backup.name') . '/' . $file_name)) {
+        //     $disk->delete(config('backup.backup.name') . '/' . $file_name);
+
+        // }
+        else{
+            dd('File '. $file_name. ' does not exists.');
+        }
+        // Gate::authorize('app.backups.destroy');
+        // $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
         Alert::success('Success', 'Data berhasil dihapus');
+
+        // if ($disk->exists(config('backup.backup.name') . '/' . $file_name)) {
+        //     $disk->delete(config('backup.backup.name') . '/' . $file_name);
+
+        // }
         return back();
+        // return redirect('tes.php');
     }
 
    

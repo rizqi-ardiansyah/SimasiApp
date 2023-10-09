@@ -44,7 +44,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: "{{url('/logout')}}",
+                        url: "{{url('/simasi/public/logout')}}",
                         data: {
                             _token: CSRF_TOKEN
                         },
@@ -63,7 +63,7 @@
                     });
 
                     // location.reload();
-                    location.href = "{{'/login'}}";
+                    location.href = "{{'/simasi/public/login'}}";
 
                 } else {
                     e.dismiss;

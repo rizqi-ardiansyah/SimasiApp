@@ -40,7 +40,10 @@
 }
 
 .login-page {
-    background-image: url("/assets/img/background.png") !important;
+    /* background-image: url("assets/img/background.png") !important;  */
+    /* URL kalau localhost:8000 */
+    background-image: url("../img/background.png") !important;
+    /* URL kalau pakai public */
 }
 
 .login-box .login-logo img.lgn-logo {

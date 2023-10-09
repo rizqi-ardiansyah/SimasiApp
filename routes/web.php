@@ -29,9 +29,12 @@ Route::get('', function () {
         'title' => 'Silahkan login terlebih dahulu'
     ]);
 });
+// Route::get('/login', [LoginController::class, 'index'])->name('login');
+// Saat memakai localhost:8080
+Route::get('/simasi/public/login', [LoginController::class, 'index'])->name('login');
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
-Route::post('/logout', [LoginController::class, 'logout']);
+Route::post('/simasi/public/logout', [LoginController::class, 'logout']);
 
 Route::resource('dashboard', DashboardController::class)->middleware('auth');
 Route::resource('bencana', BencanaController::class);
@@ -71,6 +74,8 @@ Route::get("/search/pengungsi/masuk", [PengungsiController::class, 'searchPengMa
 Route::get("/search/pengungsi/keluar", [PengungsiController::class, 'searchPengKeluar'])->name('searchPengKeluar');
 
 Route::post('cadang/create', [CadangController::class, 'create'])->name('cadang.create');
+// Route::post('cadang/destroy/{file_name}', [CadangController::class, 'destroy'])->name('cadang.destroy');
+Route::post('cadang/destroy/{file_name}', [CadangController::class, 'destroy'])->name('cadang.destroy');
 Route::get('cadang/{file_name}',  [CadangController::class, 'download'])->name('cadang.download');
 
 

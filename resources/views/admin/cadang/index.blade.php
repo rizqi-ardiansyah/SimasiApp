@@ -67,7 +67,7 @@
                                             <i class="fas fa-trash-alt"></i>
                                             <span>Delete</span>
                                         </button>
-                                        <form id="delete-form-{{ $key }}" action="{{ route('cadang.destroy',$backup['file_name']) }}" method="POST" style="display: none;">
+                                        <form id="delete-form-{{ $key }}" action="{{ route('cadang.destroy', $backup['file_name']) }}" method="POST" style="display: none;">
                                             @csrf()
                                             @method('DELETE')
                                         </form>
