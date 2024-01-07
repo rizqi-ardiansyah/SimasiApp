@@ -173,7 +173,7 @@ class CadangController extends Controller
         //
     }
 
-    public function destroy($file_name)
+    public function delete($file_name)
     {
         $disk = Storage::disk(config('backup.backup.destination.disks')[0]);
 

@@ -53,6 +53,9 @@
                             <tbody>
                                 @foreach($data as $key=>$backup)
                                 <tr>
+                                    <?php
+                                        $file_name = $backup['file_name'];
+                                    ?>
                                     <td class="text-center text-muted">{{$data->firstItem() + $key  }}</td>
                                     <td class="text-center">
                                         <code>{{ $backup['file_name'] }}</code>
@@ -63,14 +66,18 @@
                                         <a class="btn btn-info btn-sm" href="{{ route('cadang.download',$backup['file_name']) }}"><i class="fas fa-download"></i>
                                             <span>Download</span>
                                         </a>
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="deleteData({{ $key }})">
+                                        <!-- <button id="delete-form-{{ $key }}" type="button" class="btn btn-danger btn-sm" onclick="deleteData({{ $key }})">
                                             <i class="fas fa-trash-alt"></i>
                                             <span>Delete</span>
-                                        </button>
-                                        <form id="delete-form-{{ $key }}" action="{{ route('cadang.destroy', $backup['file_name']) }}" method="POST" style="display: none;">
+                                        </button> -->
+                                        <a href="" class="btn btn-danger btn-sm" title="Delete" onclick="deleteData({{$file_name}})">
+                                            <i class="fas fa-trash-alt"></i>
+                                            <span>Delete</span>
+                                            </a>
+                                        <!-- <form id="delete-form-{{ $key }}" action="{{ route('cadang.destroy', $backup['file_name']) }}" method="POST" style="display: none;">
                                             @csrf()
                                             @method('DELETE')
-                                        </form>
+                                        </form> -->
                                     </td>
                                 </tr>
                                 @endforeach
@@ -90,7 +97,7 @@
 
         </div>
     </div>
-    <script>
+    <!-- <script>
         function deleteData(id) {
             Swal.fire({
                 title: "Hapus?",
@@ -103,11 +110,59 @@
                 reverseButtons: !0
             }).then((result) => {
                 if (result.value) {
-                    document.getElementById('delete-form-' + id).submit();
+                    document.getElementById('delete-form-'+id).submit();
                 }
+                
+            })
+        }
+    </script> -->
+
+    <script type="text/javascript">
+        function deleteData(id) {
+            swal.fire({
+                title: "Hapus?",
+                icon: 'question',
+                text: "Apakah Anda yakin?",
+                type: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Iya, hapus!",
+                cancelButtonText: "Batal!",
+                reverseButtons: !0
+            }).then(function(e) {
+
+                if (e.value === true) {
+                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{url('cadang/delete')}}/" + id,
+                        data: {
+                            _token: CSRF_TOKEN
+                        },
+                        dataType: 'JSON',
+                        success: function(results) {
+                            if (results.success === true) {
+                                swal.fire("Berhasil!", results.message, "success");
+                                // refresh page after 2 seconds
+                                setTimeout(function() {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                swal.fire("Gagal!", results.message, "error");
+                            }
+                        }
+                    });
+
+                } else {
+                    e.dismiss;
+                }
+
+            }, function(dismiss) {
+                return false;
             })
         }
     </script>
+
 </section>
 
 @endsection()

@@ -387,6 +387,12 @@ class PengungsiController extends Controller
                     'posko_id' => $request->posko_id,
                     'statKon' => $request->statKon,
                 ]);
+                $getIdKpl = KepalaKeluarga::select('id')->orderBy('id', 'desc')->value('id');
+                $getIdPeng = Pengungsi::select('id')->orderBy('id', 'desc')->first();
+                $getIdPeng->update([
+                    'kpl_id' => $getIdKpl,
+                    //  'totalmoroso' => $Ingresos->deuda,
+                 ]);
                 // 'kplklg_id' => $request->kpl,
             } else {
                 Pengungsi::create([
@@ -401,13 +407,8 @@ class PengungsiController extends Controller
                     'statKon' => $request->statKon,
                 ]);
             }
-            // $peng = Pengungsi::create($request->all());
-            $getIdKpl = KepalaKeluarga::select('id')->orderBy('id', 'desc')->value('id');
-            $getIdPeng = Pengungsi::select('id')->orderBy('id', 'desc')->first();
-            $getIdPeng->update([
-                'kpl_id' => $getIdKpl,
-                //  'totalmoroso' => $Ingresos->deuda,
-            ]);
+                // $peng = Pengungsi::create($request->all());
+                
 
             // return Redirect::to('admin/ingresos');
             Alert::success('Success', 'Data berhasil ditambahkan');

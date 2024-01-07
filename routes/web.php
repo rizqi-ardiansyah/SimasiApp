@@ -77,7 +77,7 @@ Route::post('cadang/create', [CadangController::class, 'create'])->name('cadang.
 // Route::post('cadang/destroy/{file_name}', [CadangController::class, 'destroy'])->name('cadang.destroy');
 Route::post('cadang/destroy/{file_name}', [CadangController::class, 'destroy'])->name('cadang.destroy');
 Route::get('cadang/{file_name}',  [CadangController::class, 'download'])->name('cadang.download');
-
+Route::post('cadang/delete/{id}', [CadangController::class, 'delete']);
 
 // Route::get('laporan/exportPdf/{id}',  [LaporanController::class, 'exportPdf'])->name('laporan.exportPdf');
 Route::get('laporan/exportPdf/{id}', [LaporanController::class, 'exportPdf']);
