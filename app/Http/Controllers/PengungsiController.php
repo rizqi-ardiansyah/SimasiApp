@@ -61,7 +61,46 @@ class PengungsiController extends Controller
             ->where('pengungsi.posko_id', $id)
             ->orderBy('pengungsi.kpl_id', 'desc')
             ->distinct()
-            ->paginate(5);
+            // model paginate agar banyak paginate bisa muncul dalam 1 page
+            ->paginate(5, ['*'], 'p');
+
+        session()->put('idPosko', $id);
+        $pengungsiKeluar = Pengungsi::select(
+            DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
+            Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+            Daerah ',kpl.detail,' ')
+        as lokasi"),
+            DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+            Daerah ',kpl.detail,' ')
+        as lokKel"),
+            'pengungsi.nama',
+            'pengungsi.id as idPengungsi',
+            'kpl_id',
+            'statKel',
+            'telpon',
+            'gender',
+            'umur',
+            'statPos',
+            'pengungsi.posko_id as idPospeng',
+            'statKon',
+            'pengungsi.created_at as tglMasuk',
+            'p.id as idPosko',
+            'p.nama as namaPosko',
+            'kpl.id as idKepala',
+            'kpl.nama as namaKepala',
+            'kpl.provinsi as provinsi',
+            'kpl.kota as kota',
+            'kpl.kecamatan as kecamatan',
+            'kpl.kelurahan as kelurahan',
+            'kpl.detail as detail',
+        )
+            ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
+            ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
+            ->where('pengungsi.posko_id', $id)
+            ->orderBy('pengungsi.kpl_id', 'desc')
+            ->distinct()
+            ->paginate(10, ['*'], 'k');
+
 
         $getKpl = KepalaKeluarga::all();
 
@@ -173,6 +212,7 @@ class PengungsiController extends Controller
         $getKeluar = $getKeluar->count();
 
         return view('admin.pengungsi.index', [
+            'pengKel' => $pengungsiKeluar,
             'data' => $pengungsi,
             'kpl' => $getKpl,
             'dataKpl' => $dataKpl,

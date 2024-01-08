@@ -687,7 +687,7 @@
                         <tbody id="result2">
                             <tr>
                                 <?php $j = 0 ?>
-                                @foreach ($data as $keys => $pengungsis)
+                                @foreach ($pengKel as $keys => $pengungsis)
                                 @if($pengungsis->statPos == 0)
                                 <?php $j++; ?>
                                 <td>{{ $j }}</th>
@@ -728,7 +728,8 @@
                 </div>
 
                 <br />
-                {{ $data->links() }}
+                <!-- {{ $pengKel->links() }} -->
+                {{$pengKel->links()}}    
                 <br />
             </div>
         </div>
