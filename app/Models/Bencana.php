@@ -15,6 +15,7 @@ class Bencana extends Model
         'nama',
         'tanggal',
         'waktu',
+        'jmlPengungsi',
         'lokasi',
         'status',
     ];

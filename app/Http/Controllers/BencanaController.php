@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bencana;
 use App\Models\Posko;
+use App\Models\Integrasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -21,18 +22,20 @@ class BencanaController extends Controller
         $bencana = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
             'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
             'bencana.nama as namaBencana', 'lokasi', 'status',
-            'bencana.updated_at as waktuUpdate', 'p.bencana_id',
+            'bencana.updated_at as waktuUpdate', 'p.bencana_id', 'bencana.jmlPengungsi',
+            // DB::raw('count(int.png_id) as ttlPengungsi'),
             DB::raw('count(p.bencana_id) as ttlPosko'),
             //  DB::raw('count(p.id) as ttlPengungsi')
         )
             ->leftJoin('posko AS p', 'bencana.id', '=', 'p.bencana_id')
+            // ->join('integrasi as int', 'int.bencana_id','=','bencana.id')
         // ->join('pengungsi as peng','peng.posko_id','=','p.id')
             ->orderBy('bencana.tanggal', 'desc')
             ->distinct()
             // ->where('p.bencana_id', '=', 'b.id')
         // ->where('peng.posko_id','=','p.id')
             ->groupBy('p.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
-                'bencana.nama', 'lokasi', 'status', 'bencana.updated_at')
+                'bencana.nama', 'lokasi', 'status', 'bencana.updated_at','bencana.jmlPengungsi')
             ->paginate(5);
 
         // $getIdBencana = Bencana::where('id',$bencana)->value('id');

@@ -127,7 +127,7 @@
                                     <th>Waktu</th>
                                     <th>Lokasi</th>
                                     <th>Posko</th>
-                                    <!-- <th>Pengungsi</th> -->
+                                    <th>Pengungsi</th>
                                     <th>Waktu Update</th>
                                     <th>Status</th>
                                     @role('pusdalop')
@@ -148,6 +148,7 @@
                                     <td>{{ $bencana->ttlPosko }} tempat</br>
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
                                     </td>
+                                    <td>{{ $bencana->jmlPengungsi }} orang</br>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)

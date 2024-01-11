@@ -576,8 +576,7 @@
         form.addEventListener('beforeinput', e => {
             const formdata = new FormData(form);
             let search = formdata.get('search');
-            let url = "{{ route('searchPengungsi', "
-            search = ")  }}" + search
+            let url = "{{ route('searchPengungsi',"search=")}}"+search
 
             // let data = url;
             // alert(data);

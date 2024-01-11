@@ -38,7 +38,7 @@ class PoskoController extends Controller
             kecamatan,', Ds. ',kelurahan,', Daerah ',detail,' ')
         as lokasi"),
             'posko.id as idPosko',
-            'posko.trc_id as idTrc',
+            'int.user_id as idTrc',
             'posko.nama as namaPosko',
             'provinsi',
             'kota',
@@ -46,20 +46,21 @@ class PoskoController extends Controller
             'kelurahan',
             'detail',
             'kapasitas',
-            'bencana_id',
+            'int.bencana_id',
             'b.id as idBencana',
             DB::raw("concat(u.firstname,' ',u.lastname) as fullName"), 'u.id as idAdmin',
             'posko.created_at',
             'posko.updated_at',
             DB::raw('count(p.posko_id) as ttlPengungsi'),
         )
-            ->leftJoin('users AS u', 'posko.trc_id', '=', 'u.id')
-            ->join('bencana as b', 'posko.bencana_id', '=', 'b.id')
-            ->leftJoin('pengungsi as p', 'posko.id', '=', 'p.posko_id')
+            ->join('integrasi as int','int.posko_id','=','posko.id')
+            ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
+            ->join('bencana as b', 'int.bencana_id', '=', 'b.id')
+            ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
             ->groupBy('lokasi', 'provinsi', 'kota', 'kecamatan', 'kelurahan', 'detail', 'posko.id'
-                , 'posko.nama', 'posko.bencana_id', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
-                'posko.updated_at', 'posko.trc_id','kapasitas')
-            ->where('posko.bencana_id', $id)
+                , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
+                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id')
+            ->where('int.bencana_id', $id)
             ->orderBy('u.id', 'desc')
             ->paginate(5);
 
@@ -72,8 +73,8 @@ class PoskoController extends Controller
                 }) //memilih role yang akan ditampilkan (p,trc,r)
             ->whereNotExists(function ($query) {
                 $query->select(DB::raw(1))
-                    ->from('posko')
-                    ->whereRaw('users.id = posko.trc_id');
+                    ->from('integrasi')
+                    ->whereRaw('users.id = integrasi.user_id');
             })->get();
 
         $getTtlPengungsi = Pengungsi::select(DB::raw("count('posko_id') as ttlPengungsi"))
@@ -101,7 +102,7 @@ class PoskoController extends Controller
         as lokasi"),
             'posko.id as idPosko',
             'posko.nama as namaPosko',
-            'posko.trc_id',
+            'int.user_id',
             'provinsi',
             'kota',
             'kecamatan',
@@ -114,13 +115,14 @@ class PoskoController extends Controller
             'posko.updated_at',
             DB::raw('count(p.posko_id) as ttlPengungsi'), 'kapasitas',
         )
-            ->leftJoin('users AS u', 'posko.trc_id', '=', 'u.id')
-            ->leftJoin('bencana as b', 'posko.bencana_id', '=', 'b.id')
-            ->leftJoin('pengungsi as p', 'posko.id', '=', 'p.posko_id')
+            ->leftJoin('integrasi as int','int.posko_id','=','posko.id')
+            ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
+            ->leftJoin('bencana as b', 'int.bencana_id', '=', 'b.id')
+            ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
             ->groupBy('lokasi', 'provinsi', 'kota', 'kecamatan', 'kelurahan', 'detail', 'posko.id'
-                , 'posko.nama', 'posko.bencana_id', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
-                'posko.updated_at','posko.kapasitas', 'posko.trc_id')
-            ->where('posko.bencana_id', session()->get('idBencana'))
+                , 'posko.nama', 'int.bencana_id', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
+                'posko.updated_at','posko.kapasitas', 'int.user_id')
+            ->where('int.bencana_id', session()->get('idBencana'))
             ->where(function ($query) use ($filter) {
                 $query->where('posko.nama', 'LIKE', "%{$filter['search']}%")
                     ->orWhere('posko.provinsi', 'LIKE', "%{$filter['search']}%")
@@ -155,13 +157,14 @@ class PoskoController extends Controller
             'posko.updated_at',
             DB::raw('count(p.posko_id) as ttlPengungsi'),
         )
-            ->leftJoin('users AS u', 'posko.trc_id', '=', 'u.id')
-            ->leftJoin('bencana as b', 'posko.bencana_id', '=', 'b.id')
-            ->leftJoin('pengungsi as p', 'posko.id', '=', 'p.posko_id')
+            ->leftJoin('integrasi as int','int.posko_id','=','posko.id')
+            ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
+            ->leftJoin('bencana as b', 'int.bencana_id', '=', 'b.id')
+            ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
             ->groupBy('lokasi', 'provinsi', 'kota', 'kecamatan', 'kelurahan', 'detail', 'posko.id'
-                , 'posko.nama', 'posko.bencana_id', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
+                , 'posko.nama', 'int.bencana_id', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
                 'posko.updated_at','posko.kapasitas')
-            ->where('posko.trc_id', $id)
+            ->where('integrasi.user_id', $id)
             ->where(function ($query) use ($filter) {
                 $query->where('posko.nama', 'LIKE', "%{$filter['search']}%")
                     ->orWhere('posko.provinsi', 'LIKE', "%{$filter['search']}%")
