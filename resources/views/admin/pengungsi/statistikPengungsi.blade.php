@@ -151,14 +151,14 @@
                             </tr>
                         </thead>
                         <?php $k = 0; ?>
-                        @foreach($dataKpl as $pengungsi)
+                        @foreach($anggotaKpl as $pengungsi)
                         <tr>
                             <?php $k++; ?>
                             <td>{{ $k }}</td>
                             <td>{{ $pengungsi->nama}}</td>
-                            <td>{{ $jmlAnggota }}</td>
-                            @foreach($getAlamat as $alamat)
-                            <td>{{ $alamat->lokasi }}</td>
+                            <td>{{ $pengungsi->anggota}}</td>
+                            <!-- @foreach($getAlamat as $alamat) -->
+                            <td>{{ $pengungsi->lokasi }}</td>
                             @endforeach
                         </tr>
                         @endforeach

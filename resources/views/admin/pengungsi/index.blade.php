@@ -64,7 +64,12 @@
                                         @csrf
                                         <div class="card-body">
                                             <!-- <div class="form-group"> -->
+                                            <!-- {{request()->id}}
+                {{request()->bencana_id}}
+                {{request()->trc_id}} -->
                                             <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
+                                            <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->bencana_id}}" hidden required>
+                                            <input type="text" class="form-control" id="trc_id" name="trc_id" value="{{request()->trc_id}}" hidden required>
                                             <!-- </div> -->
 
                                             <div class="form-group">
@@ -197,7 +202,7 @@
 
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
+                        <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Pengungsi
                         </a>
 

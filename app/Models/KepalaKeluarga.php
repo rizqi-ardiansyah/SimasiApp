@@ -18,5 +18,6 @@ class KepalaKeluarga extends Model
         'kecamatan',
         'kelurahan',
         'detail',
+        'anggota',
     ];
 }
