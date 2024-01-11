@@ -251,12 +251,12 @@
                         </thead>
                         <tbody>
                             <?php $l = 0; ?>
-                            @foreach($data as $balita)
+                            @foreach($getBalita as $balita)
                             @if ($balita->umur < 5) <?php $l++; ?> <tr>
                                 <td>{{ $l }}</td>
                                 <td>{{ $balita->nama }}</td>
+                                <td>{{ $balita->namKep }}</td>
                                 <td>{{ $balita->telpon }}</td>
-                                <td>{{ $balita->namaKepala }}</td>
                                 <td>{{ $balita->lokasi }}</td>
                                 <?php
                                 $getGender = $balita->gender;
@@ -340,13 +340,13 @@
                         </thead>
                         <tbody>
                             <?php $m = 0; ?>
-                            @foreach($data as $lansia)
-                            @if ($lansia->umur > 60)
+                            @foreach($getLansia as $lansia)
+                            @if ($lansia->umur >= 60)
                             <?php $m++; ?>
                             <tr>
                                 <td>{{ $m }}</td>
                                 <td>{{ $lansia->nama }}</td>
-                                <td>{{ $lansia->namaKepala }}</td>
+                                <td>{{ $lansia->namKep }}</td>
                                 <td>{{ $lansia->telpon }}</td>
                                 <td>{{ $lansia->lokasi }}</td>
                                 <?php
@@ -430,13 +430,13 @@
                     </thead>
                     <tbody>
                         <?php $n = 0; ?>
-                        @foreach($data as $sakit)
+                        @foreach($getDifabel as $sakit)
                         @if ($sakit->statKon == 4)
                         <?php $n++; ?>
                         <tr>
                             <td>{{ $n }}</td>
                             <td>{{ $sakit->nama }}</td>
-                            <td>{{ $sakit->namaKepala }}</td>
+                            <td>{{ $sakit->namaKep }}</td>
                             <td>{{ $sakit->telpon }}</td>
                             <td>{{ $sakit->lokasi }}</td>
                             <?php
@@ -518,13 +518,13 @@
                     </thead>
                     <tbody>
                         <?php $n = 0; ?>
-                        @foreach($data as $sakit)
+                        @foreach($getSakit as $sakit)
                         @if ($sakit->statKon > 0 && $sakit->statKon != 4)
                         <?php $n++; ?>
                         <tr>
                             <td>{{ $n }}</td>
                             <td>{{ $sakit->nama }}</td>
-                            <td>{{ $sakit->namaKepala }}</td>
+                            <td>{{ $sakit->namKep }}</td>
                             <td>{{ $sakit->telpon }}</td>
                             <td>{{ $sakit->lokasi }}</td>
                             <?php
