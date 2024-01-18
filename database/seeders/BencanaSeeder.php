@@ -18,13 +18,14 @@ class BencanaSeeder extends Seeder
     public function run()
     {
         // \App\Models\Bencana::factory(10)->create();
-        Bencana::truncate();
+        // Bencana::truncate();
         DB::table('bencana')->insert([
             [
                 'nama' => 'Gunung Kelud Meletus',
                 'tanggal' => Carbon::parse('2014-02-13'),
                 'waktu' => '12:34',
                 'lokasi' => 'Blitar, Malang, Kediri',
+                'jmlPengungsi' => 0,
                 'status' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -33,7 +34,8 @@ class BencanaSeeder extends Seeder
                 'nama' => 'Banjir Bandang Kota Malang',
                 'tanggal' => Carbon::parse('2018-02-14'),
                 'waktu' => '16:34',
-                'lokasi' => 'Sumberbrantas, Bumiaji, Batu',
+                'lokasi' => 'Bulukerto, Bumiaji, Batu',
+                'jmlPengungsi' => 0,
                 'status' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -42,7 +44,8 @@ class BencanaSeeder extends Seeder
                 'nama' => 'Tanah Longsor',
                 'tanggal' => Carbon::parse('2022-12-16'),
                 'waktu' => '19:34',
-                'lokasi' => 'Jalan Batu - Kediri',
+                'lokasi' => 'Mojorejo, Junrejo, Batu',
+                'jmlPengungsi' => 0,
                 'status' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),

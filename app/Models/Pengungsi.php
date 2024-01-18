@@ -15,12 +15,12 @@ class Pengungsi extends Model
     protected $fillable = [
         'nama',
         'telpon',
-        'kpl_id',
+        // 'kpl_id',
         'statKel',
         'gender',
         'umur',
         'statPos',
-        'posko_id',
+        // 'posko_id',
         'statKon',
     ];
 

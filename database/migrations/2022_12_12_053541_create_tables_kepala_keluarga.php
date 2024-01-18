@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('kecamatan');
             $table->string('kelurahan');
             $table->string('detail');
+            $table->unsignedBigInteger('anggota')->nullable();
             $table->timestamps();
         });
     }

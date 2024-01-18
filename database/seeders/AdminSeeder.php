@@ -16,7 +16,7 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        User::truncate();
+        // User::truncate();
         // DB::table('users')->delete();
 
         $pusdalop1 = User::create([

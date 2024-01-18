@@ -19,8 +19,9 @@ return new class extends Migration
             $table->date('tanggal');
             $table->time('waktu');
             $table->string('lokasi');
+            $table->unsignedBigInteger('jmlPengungsi')->nullable();
             // $table->unsignedBigInteger('posko_id')->nullable();
-            $table->unsignedBigInteger('pengungsi_id')->nullable();
+            // $table->unsignedBigInteger('pengungsi_id')->nullable();
             // $table->string('korban')->nullable();
             $table->unsignedBigInteger('status')->nullable();
             // $table->unsignedBigInteger('posko_id')->nullable();

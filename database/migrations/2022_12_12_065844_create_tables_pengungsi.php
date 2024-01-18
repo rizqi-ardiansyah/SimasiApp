@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('statKel');
-            $table->unsignedBigInteger('kpl_id');
+            // $table->unsignedBigInteger('kpl_id');
             $table->string('telpon');
             $table->unsignedBigInteger('gender');
             $table->unsignedBigInteger('umur');
             $table->unsignedBigInteger('statPos');
-            $table->unsignedBigInteger('posko_id');
+            // $table->unsignedBigInteger('posko_id');
             $table->unsignedBigInteger('statKon');
             $table->timestamps();
         });

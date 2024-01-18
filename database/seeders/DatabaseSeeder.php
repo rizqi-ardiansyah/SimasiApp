@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             BencanaSeeder::class,
             PoskoSeeder::class,
             PengungsiSeeder::class,
+            KepKelSeeder::class,
+            IntegrasiSeeder::class,
         ]);
     }
 }

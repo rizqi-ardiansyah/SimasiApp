@@ -18,7 +18,7 @@ class PengungsiSeeder extends Seeder
     public function run()
     {
         // \App\Models\Pengungsi::factory(3)->create();
-        KepalaKeluarga::truncate();
+        // KepalaKeluarga::truncate();
         DB::table('kepala_keluarga')->insert([
             [
                 'nama' => 'Budiman',
@@ -53,17 +53,17 @@ class PengungsiSeeder extends Seeder
 
         ]);
 
-        Pengungsi::truncate();
+        // Pengungsi::truncate();
         DB::table('pengungsi')->insert([
             [
                 'nama' => 'Budiman',
                 'statKel' => 0,
-                'kpl_id' => 1,
+                // 'kpl_id' => 1,
                 'telpon' => '085647225203',
                 'gender' => 1,
                 'umur' => 55,
                 'statPos' => 1,
-                'posko_id' => 1,
+                // 'posko_id' => 1,
                 'statKon' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -71,12 +71,12 @@ class PengungsiSeeder extends Seeder
             [
                 'nama' => 'Riko Firmansyah',
                 'statKel' => 2,
-                'kpl_id' => 1,
+                // 'kpl_id' => 1,
                 'telpon' => '085647225203',
                 'gender' => 1,
                 'umur' => 4,
                 'statPos' => 1,
-                'posko_id' => 1,
+                // 'posko_id' => 1,
                 'statKon' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -84,12 +84,12 @@ class PengungsiSeeder extends Seeder
             [
                 'nama' => 'Rini Sukmawati',
                 'statKel' => 1,
-                'kpl_id' => 1,
+                // 'kpl_id' => 1,
                 'telpon' => '085647225203',
                 'gender' => 1,
                 'umur' => 50,
                 'statPos' => 1,
-                'posko_id' => 1,
+                // 'posko_id' => 1,
                 'statKon' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -97,12 +97,12 @@ class PengungsiSeeder extends Seeder
             [
                 'nama' => 'Tejo',
                 'statKel' => 0,
-                'kpl_id' => 2,
+                // 'kpl_id' => 2,
                 'telpon' => '085747225123',
                 'gender' => 1,
                 'umur' => 50,
                 'statPos' => 1,
-                'posko_id' => 1,
+                // 'posko_id' => 1,
                 'statKon' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -110,12 +110,12 @@ class PengungsiSeeder extends Seeder
             [
                 'nama' => 'Irma Wati',
                 'statKel' => 1,
-                'kpl_id' => 2,
+                // 'kpl_id' => 2,
                 'telpon' => '085747225123',
                 'gender' => 0,
                 'umur' => 45,
                 'statPos' => 0,
-                'posko_id' => 2,
+                // 'posko_id' => 2,
                 'statKon' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -123,12 +123,12 @@ class PengungsiSeeder extends Seeder
             [
                 'nama' => 'Andi Firmansyah',
                 'statKel' => 0,
-                'kpl_id' => 3,
+                // 'kpl_id' => 3,
                 'telpon' => '085747225123',
                 'gender' => 0,
                 'umur' => 45,
                 'statPos' => 1,
-                'posko_id' => 3,
+                // 'posko_id' => 3,
                 'statKon' => 0,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
@@ -136,12 +136,12 @@ class PengungsiSeeder extends Seeder
             [
                 'nama' => 'Putri Cantika',
                 'statKel' => 1,
-                'kpl_id' => 3,
+                // 'kpl_id' => 3,
                 'telpon' => '085747225123',
                 'gender' => 0,
                 'umur' => 42,
                 'statPos' => 1,
-                'posko_id' => 3,
+                // 'posko_id' => 3,
                 'statKon' => 1,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
