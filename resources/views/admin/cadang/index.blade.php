@@ -58,7 +58,7 @@
                                     ?>
                                     <td class="text-center text-muted">{{$data->firstItem() + $key  }}</td>
                                     <td class="text-center">
-                                        <code>{{ $backup['file_name'] }}</code>
+                                        <code><?php echo $file_name;?></code>
                                     </td>
                                     <td class="text-center">{{ $backup['file_size'] }}</td>
                                     <td class="text-center">{{ $backup['created_at'] }}</td>
@@ -70,7 +70,7 @@
                                             <i class="fas fa-trash-alt"></i>
                                             <span>Delete</span>
                                         </button> -->
-                                        <a href="" class="btn btn-danger btn-sm" title="Delete" onclick="deleteData({{$file_name}})">
+                                        <a href="#" class="btn btn-danger btn-sm" title="Delete" onclick="deleteData('<?php echo $file_name;?>')">
                                             <i class="fas fa-trash-alt"></i>
                                             <span>Delete</span>
                                             </a>

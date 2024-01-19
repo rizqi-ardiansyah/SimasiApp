@@ -51,7 +51,7 @@ class PoskoController extends Controller
             DB::raw("concat(u.firstname,' ',u.lastname) as fullName"), 'u.id as idAdmin',
             'posko.created_at',
             'posko.updated_at',
-            DB::raw('count(p.posko_id) as ttlPengungsi'),
+            DB::raw('count(int.posko_id) as ttlPengungsi'),
         )
             ->join('integrasi as int','int.posko_id','=','posko.id')
             ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
@@ -77,8 +77,9 @@ class PoskoController extends Controller
                     ->whereRaw('users.id = integrasi.user_id');
             })->get();
 
-        $getTtlPengungsi = Pengungsi::select(DB::raw("count('posko_id') as ttlPengungsi"))
-            ->join('posko as p', 'pengungsi.posko_id', '=', 'p.id')
+        $getTtlPengungsi = Pengungsi::select(DB::raw("count('int.posko_id') as ttlPengungsi"))
+            ->join('integrasi as int','int.png_id','=','pengungsi.id')
+            ->join('posko as p', 'int.posko_id', '=', 'p.id')
             ->paginate(5);
 
         // return view('admin.posko.index', ['data'=>$posko],
@@ -113,7 +114,7 @@ class PoskoController extends Controller
             DB::raw("concat(u.firstname,' ',u.lastname) as fullName"), 'u.id as idAdmin',
             'posko.created_at',
             'posko.updated_at',
-            DB::raw('count(p.posko_id) as ttlPengungsi'), 'kapasitas',
+            DB::raw('count(int.posko_id) as ttlPengungsi'), 'kapasitas',
         )
             ->leftJoin('integrasi as int','int.posko_id','=','posko.id')
             ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
