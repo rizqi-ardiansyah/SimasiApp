@@ -34,11 +34,116 @@
                             <span class="btn-icon-wrapper pr-2 opacity-7">
                                 <i class="fas fa-plus"></i>
                             </span>
-                            {{ __('Cadangkan') }}
+                            {{ __('Cadangkan (.sql)') }}
                         </button>
+
+                        <!-- <button class="bx--btn bx--btn--primary" type="button" id="swal_upload">Apri</button> -->
+                        <a href="#" class="btn btn-info mb-2 " data-toggle="modal" data-target="#upload" style="font-size: 14px;">
+                            <i class="fas fa-plus mr-1"></i> Pulihkan (.xlsx)
+                        </a>
+<div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    @if (isset($errors) && $errors->any())
+                        <div class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
+                    @endif
+
+                    @if (session()->has('failures'))
+
+                        <table class="table table-danger">
+                            <tr>
+                                <th>Row</th>
+                                <th>Attribute</th>
+                                <th>Errors</th>
+                                <th>Value</th>
+                            </tr>
+
+                            @foreach (session()->get('failures') as $validation)
+                                <tr>
+                                    <td>{{ $validation->row() }}</td>
+                                    <td>{{ $validation->attribute() }}</td>
+                                    <td>
+                                        <ul>
+                                            @foreach ($validation->errors() as $e)
+                                                <li>{{ $e }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        {{ $validation->values()[$validation->attribute()] }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </table>
+
+                    @endif
+
+                        <!-- Tambah bencana -->
+                    <div class="modal fade" id="upload">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Upload file</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- form start -->
+                                    <form enctype="multipart/form-data" action="{{ route('cadang.store') }}" method="post">
+                                        @csrf
+                                        <div class="card-body">
+
+                                            <input type="file" name="file" />
+
+                                        </div>
+                                        <!-- /.card-body -->
+
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                       
+                        <!-- <button onclick="event.preventDefault();
+                          document.getElementById('pulihkan').submit();" class="btn btn-info mb-2" style="font-size: 14px;"
+                          type="file">
+                            <span class="btn-icon-wrapper pr-2 opacity-7">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            {{ __('Pulihkan (.xlsx)') }}
+                        </button> -->
                         <form id="new-backup-form" action="{{ route('cadang.create') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
+                        <!-- <form id="pulihkan" action="/users/import" method="post" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="form-group">
+                            <input type="file" name="file" />
+
+                            <button type="submit" class="btn btn-primary">Import</button>
+                        </div>
+                        </form> -->
+
+                        <!-- <form id="new-backup-form" action="{{ route('cadang.create') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form> -->
+
+                       
 
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
@@ -64,7 +169,7 @@
                                     <td class="text-center">{{ $backup['created_at'] }}</td>
                                     <td class="text-center">
                                         <a class="btn btn-info btn-sm" href="{{ route('cadang.download',$backup['file_name']) }}"><i class="fas fa-download"></i>
-                                            <span>Download</span>
+                                            <span>Download (.sql)</span>
                                         </a>
                                         <!-- <button id="delete-form-{{ $key }}" type="button" class="btn btn-danger btn-sm" onclick="deleteData({{ $key }})">
                                             <i class="fas fa-trash-alt"></i>
@@ -162,6 +267,46 @@
             })
         }
     </script>
+
+    <script>
+
+        $('#swal_upload').click(function() {
+            Swal({
+                title: 'Select a file',
+                showCancelButton: true,
+                confirmButtonText: 'Upload',
+                input: 'file',
+                onBeforeOpen: () => {
+                    $(".swal2-file").change(function () {
+                        var reader = new FileReader();
+                        reader.readAsDataURL(this.files[0]);
+                    });
+                }
+            }).then((file) => {
+                if (file.value) {
+                    var formData = new FormData();
+                    var file = $('.swal2-file')[0].files[0];
+                    formData.append("fileToUpload", file);
+                    $.ajax({
+                        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+                        method: 'post',
+                        url: '/file/upload',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function (resp) {
+                            Swal('Uploaded', 'Your file have been uploaded', 'success');
+                        },
+                        error: function() {
+                            Swal({ type: 'error', title: 'Oops...', text: 'Something went wrong!' })
+                        }
+                    })
+                }
+            })
+        })
+
+    </script>
+    
 
 </section>
 

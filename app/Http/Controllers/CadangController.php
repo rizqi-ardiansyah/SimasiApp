@@ -10,6 +10,9 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use ZipArchive;
+use App\Imports\PengungsiImport;
+use App\Imports\ExcelImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CadangController extends Controller
 {
@@ -133,7 +136,13 @@ class CadangController extends Controller
      */
     public function store(Request $request)
     {
+        $file = $request->file('file');
+
+        Excel::import(new ExcelImport, $file);
         //
+        Alert::success('Success', 'Data berhasil dipulihkan');
+        return back();
+        // return back()->withStatus('Excel file succesfully');
     }
 
     /**
