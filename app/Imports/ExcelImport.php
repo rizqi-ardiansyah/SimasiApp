@@ -15,7 +15,7 @@ class ExcelImport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            'Upload_Data' => new PengungsiImport(),
+            'Upload_Data' => new ImportPengungsi(),
         ];
     }
 }

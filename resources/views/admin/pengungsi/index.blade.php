@@ -65,7 +65,7 @@
                                         <div class="card-body">
                                             <!-- <div class="form-group"> -->
                                             <!-- {{request()->id}}
-                {{request()->bencana_id}}
+                
                 {{request()->trc_id}} -->
                                             <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
                                             <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->bencana_id}}" hidden required>
@@ -205,6 +205,42 @@
                         <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Pengungsi
                         </a>
+                        <a href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#upload" style="font-size: 14px;">
+                            <i class="fas fa-plus mr-1"></i> Unggah Data
+                        </a>
+
+                        
+                            <!-- Tambah bencana -->
+                        <div class="modal fade" id="upload">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Upload file</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- form start -->
+                                        <form enctype="multipart/form-data" action="{{ route('pengungsi.store') }}" method="post">
+                                            @csrf
+                                            <div class="card-body">
+
+                                                <input type="file" name="file" />
+
+                                            </div>
+                                            <!-- /.card-body -->
+
+                                            <div class="card-footer">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
 
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>

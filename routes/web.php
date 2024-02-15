@@ -63,6 +63,7 @@ Route::get('/listPengungsi/{id}/{bencana_id}/{trc_id}', [PengungsiController::cl
 Route::post('pengungsi/create', [PengungsiController::class, 'createPengungsi'])->name('pengungsi.create');
 Route::match(['get', 'post'], 'pengungsi/edit/{id}', [PengungsiController::class, 'edit']);
 Route::post('pengungsi/delete/{id}', [PengungsiController::class, 'delete']);
+// Route::get('listPengungsi/{idPosko}/{idBencana}/{idTrc}', [PengungsiController::class, 'store']);
 
 Route::get("/search/bencana", [BencanaController::class, 'search'])->name('searchBencana');
 Route::get("/search/bencanaTrc/{id}", [BencanaController::class, 'searchForTrc'])->name('searchForTrc');
@@ -80,7 +81,8 @@ Route::get('cadang/{file_name}',  [CadangController::class, 'download'])->name('
 Route::post('cadang/delete/{id}', [CadangController::class, 'delete']);
 Route::post('bencana/create', [BencanaController::class, 'createBencana'])->name('bencana.create');
 Route::get('cadang/import', [CadangController::class, 'import'])->name('cadang.import');
-Route::post('cadang/store', [CadangController::class, 'store'])->name('cadang.store');
+// Route::post('cadang/store', [CadangController::class, 'store'])->name('cadang.store');
+Route::post('pengungsi/store', [PengungsiController::class, 'store'])->name('pengungsi.store');
 
 // Route::get('laporan/exportPdf/{id}',  [LaporanController::class, 'exportPdf'])->name('laporan.exportPdf');
 Route::get('laporan/exportPdf/{id}', [LaporanController::class, 'exportPdf']);

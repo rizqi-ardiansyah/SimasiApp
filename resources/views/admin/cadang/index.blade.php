@@ -38,10 +38,10 @@
                         </button>
 
                         <!-- <button class="bx--btn bx--btn--primary" type="button" id="swal_upload">Apri</button> -->
-                        <a href="#" class="btn btn-info mb-2 " data-toggle="modal" data-target="#upload" style="font-size: 14px;">
+                        <!-- <a href="#" class="btn btn-info mb-2 " data-toggle="modal" data-target="#upload" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Pulihkan (.xlsx)
-                        </a>
-<div class="card-body">
+                        </a> -->
+<!-- <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
                             {{ session('status') }}
@@ -84,39 +84,7 @@
                             @endforeach
                         </table>
 
-                    @endif
-
-                        <!-- Tambah bencana -->
-                    <div class="modal fade" id="upload">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Upload file</h4>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <!-- form start -->
-                                    <form enctype="multipart/form-data" action="{{ route('cadang.store') }}" method="post">
-                                        @csrf
-                                        <div class="card-body">
-
-                                            <input type="file" name="file" />
-
-                                        </div>
-                                        <!-- /.card-body -->
-
-                                        <div class="card-footer">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <!-- /.modal-content -->
-                        </div>
-                        <!-- /.modal-dialog -->
-                    </div>
+                    @endif -->
                        
                         <!-- <button onclick="event.preventDefault();
                           document.getElementById('pulihkan').submit();" class="btn btn-info mb-2" style="font-size: 14px;"

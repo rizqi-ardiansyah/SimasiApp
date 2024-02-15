@@ -11,25 +11,38 @@ use App\Models\Integrasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\PengungsiImport;
+use App\Imports\ExcelImport;
 
 class PengungsiController extends Controller
 {
+    private $idBencana;
+    private $idPosko;
+    private $idTrc;
     // protected $idPosko;
     //Membuat variabel global idPosko
     public function _construct()
     {
-        $this->idPosko;
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index(Request $request)
     {
         // $this->idPosko = $id;
         //Memberikan nilai pada idPosko
-        session()->put('idPosko', $id);
+        $this->idBencana = $request->bencana_id;
+        $this->idPosko = $request->id;
+        $this->idTrc = $request->trc_id;  
+        
+        session()->put('idPosko', $this->idPosko); 
+        session()->put('idBencana', $this->idBencana); 
+        session()->put('idTrc', $this->idTrc); 
+
+        session()->put('idPosko', $request->id);
         $pengungsi = Pengungsi::select(
             DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
             Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
@@ -64,7 +77,7 @@ class PengungsiController extends Controller
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
             // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
-            ->where('int.posko_id', $id)
+            ->where('int.posko_id', $request->id)
             ->orderBy('int.kpl_id', 'desc')
             ->distinct()
             // model paginate agar banyak paginate bisa muncul dalam 1 page
@@ -104,7 +117,7 @@ class PengungsiController extends Controller
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
             // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
-            ->where('int.posko_id', $id)
+            ->where('int.posko_id', $request->id)
             ->where('pengungsi.statPos', 0)
             ->orderBy('int.kpl_id', 'desc')
             ->distinct()
@@ -113,12 +126,12 @@ class PengungsiController extends Controller
 
         $getKpl = KepalaKeluarga::all();
 
-        $getNmPosko = Posko::select('nama')->where('id', $id)->get();
+        $getNmPosko = Posko::select('nama')->where('id', $request->id)->get();
 
         $dataKpl = Pengungsi::select('*', DB::raw('count(int.kpl_id) as ttlAnggota'))
             // ->join('kepala_keluarga as kp','kp.id','=','pengungsi.kpl_id')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
-            ->where('int.posko_id', '=', $id)
+            ->where('int.posko_id', '=', $request->id)
             ->where('pengungsi.statKel', '=', 0)
             ->groupBy(
                 'int.kpl_id',
@@ -147,7 +160,7 @@ class PengungsiController extends Controller
         as lokasi"),'kpl.anggota')
             ->join('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
             ->join('pengungsi as p','p.id','=','integrasi.png_id')
-            ->where('integrasi.posko_id', '=', $id)
+            ->where('integrasi.posko_id', '=', $request->id)
             ->where('p.statkel','=',0)
             ->distinct()
             ->groupBy(
@@ -174,13 +187,13 @@ class PengungsiController extends Controller
 
             $anggotaKpl2 = Integrasi::select('integrasi.kpl_id')
             ->join('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
-            ->where('integrasi.posko_id', '=', $id)
+            ->where('integrasi.posko_id', '=', $request->id)
             
             ->get();
 
         $getJml = Pengungsi::select('*')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
-            ->where('int.posko_id', '=', $id)
+            ->where('int.posko_id', '=', $request->id)
             ->get();
 
 
@@ -192,7 +205,7 @@ class PengungsiController extends Controller
         provinsi,', Kota ',kota,',
         Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
         as lokasi"))
-            ->where('kepala_keluarga.id', '=', $id)
+            ->where('kepala_keluarga.id', '=', $request->id)
             ->get();
 
         $getTtlKpl = $dataKpl->count();
@@ -203,7 +216,7 @@ class PengungsiController extends Controller
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             ->where('umur', '<', 5)
-            ->where('int.posko_id', '=', $id)->get();
+            ->where('int.posko_id', '=', $request->id)->get();
 
         $getTtlBalita = $getBalita->count();
 
@@ -213,14 +226,14 @@ class PengungsiController extends Controller
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             ->where('umur', '>=', 60)
-            ->where('int.posko_id', '=', $id)->get();
+            ->where('int.posko_id', '=', $request->id)->get();
 
         $getTtlLansia = $getLansia->count();
 
         $getSehat = Pengungsi::select('*')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->where('statKon', '=', 0)
-            ->where('int.posko_id', '=', $id)->get();
+            ->where('int.posko_id', '=', $request->id)->get();
 
         $getTtlSehat = $getSehat->count();
 
@@ -231,7 +244,7 @@ class PengungsiController extends Controller
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             ->where('statKon', '>', 0)
             ->where('statKon', '!=', 4)
-            ->where('int.posko_id', '=', $id)->get();
+            ->where('int.posko_id', '=', $request->id)->get();
 
         $getTtlSakit = $getSakit->count();
 
@@ -241,7 +254,7 @@ class PengungsiController extends Controller
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             ->where('statKon', '=', 4)
-            ->where('int.posko_id', '=', $id)->get();
+            ->where('int.posko_id', '=', $request->id)->get();
 
         $getTtlDifabel = $getDifabel->count();
 
@@ -251,25 +264,26 @@ class PengungsiController extends Controller
             // ->join('posko as p','pengungsi.posko_id','=','p.id')
             ->join('integrasi as int','int.posko_id','=','posko.id')
             ->join('users as u', 'u.id', '=', 'int.user_id')
-            ->where('posko.id', $id)
+            ->where('posko.id', $request->id)
             ->distinct()
             ->get();
 
         $getMasuk = Pengungsi::select('*')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->where('statPos', '=', 1)
-            ->where('int.posko_id', '=', $id)->get();
+            ->where('int.posko_id', '=', $request->id)->get();
 
         $getMasuk = $getMasuk->count();
 
         $getKeluar = Pengungsi::select('*')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->where('statPos', '=', 0)
-            ->where('int.posko_id', '=', $id)->get();
+            ->where('int.posko_id', '=', $request->id)->get();
 
         $getKeluar = $getKeluar->count();
 
         return view('admin.pengungsi.index', [
+            'idBencana' => $this->idBencana,
             'anggotaKpl' => $anggotaKpl,
             'pengKel' => $pengungsiKeluar,
             'data' => $pengungsi,
@@ -474,8 +488,9 @@ class PengungsiController extends Controller
             // ]);
 
             $statKel = $request->statKel;
-            $idBencana = $request->bencana_id;
-
+            $this->idBencana = $request->bencana_id;
+            $this->idPosko = $request->id;
+            $this->idTrc = $request->trc_id;           
 
             if ($statKel == 0) {
                 KepalaKeluarga::create([
@@ -542,7 +557,7 @@ class PengungsiController extends Controller
                     'png_id' => $getIdPengungsi,
                 ]);
             }
-            Bencana::where('id', $idBencana)
+            Bencana::where('id', $this->idBencana)
             ->update([
              'jmlPengungsi'=> DB::raw('jmlPengungsi+1'), 
              'updated_at' => Carbon::now(),
@@ -566,7 +581,22 @@ class PengungsiController extends Controller
      */
     public function store(Request $request)
     {
+        $file = $request->file('file');
+
+        $idBencanas = $this->idBencana;
+        Excel::import(new ExcelImport, $file);
+        
+        // $getIdIntegrasi = Integrasi::select('id')->orderBy('id','desc')->first();
+        $eksekusi = Integrasi::select('id')->whereNull('bencana_id');
+        $eksekusi->update([
+            'bencana_id' => $this->idBencana = session()->get('idBencana'),
+            'posko_id' => $this->idPosko = session()->get('idPosko'),
+            'user_id' => $this->idTrc = session()->get('idTrc'),
+        ]);
         //
+        Alert::success('Success', 'Data berhasil dipulihkan');
+        return back();
+        // return back()->withStatus('Excel file succesfully');
     }
 
     /**
