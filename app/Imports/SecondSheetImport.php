@@ -4,15 +4,18 @@ namespace App\Imports;
 
 use App\Models\Pengungsi;
 use App\Models\KepalaKeluarga;
+use App\Models\Integrasi;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
+use Maatwebsite\Excel\Concerns\ToArray;
 
-class ImportPengungsi implements ToCollection
+class SecondSheetImport implements ToArray, WithCalculatedFormulas
 {
     /**
     * @param Collection $collection
     */
-    public function collection(Collection $rows)
+    public function array(array $rows)
     {
         //
         // $idTrc = $request->bencana_id;
@@ -27,7 +30,7 @@ class ImportPengungsi implements ToCollection
                'statPos' => $row[5],
                'statKon' => $row[6],
            ]);
-           KepalaKeluarga::create([
+           $kplKeluarga = KepalaKeluarga::create([
                'nama' => $row[7],
                'provinsi' => $row[8],
                'kota' => $row[9],
@@ -36,15 +39,10 @@ class ImportPengungsi implements ToCollection
                'detail' => $row[12],
                'anggota' => $row[13],
            ]);
-
-        //    $myString = $row[8];
-        //    $myArray = explode(',', $myString);
-        //    foreach ($myArray as $value) {
-        //        Courses::create([
-        //             'user_id' => $user->id,
-        //             'course_name' => $value,
-        //        ]);
-        //    }
+           Integrasi::create([
+                'kpl_id' => $kplKeluarga->id,
+                'png_id' => $pengungsi->id,
+           ]);
 
            
         }

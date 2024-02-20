@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Pengungsi;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\ToModel;
 
 class PengungsiImport implements ToModel

@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Models\Pengungsi;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
 class ExcelImport implements WithMultipleSheets
 {
@@ -15,7 +16,8 @@ class ExcelImport implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            'Upload_Data' => new ImportPengungsi(),
+            'Data_Pengungsi' => new FirstSheetImport(),
+            'Upload_Data' => new SecondSheetImport()
         ];
     }
 }

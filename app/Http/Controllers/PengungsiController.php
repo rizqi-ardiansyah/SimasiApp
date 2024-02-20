@@ -14,6 +14,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\PengungsiImport;
 use App\Imports\ExcelImport;
+use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
 class PengungsiController extends Controller
 {
