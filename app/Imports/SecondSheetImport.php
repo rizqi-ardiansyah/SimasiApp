@@ -9,9 +9,15 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 use Maatwebsite\Excel\Concerns\ToArray;
+use Maatwebsite\Excel\Concerns\WithValidation;
+use Maatwebsite\Excel\Concerns\Importable;
+use Illuminate\Validation\Rule;
+use RealRashid\SweetAlert\Facades\Alert;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class SecondSheetImport implements ToArray, WithCalculatedFormulas
+class SecondSheetImport implements ToArray, WithCalculatedFormulas, WithValidation, WithHeadingRow
 {
+    use Importable;
     /**
     * @param Collection $collection
     */
@@ -22,22 +28,22 @@ class SecondSheetImport implements ToArray, WithCalculatedFormulas
         foreach ($rows as $row)
         {
            $pengungsi = Pengungsi::create([
-               'nama' => $row[0],
-               'statKel' => $row[1],
-               'telpon' => $row[2],
-               'gender' => $row[3],
-               'umur' => $row[4],
-               'statPos' => $row[5],
-               'statKon' => $row[6],
+               'nama' => $row['nama'],
+               'statKel' => $row['statkel'],
+               'telpon' => $row['telepon'],
+               'gender' => $row['gender'],
+               'umur' => $row['umur'],
+               'statPos' => $row['status_posko'],
+               'statKon' => $row['status_kondisi'],
            ]);
            $kplKeluarga = KepalaKeluarga::create([
-               'nama' => $row[7],
-               'provinsi' => $row[8],
-               'kota' => $row[9],
-               'kecamatan' => $row[10],
-               'kelurahan' => $row[11],
-               'detail' => $row[12],
-               'anggota' => $row[13],
+               'nama' => $row['nama_kepala'],
+               'provinsi' => $row['provinsi'],
+               'kota' => $row['kota'],
+               'kecamatan' => $row['kecamatan'],
+               'kelurahan' => $row['kelurahan'],
+               'detail' => $row['detail_alamat'],
+               'anggota' => $row['anggota'],
            ]);
            Integrasi::create([
                 'kpl_id' => $kplKeluarga->id,
@@ -47,4 +53,13 @@ class SecondSheetImport implements ToArray, WithCalculatedFormulas
            
         }
     }
+
+    public function rules(): array
+    {
+        return [
+            'nama_kepala' => 'unique:kepala_keluarga,nama',
+        ];
+
+    }
+
 }

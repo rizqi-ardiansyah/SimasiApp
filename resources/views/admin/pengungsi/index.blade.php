@@ -34,7 +34,14 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">List Pengungsi</h3>
+                        <h3 class="card-title">List Pengungsi</h3><br>
+                        @if ($errors->any())
+                        <div class="alert alert-danger" role="alert">
+                            @foreach ($errors->all() as $error)
+                                {{ $error }}
+                            @endforeach
+                        </div>
+                        @endif
                         <div class="card-tools">
                             <form id="search">
                                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -199,6 +206,7 @@
                         </div>
                         <!-- /.modal-dialog -->
                     </div>
+
 
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">

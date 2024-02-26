@@ -582,7 +582,7 @@ class PengungsiController extends Controller
      */
     public function store(Request $request)
     {
-        $file = $request->file('file');
+        $file = $request->file('file')->store('Laravel/import');
 
         $idBencanas = $this->idBencana;
         Excel::import(new ExcelImport, $file);
