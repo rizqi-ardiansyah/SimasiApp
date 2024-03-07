@@ -28,7 +28,7 @@ class SecondSheetImport implements ToArray, WithCalculatedFormulas, WithValidati
         foreach ($rows as $row)
         {
            $pengungsi = Pengungsi::create([
-               'nama' => $row['nama'],
+               'nama' => $row['nama_pengungsi'],
                'statKel' => $row['statkel'],
                'telpon' => $row['telepon'],
                'gender' => $row['gender'],

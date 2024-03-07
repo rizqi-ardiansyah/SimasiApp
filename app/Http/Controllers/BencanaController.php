@@ -21,28 +21,33 @@ class BencanaController extends Controller
     {
         $bencana = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
             'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
-            'bencana.nama as namaBencana', 'lokasi', 'status',
+            'bencana.nama as namaBencana','status', 
             'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
+            'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+            'bencana.detail',
             // DB::raw('count(int.png_id) as ttlPengungsi'),
-            DB::raw('count(int.bencana_id) as ttlPosko'),
-            //  DB::raw('count(p.id) as ttlPengungsi')
+             DB::raw('count(int.posko_id) as ttlPosko'),
+             DB::raw('count(int.png_id) as ttlPengungsi'),
+             DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
+             ' ',bencana.kelurahan,',',' ',bencana.detail) as alamat")
         )
             ->join('integrasi as int', 'int.bencana_id','=','bencana.id')
-            // ->leftJoin('posko AS p', 'bencana.id', '=', 'p.bencana_id')
-        // ->join('pengungsi as peng','peng.posko_id','=','p.id')
+            ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
+            ->leftJoin('pengungsi as peng','int.png_id','=','peng.id')
             ->orderBy('bencana.tanggal', 'desc')
             ->distinct()
             // ->where('p.bencana_id', '=', 'b.id')
         // ->where('peng.posko_id','=','p.id')
             ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
-                'bencana.nama', 'lokasi', 'status', 'bencana.updated_at','bencana.jmlPengungsi')
+                'bencana.nama', 'status', 'bencana.provinsi','bencana.kota','bencana.kecamatan','bencana.kelurahan',
+                'bencana.detail','bencana.updated_at','bencana.jmlPengungsi')
             ->paginate(5);
 
         // $getIdBencana = Bencana::where('id',$bencana)->value('id');
 
         $bencana2 = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
             'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
-            'bencana.nama as namaBencana', 'lokasi', 'status',
+            'bencana.nama as namaBencana', 'status',
             'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'int.user_id as trc',
             DB::raw('count(int.bencana_id) as ttlPosko'),
             
@@ -55,7 +60,7 @@ class BencanaController extends Controller
             ->distinct()
             // ->where('p.bencana_id', '=', 'b.id')
             ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
-                'bencana.nama', 'lokasi', 'status', 'bencana.updated_at', 'int.user_id')
+                'bencana.nama', 'status', 'bencana.updated_at', 'int.user_id')
             ->paginate(5);
 
         $getTtlPengungsi = Posko::select('*')
@@ -145,9 +150,20 @@ class BencanaController extends Controller
             $addBencana->nama = $request->namaBencana;
             $addBencana->tanggal = $request->tanggal;
             $addBencana->waktu = $request->waktu;
-            $addBencana->lokasi = $request->lokasi;
+            // $addBencana->lokasi = $request->lokasi;
+            $addBencana->provinsi = $request->provinsi;
+            $addBencana->kota = $request->kota;
+            $addBencana->kecamatan = $request->kecamatan;
+            $addBencana->kelurahan = $request->kelurahan;
+            $addBencana->detail = $request->detail;
             $addBencana->status = $request->status;
             $addBencana->save();
+
+            $getIdBencana = Bencana::select('id')->orderBy('id','desc')->value('id');
+            $addIntegrasi = new Integrasi;
+            $addIntegrasi->bencana_id = $getIdBencana;
+            $addIntegrasi->save();
+
             // $addMember->assignRole($role);
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
@@ -191,7 +207,10 @@ class BencanaController extends Controller
             $bencana->nama = $request->namaBencana;
             $bencana->tanggal = $request->tanggal;
             $bencana->waktu = $request->waktu;
-            $bencana->lokasi = $request->lokasi;
+            $bencana->provinsi = $request->provinsi;
+            $bencana->kota = $request->kota;
+            $bencana->kecamatan = $request->kecamatan;
+            $bencana->kelurahan = $request->kelurahan;
             $bencana->status = $request->status;
             $bencana->update();
             Alert::success('Success', 'Data berhasil diubah');

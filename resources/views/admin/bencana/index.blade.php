@@ -85,9 +85,30 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="exampleInputKorban">Lokasi</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan lokasi" name="lokasi" required>
+                                                <label for="exampleInputProvinsi">Provinsi</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" required>
                                             </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputKota">Kota</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kota" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputKec">Kecamatan</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kecamatan" name="kecamatan" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputKel">Kelurahan</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kelurahan" name="kelurahan" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputDetail">Detail</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan detail" name="detail" required>
+                                            </div>
+
 
                                             <div class="form-group">
                                                 <label for="status">Status</label>
@@ -143,12 +164,12 @@
                                     <td>{{ $data->firstItem() + $key }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
-                                    <td>{{ $bencana->lokasi }}</td>
+                                    <td>{{ $bencana->alamat }}</td>
                                     <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->ttlPosko }} tempat</br>
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
                                     </td>
-                                    <td>{{ $bencana->jmlPengungsi }} orang</br>
+                                    <td>{{ $bencana->ttlPengungsi }} orang</br>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)
@@ -203,7 +224,7 @@
                                     <td>{{ $i }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
-                                    <td>{{ $bencana->lokasi }}</td>
+                                    <!-- <td>{{ $bencana->lokasi }}</td> -->
                                     <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->ttlPosko }} tempat</br>
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
@@ -237,7 +258,7 @@
                                     <td>{{ $i }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
-                                    <td>{{ $bencana->lokasi }}</td>
+                                    <!-- <td>{{ $bencana->lokasi }}</td> -->
                                     <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->ttlPosko }} tempat</br>
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
@@ -292,9 +313,30 @@
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label for="exampleInputKorban">Lokasi</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan lokasi" name="lokasi" value="{{$detail->lokasi}}" required>
-                                                        </div>
+                                                <label for="exampleInputProvinsi">Provinsi</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$detail->provinsi}}" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputKota">Kota</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kota" value="{{$detail->kota}}" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputKec">Kecamatan</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kecamatan" name="kecamatan" value="{{$detail->kecamatan}}" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputKel">Kelurahan</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kelurahan" name="kelurahan" value="{{$detail->kelurahan}}" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputDetail">Detail</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan detail" name="detail" value="{{$detail->detail}}" required>
+                                            </div>
+
 
                                                         <?php
                                                         $value = $detail->status;
@@ -372,10 +414,10 @@
                                             <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan waktu" name="waktu" value="{{$detail->time}}" required>
                                         </div>
 
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="exampleInputKorban">Lokasi</label>
                                             <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan lokasi" name="lokasi" value="{{$detail->lokasi}}" required>
-                                        </div>
+                                        </div> -->
 
                                         <?php
                                         $value = $detail->status;
