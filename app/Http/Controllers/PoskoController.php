@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Bencana;
 use App\Models\Pengungsi;
+use App\Models\Integrasi;
 use App\Models\Posko;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -33,33 +35,30 @@ class PoskoController extends Controller
         // $this->idBencana = $getIdBencana;
         //Memberikan nilai pada idBencana
         session()->put('idBencana', $id);
+
         $posko = Posko::select(
-            DB::raw("concat('Prov. ',provinsi,', Kota ',kota,', Kec. ',
-            kecamatan,', Ds. ',kelurahan,', Daerah ',detail,' ')
-        as lokasi"),
+            DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,', Kec. ',
+            b.kecamatan,', Ds. ',b.kelurahan,', Daerah ',b.detail,' ')
+            as lokasi"),
             'posko.id as idPosko',
             'int.user_id as idTrc',
             'posko.nama as namaPosko',
-            'provinsi',
-            'kota',
-            'kecamatan',
-            'kelurahan',
-            'detail',
             'kapasitas',
             'int.bencana_id',
             'b.id as idBencana',
             DB::raw("concat(u.firstname,' ',u.lastname) as fullName"), 'u.id as idAdmin',
             'posko.created_at',
             'posko.updated_at',
+            'b.nama as namaBencana',
             DB::raw('count(int.posko_id) as ttlPengungsi'),
         )
             ->join('integrasi as int','int.posko_id','=','posko.id')
             ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
             ->join('bencana as b', 'int.bencana_id', '=', 'b.id')
             ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
-            ->groupBy('lokasi', 'provinsi', 'kota', 'kecamatan', 'kelurahan', 'detail', 'posko.id'
+            ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'b.detail', 'posko.id'
                 , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
-                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id')
+                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama')
             ->where('int.bencana_id', $id)
             ->orderBy('u.id', 'desc')
             ->paginate(5);
@@ -82,6 +81,24 @@ class PoskoController extends Controller
             ->join('posko as p', 'int.posko_id', '=', 'p.id')
             ->paginate(5);
 
+        $getNmBencana= Bencana::select(
+            'bencana.nama as namaBencana',
+            )
+            
+            // ->join('posko as p','pengungsi.posko_id','=','p.id')
+            ->join('integrasi as int','int.bencana_id','=','bencana.id')
+            ->where('int.bencana_id', $id)
+            ->get();
+
+        $getIdPosko = Posko::select('id')->orderBy('id','desc')->value('id');
+
+        $getLokasi = Bencana::select( DB::raw("concat('Prov. ',provinsi,', Kota ',kota,', Kec. ',
+        kecamatan,', Ds. ',kelurahan,', Daerah ',detail,' ')
+        as lokasi"))
+        ->join('integrasi as int','int.bencana_id','=','bencana.id')
+        ->where('int.bencana_id', $id)
+        ->get();
+
         // return view('admin.posko.index', ['data'=>$posko],
         // ['getTrc'=>$trc],['getId'=>$getIdBencana],['ttlPengungsi'=>$getTtlPengungsi]);
         return view('admin.posko.index', [
@@ -89,6 +106,9 @@ class PoskoController extends Controller
             'getTrc' => $trc,
             'getId' => $getIdBencana,
             'ttlPengungsi' => $getTtlPengungsi,
+            'getNmBencana' => $getNmBencana,
+            'getIdPosko' => $getIdPosko,
+            'getLokasi' => $getLokasi
         ]);
 
     }
@@ -189,23 +209,30 @@ class PoskoController extends Controller
                 'nama' => ['string', 'unique:posko'],
                 // 'trc_id' => ['string', 'unique:posko'],
             ]);
+            // $getIdBencana = Bencana::select('id')->orderBy('id','desc')->first();
+
             $addPosko = new Posko;
             $addPosko->nama = $request->nama;
-            $addPosko->provinsi = $request->provinsi;
-            $addPosko->kota = $request->kota;
-            $addPosko->kecamatan = $request->kecamatan;
-            $addPosko->kelurahan = $request->kelurahan;
-            $addPosko->detail = $request->detail;
-            $addPosko->kapasitas = $request->kapasitass;
-            $addPosko->trc_id = $request->trc_id;
-            $addPosko->bencana_id = $request->idPosko;
+            $addPosko->detail = $request->detail_lokasi;
+            $addPosko->kapasitas = $request->kapasitas;
+            // $addPosko->trc_id = $request->trc_id;
+            // $addPosko->bencana_id = $request->idBencana;
             $addPosko->save();
 
-            // $idPosko = Posko::where('bencana_id', $request->idBencana)->first()->value('id');
-            // $bencana = Bencana::where('id', $request->idBencana)->first();
-            // $bencana->posko_id = $idPosko;
-            // $bencana->update();
-
+            $eksekusi = Integrasi::select('id')->whereNull('posko_id')->where('bencana_id',session()->get('idBencana'))->first();
+            $getIdPosko = Posko::select('id')->orderBy('id','desc')->value('id');
+            $getIdTrc = $request->trc_id;
+            $eksekusi->update([
+                'posko_id' => $getIdPosko,
+                'user_id' => $getIdTrc,
+            ]);
+         
+          
+            // $getIdIntegrasi = Integrasi::select('id')->where('bencana_id',session()->get('idBencana'))->first();
+            // $getIdIntegrasi->posko_id = $getIdPosko;
+            // $getIdIntegrasi->user_id = $getIdTrc;
+            // $getIdIntegrasi->update();
+            
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
         }
