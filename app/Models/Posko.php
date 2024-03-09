@@ -11,11 +11,8 @@ class Posko extends Model
     protected $table = 'posko';
 
     protected $fillable = [
-        'name',
-        'provinsi',
-        'kota',
-        'kecamatan',
-        'kelurahan',
+        'nama',
         'detail',
+        'kapasitas'
     ];
 }

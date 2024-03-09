@@ -12,6 +12,7 @@
                 @php
                     $namaBencana = $nmBencana->namaBencana;
                 @endphp
+                @break
               @endforeach
             </div>
             <div class="col-sm-6">

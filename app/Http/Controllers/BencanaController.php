@@ -234,15 +234,17 @@ class BencanaController extends Controller
     public function delete($id)
     {
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            $getPosko = Posko::where('bencana_id', $id)->value('id');
-            $delBencana = Bencana::destroy($id);
+            $getIdPosko = Integrasi::select('posko_id')->where('bencana_id', $id)->value('posko_id');
+            $getIdIntegrasi = Integrasi::where('bencana_id', $id)->value('id');
+            $getPosko = Posko::where('id', $getIdPosko)->value('id');
+            $getBencana = Bencana::where('id', $id)->value('id');
+
+            $delIntegrasi = Integrasi::destroy($getIdIntegrasi);
+            $delBencana = Bencana::destroy($getBencana);
             $delPosko = Posko::destroy($getPosko);
 
             // check data deleted or not
-            if ($delBencana == 1 && $delPosko == 1) {
-                $success = true;
-                $message = "Data berhasil dihapus";
-            } else if ($delBencana == 1) {
+            if ($delIntegrasi && $delBencana == 1 && $delPosko == 1) {
                 $success = true;
                 $message = "Data berhasil dihapus";
             } else {

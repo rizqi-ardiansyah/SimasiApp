@@ -204,20 +204,26 @@ class PoskoController extends Controller
     public function createPosko(Request $request)
     {
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            $request->validate([
-                // 'namaBelakang' => ['required', 'max:50'],
-                'nama' => ['string', 'unique:posko'],
-                // 'trc_id' => ['string', 'unique:posko'],
+            // $request->validate([
+            //     // 'namaBelakang' => ['required', 'max:50'],
+            //     'nama' => ['string', 'unique:posko'],
+            //     // 'trc_id' => ['string', 'unique:posko'],
+            // ]);
+            Posko::create([
+                'nama' => $request->nama,
+                'detail' => $request->detail_lokasi,
+                'kapasitas' => $request->kapasitas
             ]);
-            // $getIdBencana = Bencana::select('id')->orderBy('id','desc')->first();
-
-            $addPosko = new Posko;
-            $addPosko->nama = $request->nama;
-            $addPosko->detail = $request->detail_lokasi;
-            $addPosko->kapasitas = $request->kapasitas;
-            // $addPosko->trc_id = $request->trc_id;
-            // $addPosko->bencana_id = $request->idBencana;
-            $addPosko->save();
+            Integrasi::create([
+                'bencana_id' => $request->session()->get('idBencana'),
+            ]);
+            // $addPosko = new Posko;
+            // $addPosko->nama = $request->nama;
+            // $addPosko->detail = $request->detail_lokasi;
+            // $addPosko->kapasitas = $request->kapasitas;
+            // // $addPosko->trc_id = $request->trc_id;
+            // // $addPosko->bencana_id = $request->idBencana;
+            // $addPosko->save();
 
             $eksekusi = Integrasi::select('id')->whereNull('posko_id')->where('bencana_id',session()->get('idBencana'))->first();
             $getIdPosko = Posko::select('id')->orderBy('id','desc')->value('id');
