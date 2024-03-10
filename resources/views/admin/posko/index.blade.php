@@ -17,8 +17,8 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="/bencana">Bencana</a></li>
+                    <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{{url('/bencana')}}">Bencana</a></li>
                     <li class="breadcrumb-item active">Posko</li>
                 </ol>
             </div>
@@ -163,6 +163,7 @@
 
                                     <th>Nama</th>
                                     <th>Lokasi</th>
+                                    <th>Detail</th>
                                     <th>TRC</th>
                                     <th>Pengungsi</th>
                                     <th>Sisa Kapasitas</th>
@@ -180,6 +181,7 @@
                                     <td>{{ $data->firstItem() + $key  }}</td>
                                     <td>{{ $posko->namaPosko }}</td>
                                     <td>{{ $posko->lokasi}}</td>
+                                    <td>{{ $posko->detail}}</td>
                                     <td>{{ $posko->fullName}}</td>
                                     <td>
                                         {{ $posko->ttlPengungsi}} orang
@@ -281,32 +283,20 @@
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="exampleInputNama">Nama Posko</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" name="nama" placeholder="Masukan nama posko" value="{{$detail->namaPosko}}" required>
+                                                            <input type="text" class="form-control" id="exampleInputnama" name="nama" placeholder="Masukan nama posko" value="{{$detail->namaPosko}}" readonly>
                                                         </div>
+                                                         
+                                                        @foreach ($getLokasi as $lokasi)
+                                                        <div class="form-group">
+                                                            <label for="exampleInputProvinsi">Lokasi bencana</label>
+                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan lokasi" name="lokasi" value="{{$detail->lokasi}}" readonly>
+                                                        </div>
+                                                        @break
+                                                        @endforeach
 
                                                         <div class="form-group">
-                                                            <label for="exampleInputProvinsi">Provinsi</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$detail->provinsi}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="exampleInputKota">Kota</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kota" value="{{$detail->kota}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="exampleInputKec">Kecamatan</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kecamatan" name="kecamatan" value="{{$detail->kecamatan}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="exampleInputKel">Kelurahan</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kelurahan" name="kelurahan" value="{{$detail->kelurahan}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="exampleInputDetail">Detail</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan detail" name="detail" value="{{$detail->detail}}" required>
+                                                            <label for="exampleInputProvinsi">Detail alamat posko</label>
+                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan detail alamat" name="detail_lokasi" value="{{$detail->detail}}" required>
                                                         </div>
 
                                                         <div class="form-group">

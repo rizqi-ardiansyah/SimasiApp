@@ -38,9 +38,10 @@ class PoskoController extends Controller
 
         $posko = Posko::select(
             DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,', Kec. ',
-            b.kecamatan,', Ds. ',b.kelurahan,', Daerah ',b.detail,' ')
+            b.kecamatan,', Ds. ',b.kelurahan)
             as lokasi"),
             'posko.id as idPosko',
+            'posko.detail',
             'int.user_id as idTrc',
             'posko.nama as namaPosko',
             'kapasitas',
@@ -50,15 +51,15 @@ class PoskoController extends Controller
             'posko.created_at',
             'posko.updated_at',
             'b.nama as namaBencana',
-            DB::raw('count(int.posko_id) as ttlPengungsi'),
+            DB::raw('count(int.png_id) as ttlPengungsi'),
         )
             ->join('integrasi as int','int.posko_id','=','posko.id')
             ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
             ->join('bencana as b', 'int.bencana_id', '=', 'b.id')
             ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
-            ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'b.detail', 'posko.id'
+            ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'posko.id'
                 , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
-                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama')
+                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail')
             ->where('int.bencana_id', $id)
             ->orderBy('u.id', 'desc')
             ->paginate(5);
@@ -93,7 +94,7 @@ class PoskoController extends Controller
         $getIdPosko = Posko::select('id')->orderBy('id','desc')->value('id');
 
         $getLokasi = Bencana::select( DB::raw("concat('Prov. ',provinsi,', Kota ',kota,', Kec. ',
-        kecamatan,', Ds. ',kelurahan,', Daerah ',detail,' ')
+        kecamatan,', Ds. ',kelurahan)
         as lokasi"))
         ->join('integrasi as int','int.bencana_id','=','bencana.id')
         ->where('int.bencana_id', $id)
@@ -285,13 +286,22 @@ class PoskoController extends Controller
 
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $posko->nama = $request->nama;
-            $posko->provinsi = $request->provinsi;
-            $posko->kota = $request->kota;
-            $posko->kecamatan = $request->kecamatan;
-            $posko->kelurahan = $request->kelurahan;
-            $posko->detail = $request->detail;
-            $posko->trc_id = $request->trc_id;
+            // $posko->provinsi = $request->provinsi;
+            // $posko->kota = $request->kota;
+            // $posko->kecamatan = $request->kecamatan;
+            // $posko->kelurahan = $request->kelurahan;
+            $posko->detail = $request->detail_lokasi;
             $posko->update();
+
+            $eksekusi = Integrasi::select('id')->where('posko_id',$id)->first();
+            // $getIdPosko = Posko::select('id')->orderBy('id','desc')->value('id');
+            // $getIdTrc = $request->trc_id;
+            // $eksekusi->update([
+            //     'posko_id' => $getIdPosko,
+            //     'user_id' => $getIdTrc,
+            // ]);
+            $eksekusi->user_id = $request->trc_id;
+            $eksekusi->update();
             // $member->syncRoles($role);
             Alert::success('Success', 'Data berhasil diubah');
             return redirect()->back();
@@ -314,10 +324,19 @@ class PoskoController extends Controller
     public function delete($id)
     {
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            $delete = Posko::destroy($id);
+            // $delete = Posko::destroy($id);yy
+
+            // $getIdBencana = Integrasi::select('bencana_id')->where('posko_id', $id)->value('bencana_id');
+            $getIdIntegrasi = Integrasi::where('posko_id', $id)->value('id');
+            $getPosko = Posko::where('id', $id)->value('id');
+            // $getBencana = Bencana::where('id', $getIdBencana)->value('id');
+
+            $delIntegrasi = Integrasi::destroy($getIdIntegrasi);
+            // $delBencana = Bencana::destroy($getBencana);
+            $delPosko = Posko::destroy($getPosko);
 
             // check data deleted or not
-            if ($delete == 1) {
+            if ($delIntegrasi == 1 && $delPosko == 1) {
                 $success = true;
                 $message = "Data berhasil dihapus";
             } else {

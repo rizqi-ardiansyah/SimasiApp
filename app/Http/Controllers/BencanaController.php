@@ -24,12 +24,11 @@ class BencanaController extends Controller
             'bencana.nama as namaBencana','status', 
             'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
             'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
-            'bencana.detail',
             // DB::raw('count(int.png_id) as ttlPengungsi'),
              DB::raw('count(int.posko_id) as ttlPosko'),
              DB::raw('count(int.png_id) as ttlPengungsi'),
              DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
-             ' ',bencana.kelurahan,',',' ',bencana.detail) as alamat")
+             ' ',bencana.kelurahan) as alamat")
         )
             ->join('integrasi as int', 'int.bencana_id','=','bencana.id')
             ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
@@ -40,7 +39,7 @@ class BencanaController extends Controller
         // ->where('peng.posko_id','=','p.id')
             ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
                 'bencana.nama', 'status', 'bencana.provinsi','bencana.kota','bencana.kecamatan','bencana.kelurahan',
-                'bencana.detail','bencana.updated_at','bencana.jmlPengungsi')
+                'bencana.updated_at','bencana.jmlPengungsi')
             ->paginate(5);
 
         // $getIdBencana = Bencana::where('id',$bencana)->value('id');

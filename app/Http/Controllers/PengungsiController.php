@@ -502,21 +502,21 @@ class PengungsiController extends Controller
                     'kelurahan' => $request->kelurahan,
                     'detail' => $request->detail,
                 ]);
-                Pengungsi::create([
-                    'nama' => $request->nama,
-                    'telpon' => $request->telpon,
-                    'statKel' => $request->statKel,
-                    'gender' => $request->gender,
-                    'umur' => $request->umur,
-                    'statPos' => $request->statPos,
-                    // 'posko_id' => $request->posko_id,
-                    'statKon' => $request->statKon,
-                ]);
-                Integrasi::create([
-                    'bencana_id' => $request->bencana_id,
-                    'posko_id' => $request->posko_id,
-                    'user_id' => $request->trc_id,
-                ]);
+                    Pengungsi::create([
+                        'nama' => $request->nama,
+                        'telpon' => $request->telpon,
+                        'statKel' => $request->statKel,
+                        'gender' => $request->gender,
+                        'umur' => $request->umur,
+                        'statPos' => $request->statPos,
+                        // 'posko_id' => $request->posko_id,
+                        'statKon' => $request->statKon,
+                    ]);
+                    Integrasi::create([
+                        'bencana_id' => $request->bencana_id,
+                        'posko_id' => $request->posko_id,
+                        'user_id' => $request->trc_id,
+                    ]);
                 $getIdIntegrasi = Integrasi::select('id')->orderBy('id','desc')->first();
                 $getIdKpl = KepalaKeluarga::select('id')->orderBy('id', 'desc')->value('id');
                 $getIdPengungsi = Pengungsi::select('id')->orderBy('id', 'desc')->value('id');

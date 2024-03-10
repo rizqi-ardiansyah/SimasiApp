@@ -104,10 +104,10 @@
                                                 <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kelurahan" name="kelurahan" required>
                                             </div>
 
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="exampleInputDetail">Detail</label>
                                                 <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan detail" name="detail" required>
-                                            </div>
+                                            </div> -->
 
 
                                             <div class="form-group">
@@ -332,10 +332,10 @@
                                                 <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kelurahan" name="kelurahan" value="{{$detail->kelurahan}}" required>
                                             </div>
 
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="exampleInputDetail">Detail</label>
                                                 <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan detail" name="detail" value="{{$detail->detail}}" required>
-                                            </div>
+                                            </div> -->
 
 
                                                         <?php
