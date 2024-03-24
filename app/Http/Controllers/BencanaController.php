@@ -25,7 +25,8 @@ class BencanaController extends Controller
             'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
             'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
             // DB::raw('count(int.png_id) as ttlPengungsi'),
-             DB::raw('count(int.posko_id) as ttlPosko'),
+            //  DB::raw('count(int.posko_id) as ttlPosko'),
+            'bencana.jmlPosko',
              DB::raw('count(int.png_id) as ttlPengungsi'),
              DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
              ' ',bencana.kelurahan) as alamat")
@@ -39,7 +40,7 @@ class BencanaController extends Controller
         // ->where('peng.posko_id','=','p.id')
             ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
                 'bencana.nama', 'status', 'bencana.provinsi','bencana.kota','bencana.kecamatan','bencana.kelurahan',
-                'bencana.updated_at','bencana.jmlPengungsi')
+                'bencana.updated_at','bencana.jmlPengungsi','bencana.jmlPosko')
             ->paginate(5);
 
         // $getIdBencana = Bencana::where('id',$bencana)->value('id');
@@ -154,7 +155,6 @@ class BencanaController extends Controller
             $addBencana->kota = $request->kota;
             $addBencana->kecamatan = $request->kecamatan;
             $addBencana->kelurahan = $request->kelurahan;
-            $addBencana->detail = $request->detail;
             $addBencana->status = $request->status;
             $addBencana->save();
 

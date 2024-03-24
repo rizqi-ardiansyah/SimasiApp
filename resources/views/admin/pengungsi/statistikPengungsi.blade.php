@@ -157,12 +157,9 @@
                             <td>{{ $k }}</td>
                             <td>{{ $pengungsi->nama}}</td>
                             <td>{{ $pengungsi->anggota}}</td>
-                            <!-- @foreach($getAlamat as $alamat) -->
                             <td>{{ $pengungsi->lokasi }}</td>
-                            @endforeach
                         </tr>
                         @endforeach
-
                         </tbody>
                     </table>
                 </div>
@@ -175,53 +172,6 @@
 </div>
 <!-- end -->
 
-<!-- modal kepala keluarga -->
-<div class="modal fade" id="modal-kkeluarga">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">List Kepala Keluarga</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- form start -->
-                <table id="example2" class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nama</th>
-                            <th>Jumlah anggota</th>
-                            <th>Alamat</th>
-                            <!-- <th>Jenis Kelamin</th> -->
-                            <!-- <th>Umur</th> -->
-                            <!-- <th>Kondisi</th>
-                            <th>Status</th> -->
-                        </tr>
-                    </thead>
-                    <?php $k = 0; ?>
-                    @foreach($dataKpl as $pengungsi)
-                    <tr>
-                        <?php $k++; ?>
-                        <td>{{ $k }}</td>
-                        <td>{{ $pengungsi->nama}}</td>
-                        <td>{{ $jmlAnggota }}</td>
-                        @foreach($getAlamat as $alamat)
-                        <td>{{ $alamat->lokasi }}</td>
-                        @endforeach
-                    </tr>
-                    @endforeach
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- end -->
 
 <!-- modal bayi -->
 <div class="modal fade" id="modal-bayi">

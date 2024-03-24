@@ -166,7 +166,7 @@
                                     <td>{{ $bencana->waktu }}</td>
                                     <td>{{ $bencana->alamat }}</td>
                                     <!-- <td>{{ $bencana->posko }}</td> -->
-                                    <td>{{ $bencana->ttlPosko }} tempat</br>
+                                    <td>{{ $bencana->jmlPosko }} tempat</br>
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->ttlPengungsi }} orang</br>

@@ -129,7 +129,7 @@ class PengungsiController extends Controller
 
         $getNmPosko = Posko::select('nama')->where('id', $request->id)->get();
 
-        $dataKpl = Pengungsi::select('*', DB::raw('count(int.kpl_id) as ttlAnggota'))
+        $dataKpl = Pengungsi::select('*', DB::raw('count(int.png_id) as ttlAnggota'))
             // ->join('kepala_keluarga as kp','kp.id','=','pengungsi.kpl_id')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->where('int.posko_id', '=', $request->id)
@@ -557,6 +557,11 @@ class PengungsiController extends Controller
                     'kpl_id' => $getIdKpl,
                     'png_id' => $getIdPengungsi,
                 ]);
+                KepalaKeluarga::where('id', $request->kpl)
+                ->update([
+                    'anggota'=> DB::raw('anggota+1'), 
+                    'updated_at' => Carbon::now(),
+                 ]);
             }
             Bencana::where('id', $this->idBencana)
             ->update([

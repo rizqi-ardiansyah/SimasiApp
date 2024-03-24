@@ -218,6 +218,11 @@ class PoskoController extends Controller
             Integrasi::create([
                 'bencana_id' => $request->session()->get('idBencana'),
             ]);
+            Bencana::where('id', $request->session()->get('idBencana'))
+            ->update([
+                'jmlPosko'=> DB::raw('jmlPosko+1'), 
+                'updated_at' => Carbon::now(),
+             ]);
             // $addPosko = new Posko;
             // $addPosko->nama = $request->nama;
             // $addPosko->detail = $request->detail_lokasi;
