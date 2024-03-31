@@ -234,9 +234,9 @@ class BencanaController extends Controller
     {
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $getIdPosko = Integrasi::select('posko_id')->where('bencana_id', $id)->value('posko_id');
-            $getIdIntegrasi = Integrasi::where('bencana_id', $id)->value('id');
-            $getPosko = Posko::where('id', $getIdPosko)->value('id');
-            $getBencana = Bencana::where('id', $id)->value('id');
+            $getIdIntegrasi = Integrasi::where('bencana_id', $id)->get();
+            $getPosko = Posko::where('id', $getIdPosko)->get();
+            $getBencana = Bencana::where('id', $id)->get();
 
             $delIntegrasi = Integrasi::destroy($getIdIntegrasi);
             $delBencana = Bencana::destroy($getBencana);

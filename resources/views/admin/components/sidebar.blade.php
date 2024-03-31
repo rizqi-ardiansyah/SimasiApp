@@ -86,8 +86,41 @@
                             Keluar
                         </p>
                     </a> -->
-            </ul>
-        </nav>
+                    <li class="nav-item menu-close">
+                    <a href="{{url('/member')}}" class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
+                        <p>
+                            Member
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+
+                    <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                            <a href="{{url('/memberPusdalop')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Pusdalop</p>
+                            </a>
+                            </li>
+                            <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>TRC</p>
+                            </a>
+                            </li>
+                            <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Relawan</p>
+                            </a>
+                            </li>
+                        </ul>
+                        </li>
+                     </li>
+
+       
+     
+    </nav>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

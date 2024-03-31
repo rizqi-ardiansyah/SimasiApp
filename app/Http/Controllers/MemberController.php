@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\MemberTeam;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -14,15 +15,45 @@ class MemberController extends Controller
 {
     public function index()
     {
-        $users = User::select(DB::raw("concat(users.firstname,' ',users.lastname) as fullName"), 'users.firstname', 'users.lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 'r.id as idRole', 'r.name as namaPeran')
+        $users = User::select('users.firstname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
+        'r.id as idRole', 'r.name as namaPeran')
             ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
             ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
-            ->orderBy('fullName', 'asc')
+            ->orderBy('firstname', 'asc')
             ->paginate(5);
 
         $roles = Role::all();
         return view('admin.member.index', [
             'data' => $users,
+            'role' => $roles,
+        ]);
+    }
+
+    public function memberPusdalop()
+    {
+        $users = User::select(DB::raw("concat(users.firstname,' ',users.lastname) as fullName"), 
+        'users.firstname', 'users.lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
+        'r.id as idRole', 'r.name as namaPeran')
+            ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->where('r.id','=',1)
+            ->orderBy('fullName', 'asc')
+            ->paginate(5);
+
+        $memberPusdalop = MemberTeam::select(DB::raw("concat(memberteam.firstname,' ',memberteam.lastname) 
+        as fullName"), 'memberteam.firstname', 'memberteam.lastname', 
+        'memberteam.email', 'memberteam.nohp','memberteam.alamat','memberteam.peran',
+        'memberteam.tim','memberteam.id as idMember')
+            ->leftJoin('users as u', 'u.id', '=', 'memberteam.tim')
+            ->where('memberteam.tim','=',1)
+            ->orderBy('firstname', 'asc')
+            ->paginate(5);
+
+
+        $roles = Role::all();
+        return view('admin.member.indexPusdalop', [
+            'data' => $users,
+            'memberPusdalop' => $memberPusdalop,
             'role' => $roles,
         ]);
     }
@@ -45,14 +76,14 @@ class MemberController extends Controller
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $request->validate([
                 'namaDepan' => ['required', 'max:50'],
-                'namaBelakang' => ['required', 'max:50'],
-                'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
+                // 'namaBelakang' => ['required', 'max:50'],
+                // 'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
             ]);
 
             $addMember = new User;
             $role = Role::findOrFail($request->peran);
             $addMember->firstname = $request->namaDepan;
-            $addMember->lastname = $request->namaBelakang;
+            // $addMember->lastname = $request->namaBelakang;
             $addMember->email = $request->email;
             $addMember->email_verified_at = now();
             $addMember->password = Hash::make('password');
@@ -72,8 +103,8 @@ class MemberController extends Controller
         $member = User::where('id', $id)->first();
 
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            $member->firstname = $request->namaDepan;
-            $member->lastname = $request->namaBelakang;
+            $member->firstname = $request->namaTim;
+            // $member->lastname = $request->namaBelakang;
             $member->email = $request->email;
             $member->update();
             $member->syncRoles($role);

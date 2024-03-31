@@ -51,6 +51,7 @@ class PoskoController extends Controller
             'posko.created_at',
             'posko.updated_at',
             'b.nama as namaBencana',
+            'b.jmlPosko as jmlPosko',
             DB::raw('count(int.png_id) as ttlPengungsi'),
         )
             ->join('integrasi as int','int.posko_id','=','posko.id')
@@ -59,7 +60,7 @@ class PoskoController extends Controller
             ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
             ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'posko.id'
                 , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
-                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail')
+                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail','b.jmlPosko')
             ->where('int.bencana_id', $id)
             ->orderBy('u.id', 'desc')
             ->paginate(5);
@@ -84,6 +85,8 @@ class PoskoController extends Controller
 
         $getNmBencana= Bencana::select(
             'bencana.nama as namaBencana',
+             DB::raw('bencana.jmlPosko+1 as jmlPosko'),
+            // 'bencana.jmlPosko as jmlPosko',
             )
             
             // ->join('posko as p','pengungsi.posko_id','=','p.id')

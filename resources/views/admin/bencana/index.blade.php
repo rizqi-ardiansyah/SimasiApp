@@ -160,6 +160,11 @@
 
                                 @role('pusdalop')
                                 @foreach ($data as $key => $bencana)
+                                @if(empty($bencana->namaBencana))
+                                    <p>Data kosong</p>
+                                    // whatever you need to do here
+                                @else 
+                               
                                 <tr>
                                     <td>{{ $data->firstItem() + $key }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
@@ -212,6 +217,7 @@
                                         </a> -->
                                     </td>
                                 </tr>
+                                @endif
                                 @endforeach
                                 @endrole
 

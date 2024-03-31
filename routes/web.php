@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BencanaController;
 use App\Http\Controllers\PoskoController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberTeamController;
 use App\Http\Controllers\PengungsiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\CadangController;
@@ -40,9 +41,17 @@ Route::resource('dashboard', DashboardController::class)->middleware('auth');
 Route::resource('bencana', BencanaController::class);
 Route::resource('posko', PoskoController::class);
 Route::resource('member', MemberController::class);
+Route::resource('memberTeam', MemberTeamController::class);
 Route::resource('pengungsi', PengungsiController::class);
 Route::resource('cadang', CadangController::class)->only(['index', 'store', 'destroy']);
 Route::resource('laporan', LaporanController::class)->only(['index', 'store', 'destroy']);
+
+Route::get('/memberPusdalop', [MemberController::class, 'memberPusdalop']);
+Route::get('/memberPusdalop/member', [MemberTeamController::class, 'memberPusdalop']);
+Route::post('/memberPusdalop/create', [MemberTeamController::class, 'createMember'])->name('memberTeam.create');
+Route::match(['get', 'post'], 'memberPusdalop/edit/{id}', [MemberTeamController::class, 'edit']);
+Route::post('memberPusdalop/deleteAnggota/{id}', [MemberTeamController::class, 'deleteAnggota']);
+// Route::post('/memberPusdalop/edit', [MemberTeamController::class, 'editMember'])->name('memberTeam.edit');
 
 Route::get('/pengungsi/keluarga', 'App\Http\Controllers\PengungsiController@showKeluarga');
 

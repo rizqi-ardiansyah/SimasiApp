@@ -11,6 +11,7 @@
                 <h1>Posko ({{ $nmBencana->namaBencana }})</h1>
                 @php
                     $namaBencana = $nmBencana->namaBencana;
+                    $jmlPosko = $nmBencana->jmlPosko;
                 @endphp
                 @break
               @endforeach
@@ -84,11 +85,12 @@
                                                 <!-- <label for="exampleInputId">Nama Posko</label> -->
                                                 <input type="text" class="form-control" id="idBencana" name="idBencana" value="{{request()->id}}" hidden required>
                                                 <input type="text" class="form-control" id="idTrc" name="idTrc" value="{{auth()->user()->id}}" hidden required>
+                                                <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputNama">Nama Posko</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}} {{$getIdPosko}}" placeholder="Masukan nama posko" readonly>
+                                                <input type="text" class="form-control" id="exampleInputnama" name="namas" value="{{$namaBencana}} {{$jmlPosko}}" placeholder="Masukan nama posko" readonly>
                                             </div>
 
                                             @foreach ($getLokasi as $lokasi)
@@ -151,6 +153,9 @@
                     <!-- Tabel Posko -->
                     <div class="card-body table-responsive">
                         @role('pusdalop')
+                        <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
+                            <i class="fas fa-plus mr-1"></i> Tambah Posko
+                        </a>
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Posko
                         </a>
