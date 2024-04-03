@@ -25,7 +25,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header justify-content-between">
-                        <h3 class="card-title">List Tim Pusdalop</h3>
+                        <h3 class="card-title">List Tim TRC</h3>
 
                         <div class="card-tools">
                             <form id="search">
@@ -47,7 +47,7 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Tambah Pusdalop</h4>
+                                    <h4 class="modal-title">Tambah TRC</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -85,8 +85,8 @@
 
                                             <div class="form-group">
                                                 <label for="peran">Peran</label>
-                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=pusdalop readonly>
-                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=1 hidden>
+                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=TRC readonly>
+                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=2 hidden>
                                             </div>
 
                                         </div>
@@ -246,8 +246,8 @@
 
                                         <div class="form-group">
                                                 <label for="peran">Peran</label>
-                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=pusdalop readonly>
-                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=1 hidden>
+                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=TRC readonly>
+                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=2 hidden>
                                         </div>
 
                                     </div>
@@ -305,7 +305,7 @@
                         <tbody id="result1">
                             <tr>
                                 <?php $i = 0; ?>
-                                @foreach ($memberPusdalop as $member)
+                                @foreach ($memberTRC as $member)
                                 @if($member->tim == $idAdmin)
                                 <?php $i++; ?>
                                 <!-- <td> {{($data->currentPage() - 1) * $data->perPage() + $loop->iteration}}</td> -->
@@ -396,7 +396,7 @@
 
                                             <div class="form-group">
                                                 <label for="namaBelakang">Nama belakang</label>
-                                                <input type="text" class="form-control" id="lastname" placeholder="Masukan nama belakang" name="lastname"  required>
+                                                <input type="text" class="form-control" id="lastname" placeholder="Masukan nama belakang" name="lastname">
                                             </div>
 
                                             <div class="form-group">
@@ -416,10 +416,10 @@
 
                                             <div class="form-group">
                                             <label for="peran">Peran</label>
-                                            <select class="form-control" id="peranAnggota" name="peranAnggota">
+                                            <select class="form-control" id="peranAnggota" name="peranAnggota" required>
                                                 <option selected value=""> Pilih peran
                                                 </option>
-                                            @foreach ($memberPusdalop as $member)
+                                            @foreach ($memberTRC as $member)
                                                 @php
                                                     $cek = 0
                                                 @endphp
@@ -470,7 +470,7 @@
                     </div>
                     @endforeach
 
-                @foreach ($memberPusdalop as $detail)
+                @foreach ($memberTRC as $detail)
                 <?php
                     $noTim = $detail->tim;
                 ?>
@@ -485,7 +485,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form action="{{ url('memberPusdalop/edit/'.$detail->idMember) }}" method="POST">
+                                <form action="{{ url('memberTRC/edit/'.$detail->idMember) }}" method="POST">
                                         @csrf
                                         <div class="card-body">
                                             <input type="text" class="form-control" id="idAdmin" placeholder="pusdalop" name="idAdmin" value="{{$noTim}}" hidden required>
@@ -497,7 +497,7 @@
 
                                             <div class="form-group">
                                                 <label for="namaBelakang">Nama belakang</label>
-                                                <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="lastname" value="{{$detail->lastname}}">
+                                                <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="lastname" value="{{$detail->lastname}}" required>
                                             </div>
 
                                             <div class="form-group">
@@ -517,13 +517,13 @@
 
                                             <div class="form-group">
                                             <label for="peran">Peran</label>
-                                            <select class="form-control" id="peranAnggota" name="peranAnggota">
+                                            <select class="form-control" id="peranAnggota" name="peranAnggota" required>
                                                 <option selected value="{{$detail->peran}}" hidden>
                                                 @if($detail->peran == 1) Ketua
                                                 @else Anggota
                                                 @endif
                                                 </option>
-                                            @foreach ($memberPusdalop as $member)
+                                            @foreach ($memberTRC as $member)
                                                 @php
                                                     $ceks = 0
                                                 @endphp
@@ -594,7 +594,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: "{{url('memberPusdalop/deleteAnggota')}}/" + id,
+                        url: "{{url('memberTRC/deleteAnggota')}}/" + id,
                         data: {
                             _token: CSRF_TOKEN
                         },

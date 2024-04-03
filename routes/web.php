@@ -51,7 +51,11 @@ Route::get('/memberPusdalop/member', [MemberTeamController::class, 'memberPusdal
 Route::post('/memberPusdalop/create', [MemberTeamController::class, 'createMember'])->name('memberTeam.create');
 Route::match(['get', 'post'], 'memberPusdalop/edit/{id}', [MemberTeamController::class, 'edit']);
 Route::post('memberPusdalop/deleteAnggota/{id}', [MemberTeamController::class, 'deleteAnggota']);
-// Route::post('/memberPusdalop/edit', [MemberTeamController::class, 'editMember'])->name('memberTeam.edit');
+
+Route::get('/memberTRC', [MemberController::class, 'memberTRC']);
+Route::post('/memberTRC/create', [MemberTeamController::class, 'createMember'])->name('memberTeam.create');
+Route::match(['get', 'post'], 'memberTRC/edit/{id}', [MemberTeamController::class, 'edit']);
+Route::post('memberTRC/deleteAnggota/{id}', [MemberTeamController::class, 'deleteAnggota']);
 
 Route::get('/pengungsi/keluarga', 'App\Http\Controllers\PengungsiController@showKeluarga');
 

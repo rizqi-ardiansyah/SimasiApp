@@ -45,7 +45,6 @@ class MemberController extends Controller
         'memberteam.email', 'memberteam.nohp','memberteam.alamat','memberteam.peran',
         'memberteam.tim','memberteam.id as idMember')
             ->leftJoin('users as u', 'u.id', '=', 'memberteam.tim')
-            ->where('memberteam.tim','=',1)
             ->orderBy('firstname', 'asc')
             ->paginate(5);
 
@@ -54,6 +53,34 @@ class MemberController extends Controller
         return view('admin.member.indexPusdalop', [
             'data' => $users,
             'memberPusdalop' => $memberPusdalop,
+            'role' => $roles,
+        ]);
+    }
+
+    public function memberTRC()
+    {
+        $users = User::select(DB::raw("concat(users.firstname,' ',users.lastname) as fullName"), 
+        'users.firstname', 'users.lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
+        'r.id as idRole', 'r.name as namaPeran')
+            ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->where('r.id','=',2)
+            ->orderBy('fullName', 'asc')
+            ->paginate(5);
+
+        $memberTRC = MemberTeam::select(DB::raw("concat(memberteam.firstname,' ',memberteam.lastname) 
+        as fullName"), 'memberteam.firstname', 'memberteam.lastname', 
+        'memberteam.email', 'memberteam.nohp','memberteam.alamat','memberteam.peran',
+        'memberteam.tim','memberteam.id as idMember')
+            ->leftJoin('users as u', 'u.id', '=', 'memberteam.tim')
+            ->orderBy('firstname', 'asc')
+            ->paginate(5);
+
+
+        $roles = Role::all();
+        return view('admin.member.indexTRC', [
+            'data' => $users,
+            'memberTRC' => $memberTRC,
             'role' => $roles,
         ]);
     }
