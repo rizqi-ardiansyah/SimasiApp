@@ -129,6 +129,10 @@ class PengungsiController extends Controller
 
         $getNmPosko = Posko::select('nama')->where('id', $request->id)->get();
 
+        $getNmBencana = Bencana::select('nama')->where('id', $request->bencana_id)->get();
+
+        $getJmlPosko = Bencana::select('jmlPosko')->where('id', $request->bencana_id)->get();
+
         $dataKpl = Pengungsi::select('*', DB::raw('count(int.png_id) as ttlAnggota'))
             // ->join('kepala_keluarga as kp','kp.id','=','pengungsi.kpl_id')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
@@ -283,6 +287,12 @@ class PengungsiController extends Controller
 
         $getKeluar = $getKeluar->count();
 
+        $getLokasi = Bencana::select( DB::raw("concat('Ds. ',kelurahan, ', Kec. ',kecamatan, ', Kota ',kota,
+        ', Prov. ',provinsi) as lokasi"))
+        ->join('integrasi as int','int.bencana_id','=','bencana.id')
+        ->where('int.bencana_id', $request->bencana_id)
+        ->get();
+
         return view('admin.pengungsi.index', [
             'idBencana' => $this->idBencana,
             'anggotaKpl' => $anggotaKpl,
@@ -290,8 +300,10 @@ class PengungsiController extends Controller
             'data' => $pengungsi,
             'kpl' => $getKpl,
             'dataKpl' => $dataKpl,
-            'getNama' => $getNmPosko,
+            // 'getNama' => $getNmPosko,
+            'getNama' => $getNmBencana,
             'getNmTrc' => $getNmTrc,
+            'getJmlPosko' => $getJmlPosko,
             'getDifabel' => $getDifabel,
             'ttlDifabel' => $getTtlDifabel,
             'jmlAnggota' => $getJmlAnggota,
@@ -306,7 +318,8 @@ class PengungsiController extends Controller
             'ttlSakit' => $getTtlSakit,
             'getMasuk' => $getMasuk,
             'getKeluar' => $getKeluar,
-            'getSehat' => $getTtlSehat
+            'getSehat' => $getTtlSehat,
+            'getLokasi' => $getLokasi
         ]);
         // return view('admin.pengungsi.index',['data' => $pengungsi],['kpl'=>$getKpl],['datas' => $pengungsi]);
     }

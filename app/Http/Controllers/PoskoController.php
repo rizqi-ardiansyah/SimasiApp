@@ -47,7 +47,7 @@ class PoskoController extends Controller
             'kapasitas',
             'int.bencana_id',
             'b.id as idBencana',
-            DB::raw("concat(u.firstname,' ',u.lastname) as fullName"), 'u.id as idAdmin',
+            DB::raw("concat(u.firstname,' ',u.lastname) as fullName"), 'u.id as idAdmin','u.firstname',
             'posko.created_at',
             'posko.updated_at',
             'b.nama as namaBencana',
@@ -65,7 +65,8 @@ class PoskoController extends Controller
             ->orderBy('u.id', 'desc')
             ->paginate(5);
 
-        $trc = User::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'users.id as idAdmin', 'lastname')
+        $trc = User::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
+        'users.id as idAdmin', 'lastname')
             ->join('model_has_roles as mr', 'mr.model_id', '=', 'users.id')
             ->join('roles as r', 'r.id', '=', 'mr.role_id')
             ->where(function ($query) {

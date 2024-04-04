@@ -85,11 +85,11 @@
                                                 <!-- <label for="exampleInputId">Nama Posko</label> -->
                                                 <input type="text" class="form-control" id="idBencana" name="idBencana" value="{{request()->id}}" hidden required>
                                                 <input type="text" class="form-control" id="idTrc" name="idTrc" value="{{auth()->user()->id}}" hidden required>
-                                                <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputNama">Nama Posko</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
                                                 <input type="text" class="form-control" id="exampleInputnama" name="namas" value="{{$namaBencana}} {{$jmlPosko}}" placeholder="Masukan nama posko" readonly>
                                             </div>
 
@@ -116,7 +116,7 @@
                                                 <select class="form-control" id="trc_id" name="trc_id" required>
                                                     <option selected value="" hidden>Pilih TRC</option>
                                                     @foreach ($getTrc as $trc)
-                                                    <option value="{{ $trc->idAdmin }}">{{ $trc->fullName }}</option>
+                                                    <option value="{{ $trc->idAdmin }}">{{ $trc->firstname}}</option>
                                                     <!-- <option value="0">Selesai</option> -->
                                                     @endforeach
                                                     <option value="">Kosongkan TRC</option>
@@ -156,8 +156,8 @@
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Posko
                         </a>
-                        <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
-                            <i class="fas fa-plus mr-1"></i> Tambah Posko
+                        <a href="{{url('/memberTRC')}}" class="btn btn-info mb-2 " style="font-size: 14px;">
+                            <i class="fas fa-info mr-1"></i> Cek TRC
                         </a>
                         @endrole
 
@@ -184,10 +184,11 @@
                                 @foreach($data as $key => $posko)
                                 <tr>
                                     <td>{{ $data->firstItem() + $key  }}</td>
-                                    <td>{{ $posko->namaPosko }}</td>
+                                    <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
+                                    <td>{{$namaBencana}} {{ $data->firstItem() + $key  }}</td>
                                     <td>{{ $posko->lokasi}}</td>
                                     <td>{{ $posko->detail}}</td>
-                                    <td>{{ $posko->fullName}}</td>
+                                    <td>{{ $posko->firstname}}</td>
                                     <td>
                                         {{ $posko->ttlPengungsi}} orang
                                         <!-- @foreach($ttlPengungsi as $ttl)
@@ -204,14 +205,14 @@
                                                 <i class="fas fa-bars"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                                <a href="#" class="dropdown-item " title="Edit Pengungsi" data-toggle="modal" data-target="#modal-edit-{{$posko->idPosko}}">
+                                                <a href="#" class="dropdown-item " title="Edit Posko" data-toggle="modal" data-target="#modal-edit-{{$posko->idPosko}}">
                                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                                                         <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
                                                     </svg>
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Pengungsi" onclick="deleteConfirmation({{$posko->idPosko}})">
+                                                <a href="#" class="dropdown-item " title="Hapus Posko" onclick="deleteConfirmation({{$posko->idPosko}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                                 <!-- /.modal-dialog -->
@@ -288,7 +289,8 @@
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="exampleInputNama">Nama Posko</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" name="nama" placeholder="Masukan nama posko" value="{{$detail->namaPosko}}" readonly>
+                                                            <input type="text" class="form-control" id="exampleInputnama" name="namas" value="{{$namaBencana}} {{$jmlPosko-1}}" placeholder="Masukan nama posko" readonly>
+                                                            <input type="text" class="form-control" id="exampleInputnama" name="nama" placeholder="Masukan nama posko" value="{{$detail->namaPosko}}" hidden readonly>
                                                         </div>
                                                          
                                                         @foreach ($getLokasi as $lokasi)
@@ -308,10 +310,10 @@
                                                             <label for="trc">TRC</label>
                                                             <select class="form-control" id="trc_id" name="trc_id" required>
                                                                 <option selected value="{{ $detail->idAdmin }}" hidden>
-                                                                    {{ $detail->fullName }}
+                                                                    {{ $detail->firstname }}
                                                                 </option>
                                                                 @foreach ($getTrc as $trc)
-                                                                <option value="{{ $trc->idAdmin }}">{{ $trc->fullName }}
+                                                                <option value="{{ $trc->idAdmin }}">{{ $trc->firstname }}
                                                                 </option>
                                                                 <!-- <option value="0">Selesai</option> -->
                                                                 @endforeach

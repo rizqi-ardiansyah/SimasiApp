@@ -21,7 +21,7 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{auth()->user()->firstname}} {{ auth()->user()->lastname }}</a>
+                        <a href="#" class="d-block">{{auth()->user()->firstname}}</a>
                     </div>
                 </div>
                 <!-- Dahsboard -->
@@ -61,14 +61,14 @@
                     </a>
                 </li>
                 @endrole
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="{{url('/member')}}" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Admin
                         </p>
                     </a>
-                </li>
+                </li> -->
                 <!-- <li class="nav-item">
                     <form id="form1" action="/logout" method="post">
                         @csrf
@@ -108,12 +108,12 @@
                                 <p>TRC</p>
                             </a>
                             </li>
-                            <li class="nav-item">
+                            <!-- <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Relawan</p>
                             </a>
-                            </li>
+                            </li> -->
                         </ul>
                         </li>
                      </li>

@@ -9,8 +9,10 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 @foreach ($getNama as $nm)
+                @foreach ($getJmlPosko as $jml)
                 @foreach ($getNmTrc as $nmTrc)
-                <h1>Pos Pengungsi {{ $nm->nama }} ({{ $nmTrc->fullName }})</h1>
+                <h3>Pos Pengungsi {{ $nm->nama }} {{$jml->jmlPosko}} ({{ $nmTrc->fullName  }})</h1>
+                @endforeach
                 @endforeach
                 @endforeach
             </div>
@@ -34,7 +36,12 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">List Pengungsi</h3><br>
+                        <h3 class="card-title">List Pengungsi
+                        (@foreach ($getLokasi as $lokasi)
+                        {{$lokasi->lokasi}}
+                        @break
+                        @endforeach)
+                        </h3><br>
                         @if ($errors->any())
                         <div class="alert alert-danger" role="alert">
                             @foreach ($errors->all() as $error)
@@ -123,9 +130,11 @@
                                                 <label for="kpl">Kepala Keluarga</label>
                                                 <select class="form-control" id="kpl" name="kpl" required>
                                                     @foreach ($kpl as $kplk)
-                                                    <option value="{{$kplk->id}}">{{$kplk->nama}} (Kec.
-                                                        {{$kplk->kecamatan}}, Kel. {{$kplk->kelurahan}},
-                                                        {{ $kplk->detail }})
+                                                    <option value="{{$kplk->id}}">
+                                                        {{$kplk->nama}} 
+                                                        <!-- (Kec.
+                                                        {{$kplk->kecamatan}}, Kel. {{$kplk->kelurahan}}, -->
+                                                        ({{ $kplk->detail }})
                                                     </option>
                                                     @endforeach
                                                     <!-- <option value="">Kosongkan dahulu</option> -->
@@ -134,7 +143,15 @@
 
                                             <!-- jika belum perlu menambahkan alamat -->
                                             <div class="wrapper-kk" class="hidden" id="form_2" style="display:none;">
+                                                @foreach ($getLokasi as $lokasi)
                                                 <div class="form-group">
+                                                    <label for="exampleInputProvinsi">Lokasi bencana</label>
+                                                    <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="lokasi" value="{{$lokasi->lokasi}}" readonly>
+                                                </div>
+                                                @break
+                                                @endforeach
+
+                                                <!-- <div class="form-group">
                                                     <label for="provinsi">Provinsi</label>
                                                     <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi">
                                                 </div>
@@ -152,7 +169,7 @@
                                                 <div class="form-group">
                                                     <label for="kelurahan">Kelurahan</label>
                                                     <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan">
-                                                </div>
+                                                </div> -->
 
                                                 <div class="form-group">
                                                     <label for="detail">Detail</label>
@@ -287,7 +304,8 @@
                                     </td>
                                     <td>{{ $pengungsi->namaKepala}}</td>
                                     <td>{{ $pengungsi->telpon }}</td>
-                                    <td>{{ $pengungsi->lokasi }}</td>
+                                    <td> {{ $pengungsi->detail }}</td>
+                                    <!-- <td>{{ $pengungsi->lokasi }}</td> -->
                                     <td>
                                         <?php
                                         $gender = $pengungsi->gender;
@@ -357,7 +375,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title">Edit Posko</h4>
+                                                    <h4 class="modal-title">Edit Pengungsi</h4>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
@@ -412,33 +430,37 @@
                                                                 function showDiv(select) {
                                                                     console.log(select);
                                                                     if (select.value == 0) {
-                                                                        document.getElementById("form_3").style.display =
-                                                                            "none";
-                                                                        document.getElementById("form_4").style.display =
-                                                                            "block";
+                                                                        document.getElementById("form_3").style.display = "none";
+                                                                        document.getElementById("form_4").style.display ="block";
                                                                         // idForm_1.style.display = "block";
                                                                         // idForm_2.style.display = "none";
                                                                     } else if (select.value == 1 || select.value == 2) {
+                                                                        document.getElementById("form_3").style.display = "block";
+                                                                        document.getElementById("form_4").style.display =  "none";
+                                                                    } else if (select.value == 0) {
                                                                         document.getElementById("form_3").style.display =
-                                                                            "block";
-                                                                        document.getElementById("form_4").style.display =
                                                                             "none";
+                                                                        document.getElementById("form_4").style.display =
+                                                                            "block";
                                                                     }
+
                                                                 }
                                                             </script>
                                                             <!-- end -->
 
                                                             <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
-                                                            <div class="form-group" id="form_3">
+                                                            <div class="form-group" id="form_3" style="display:none;">
                                                                 <label for="kpl">Kepala Keluarga</label>
                                                                 <select class="form-control" id="kpl" name="kpl" required>
                                                                     <option selected value="{{$pengungsi->idKepala}}" hidden>{{$pengungsi->namaKepala}}
-                                                                        {{ $pengungsi->lokKel}}
+                                                                        <!-- {{ $pengungsi->lokKel}} -->
+                                                                        ({{ $pengungsi->detail}})
                                                                     </option>
                                                                     @foreach ($kpl as $kplk)
-                                                                    <option value="{{$kplk->id}}">{{$kplk->nama}} (Kec.
-                                                                        {{$kplk->kecamatan}}, Kel. {{$kplk->kelurahan}},
-                                                                        {{$kplk->detail}})
+                                                                    <option value="{{$kplk->id}}">{{$kplk->nama}} 
+                                                                        <!-- (Kec.
+                                                                        {{$kplk->kecamatan}}, Kel. {{$kplk->kelurahan}}, -->
+                                                                        ({{ $kplk->detail }})
                                                                     </option>
                                                                     @endforeach
                                                                     <!-- <option value="">Kosongkan dahulu</option> -->
@@ -446,8 +468,8 @@
                                                             </div>
 
                                                             <!-- jika belum perlu menambahkan alamat -->
-                                                            <div class="wrapper-kk" class="hidden" id="form_4" style="display:none;">
-                                                                <div class="form-group">
+                                                            <div class="wrapper-kk" class="hidden" id="form_4">
+                                                                <!-- <div class="form-group">
                                                                     <label for="provinsi">Provinsi</label>
                                                                     <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi" value="{{$pengungsi->provinsi}}">
                                                                 </div>
@@ -465,7 +487,7 @@
                                                                 <div class="form-group">
                                                                     <label for="kelurahan">Kelurahan</label>
                                                                     <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan" value="{{$pengungsi->kelurahan}}">
-                                                                </div>
+                                                                </div> -->
 
                                                                 <div class="form-group">
                                                                     <label for="detail">Detail</label>
