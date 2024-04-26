@@ -132,12 +132,10 @@
                                                     @foreach ($kpl as $kplk)
                                                     <option value="{{$kplk->id}}">
                                                         {{$kplk->nama}} 
-                                                        <!-- (Kec.
-                                                        {{$kplk->kecamatan}}, Kel. {{$kplk->kelurahan}}, -->
                                                         ({{ $kplk->detail }})
                                                     </option>
                                                     @endforeach
-                                                    <!-- <option value="">Kosongkan dahulu</option> -->
+                                                    <option value="">Kosongkan dahulu</option>
                                                 </select>
                                             </div>
 
@@ -197,7 +195,8 @@
                                                     <option value=1>Luka Ringan</option>
                                                     <option value=2>Luka Sedang</option>
                                                     <option value=3>Luka Berat</option>
-                                                    <option value=4>Difabel</option>
+                                                    <option value=4>Hamil atau menyusui</option>
+                                                    <option value=5>Difabel</option>
                                                 </select>
                                             </div>
 
@@ -233,7 +232,10 @@
                         <a href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#upload" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Unggah Data
                         </a>
-
+                        <a href="{{url('/ransum')}}/{{ request()->id }}/{{ request()->bencana_id }}/{{ request()->trc_id }}" class="btn btn-info mb-2" target="__blank" style="font-size: 14px;">
+                        
+                            <i class="fas fa-info mr-1"></i> Cek Ransum
+                        </a>
                         
                             <!-- Tambah bencana -->
                         <div class="modal fade" id="upload">
@@ -328,7 +330,11 @@
                                             echo "Luka Sedang";
                                         } else if ($kondisi == 3) {
                                             echo "Luka Berat";
-                                        } else if ($kondisi == 4) {
+                                        }
+                                            else if ($kondisi == 4) {
+                                                echo "Hamil atau menyusui";
+                                            
+                                        } else if ($kondisi == 5) {
                                             echo "Difabel";
                                         }
                                         ?>
@@ -463,7 +469,7 @@
                                                                         ({{ $kplk->detail }})
                                                                     </option>
                                                                     @endforeach
-                                                                    <!-- <option value="">Kosongkan dahulu</option> -->
+                                                                    <option value="">Kosongkan dahulu</option>
                                                                 </select>
                                                             </div>
 
@@ -531,6 +537,8 @@
                                                                     } else if ($getKon == 3) {
                                                                         $statKon = "Luka Berat";
                                                                     } else if ($getKon == 4) {
+                                                                        $statKon = "Hamil atau menyusui";
+                                                                    } else if ($getKon == 5) {
                                                                         $statKon = "Difabel";
                                                                     }
                                                                     ?>
@@ -539,7 +547,8 @@
                                                                     <option value=1>Luka Ringan</option>
                                                                     <option value=2>Luka Sedang</option>
                                                                     <option value=3>Luka Berat</option>
-                                                                    <option value=4>Difabel</option>
+                                                                    <option value=4>Hamil atau menyusui</option>
+                                                                    <option value=5>Difabel</option>
                                                                 </select>
                                                             </div>
 
@@ -686,6 +695,8 @@
                                     kondisi = "Luka Sedang";
                                 } else if (kondisi == 3) {
                                     kondisi = "Luka Berat";
+                                else if ($getKon == 4) 
+                                    kondisi = "Hamil atau menyusui";
                                 } else if (kondisi == 4) {
                                     kondisi = "Difabel";
                                 }

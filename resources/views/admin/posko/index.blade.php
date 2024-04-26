@@ -156,9 +156,9 @@
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Posko
                         </a>
-                        <a href="{{url('/memberTRC')}}" class="btn btn-info mb-2 " style="font-size: 14px;">
+                        <!-- <a href="{{url('/memberTRC')}}" class="btn btn-info mb-2 " style="font-size: 14px;">
                             <i class="fas fa-info mr-1"></i> Cek TRC
-                        </a>
+                        </a> -->
                         @endrole
 
                         <table id="example2" class="table table-bordered table-hover">

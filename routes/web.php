@@ -9,6 +9,7 @@ use App\Http\Controllers\MemberTeamController;
 use App\Http\Controllers\PengungsiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\CadangController;
+use App\Http\Controllers\RansumController;
 
 
 use App\Http\Controllers\LoginController;
@@ -77,6 +78,8 @@ Route::post('pengungsi/create', [PengungsiController::class, 'createPengungsi'])
 Route::match(['get', 'post'], 'pengungsi/edit/{id}', [PengungsiController::class, 'edit']);
 Route::post('pengungsi/delete/{id}', [PengungsiController::class, 'delete']);
 // Route::get('listPengungsi/{idPosko}/{idBencana}/{idTrc}', [PengungsiController::class, 'store']);
+
+Route::get('/ransum/{id}/{bencana_id}/{trc_id}', [RansumController::class, 'index']);
 
 Route::get("/search/bencana", [BencanaController::class, 'search'])->name('searchBencana');
 Route::get("/search/bencanaTrc/{id}", [BencanaController::class, 'searchForTrc'])->name('searchForTrc');

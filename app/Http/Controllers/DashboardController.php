@@ -73,7 +73,7 @@ class DashboardController extends Controller
                 'b.nama', 'status', 'b.updated_at',
                 'posko.id', 'posko.nama', 'int.bencana_id', 'b.id', 'posko.created_at',
                 'posko.updated_at', 'int.user_id')
-        ->whereYear('b.tanggal','=',2018)
+        ->whereYear('b.tanggal','=',2024)
         // ->where('posko.bencana_id', 4)
         ->paginate(5);
 
@@ -91,7 +91,7 @@ class DashboardController extends Controller
                 'b.nama', 'status', 'b.updated_at',
                 'posko.id', 'posko.nama', 'int.bencana_id', 'b.id', 'posko.created_at',
                 'posko.updated_at', 'int.user_id')
-        ->whereYear('b.tanggal','=',2022)
+        ->whereYear('b.tanggal','=',2024)
         // ->where('posko.bencana_id', 4)
         ->paginate(5);
 
@@ -109,7 +109,7 @@ class DashboardController extends Controller
                 'b.nama', 'status', 'b.updated_at',
                 'posko.id', 'posko.nama', 'int.bencana_id', 'b.id', 'posko.created_at',
                 'posko.updated_at', 'int.user_id')
-        ->whereYear('b.tanggal','=',2023)
+        ->whereYear('b.tanggal','=',2024    )
         // ->where('posko.bencana_id', 4)
         ->paginate(5);
 
