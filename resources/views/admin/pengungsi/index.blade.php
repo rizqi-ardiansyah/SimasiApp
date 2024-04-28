@@ -474,8 +474,8 @@
                                                             </div>
 
                                                             <!-- jika belum perlu menambahkan alamat -->
-                                                            <div class="wrapper-kk" class="hidden" id="form_4">
-                                                                <!-- <div class="form-group">
+                                                            <!-- <div class="wrapper-kk" class="hidden" id="form_4">
+                                                                <div class="form-group">
                                                                     <label for="provinsi">Provinsi</label>
                                                                     <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi" value="{{$pengungsi->provinsi}}">
                                                                 </div>
@@ -493,13 +493,49 @@
                                                                 <div class="form-group">
                                                                     <label for="kelurahan">Kelurahan</label>
                                                                     <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan" value="{{$pengungsi->kelurahan}}">
-                                                                </div> -->
+                                                                </div>
 
                                                                 <div class="form-group">
                                                                     <label for="detail">Detail</label>
                                                                     <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail" value="{{$pengungsi->detail}}">
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
+
+                                                               <!-- jika belum perlu menambahkan alamat -->
+                                            <div class="wrapper-kk" class="hidden" id="form_4" style="display:none;">
+                                                @foreach ($getLokasi as $lokasi)
+                                                <div class="form-group">
+                                                    <label for="exampleInputProvinsi">Lokasi bencana</label>
+                                                    <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="lokasi" value="{{$lokasi->lokasi}}" readonly>
+                                                </div>
+                                                @break
+                                                @endforeach
+
+                                                <!-- <div class="form-group">
+                                                    <label for="provinsi">Provinsi</label>
+                                                    <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="kota">Kota</label>
+                                                    <input type="text" class="form-control" id="kota" placeholder="Masukan kota" name="kota">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="kecamatan">Kecamatan</label>
+                                                    <input type="text" class="form-control" id="kecamatan" placeholder="Masukan kecamatan" name="kecamatan">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="kelurahan">Kelurahan</label>
+                                                    <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan">
+                                                </div> -->
+
+                                                <div class="form-group">
+                                                    <label for="detail">Detail</label>
+                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
+                                                </div>
+                                            </div>
 
                                                             <div class="form-group">
                                                                 <label for="gender">Jenis Kelamin</label>
@@ -603,7 +639,7 @@
             swal.fire({
                 title: "Hapus?",
                 icon: 'question',
-                text: "Apakah Anda yakin?",
+                text: "Apakah Anda yakin menghapus ?",
                 type: "warning",
                 showCancelButton: !0,
                 confirmButtonText: "Iya, hapus!",

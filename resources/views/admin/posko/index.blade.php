@@ -119,7 +119,7 @@
                                                     <option value="{{ $trc->idAdmin }}">{{ $trc->firstname}}</option>
                                                     <!-- <option value="0">Selesai</option> -->
                                                     @endforeach
-                                                    <option value="">Kosongkan TRC</option>
+                                                    <!-- <option value="">Kosongkan TRC</option> -->
                                                 </select>
                                             </div>
 
@@ -165,7 +165,6 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-
                                     <th>Nama</th>
                                     <th>Lokasi</th>
                                     <th>Detail</th>
@@ -313,11 +312,11 @@
                                                                     {{ $detail->firstname }}
                                                                 </option>
                                                                 @foreach ($getTrc as $trc)
-                                                                <option value="{{ $trc->idAdmin }}">{{ $trc->firstname }}
+                                                                <option value="{{$trc->idAdmin}}">{{ $trc->firstname }}
                                                                 </option>
                                                                 <!-- <option value="0">Selesai</option> -->
                                                                 @endforeach
-                                                                <option value="">Kosongkan TRC</option>
+                                                                <!-- s<option value="">Kosongkan TRC</option> -->
                                                             </select>
                                                         </div>
 
@@ -366,7 +365,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: "{{url('/posko')}}/" + id,
+                        url: "{{url('/posko/delete')}}/" + id,
                         data: {
                             _token: CSRF_TOKEN
                         },

@@ -75,7 +75,7 @@ class PengungsiController extends Controller
         )
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('posko as p', 'p.id','=','int.posko_id')
-            ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+            ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
             // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
             ->where('int.posko_id', $request->id)
@@ -563,7 +563,7 @@ class PengungsiController extends Controller
                     'posko_id' => $request->posko_id,
                     'user_id' => $request->trc_id,
                 ]);
-                $getIdKpl = KepalaKeluarga::select('id')->orderBy('id', 'desc')->value('id');
+                $getIdKpl = KepalaKeluarga::select('id')->where('id', $request->kpl)->value('id');
                 $getIdPengungsi = Pengungsi::select('id')->orderBy('id', 'desc')->value('id');
                 $getIdIntegrasi = Integrasi::select('id')->orderBy('id','desc')->first();
                 $getIdIntegrasi->update([
@@ -707,17 +707,20 @@ class PengungsiController extends Controller
             $getStatkel = Pengungsi::where('id', $id)->value('statKel');
             // $statKel = $getIdKepala->statKel;
             $getIdKepala = Integrasi::where('png_id', $id)->value('kpl_id');
+            $getIdIntegrasi = Integrasi::where('png_id', $id)->value('id');
             $getKepala = KepalaKeluarga::where('id', $getIdKepala)->value('id');
 
             if ($getStatkel == 0) {
+                $delIntegrasi = Integrasi::destroy($getIdIntegrasi);
                 $delPengungsi = Pengungsi::destroy($id);
                 $delKepala = KepalaKeluarga::destroy($getKepala);
             } else {
+                $delIntegrasi = Integrasi::destroy($getIdIntegrasi);
                 $delPengungsi = Pengungsi::destroy($id);
             }
 
             // check data deleted or not
-            if ($delPengungsi == 1 || $delKepala == 1) {
+            if ($delPengungsi == 1 || $delKepala == 1 || $delIntegrasi == 1) {
                 $success = true;
                 $message = "Data berhasil dihapus";
             } else {
