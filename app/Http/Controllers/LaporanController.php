@@ -24,8 +24,10 @@ class LaporanController extends Controller
     public function index()
     {
         $data = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
+            DB::raw("concat('Prov. ',bencana.provinsi,', Kota ',bencana.kota,', Kec. ',
+             bencana.kecamatan,', Ds. ',bencana.kelurahan) as lokasi" ),
             'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
-            'bencana.nama as namaBencana', 'lokasi', 'status',
+            'bencana.nama as namaBencana','status',
             'bencana.updated_at as waktuUpdate', 'int.bencana_id',
             DB::raw('count(int.bencana_id) as ttlPosko'),
             //  DB::raw('count(p.id) as ttlPengungsi')

@@ -26,7 +26,7 @@
                 </div>
                 <!-- Dahsboard -->
                 <li class="nav-item">
-                    <a href="{{url('/dashboard')}}" class="nav-link">
+                    <a href="{{url('/dashboard')}}" class="nav-link {{ request()->is('dashboard') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -36,7 +36,7 @@
 
                 <!-- Bencana -->
                 <li class="nav-item">
-                    <a href="{{url('/bencana')}}" class="nav-link">
+                    <a href="{{url('/bencana')}}" class="nav-link {{ request()->is('bencana') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-fire"></i>
                         <p>
                             Bencana
@@ -45,7 +45,7 @@
                 </li>
                 @role('pusdalop')
                 <li class="nav-item">
-                    <a href="{{url('/cadang')}}" class="nav-link">
+                    <a href="{{url('/cadang')}}" class="nav-link {{ request()->is('cadang') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-window-restore"></i>
                         <p>
                             Cadang dan Pulihkan
@@ -53,7 +53,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{url('/laporan')}}" class="nav-link">
+                    <a href="{{url('/laporan')}}" class="nav-link {{ request()->is('laporan') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-book"></i>
                         <p>
                             Laporan
@@ -87,7 +87,7 @@
                         </p>
                     </a> -->
                     <li class="nav-item menu-close">
-                    <a href="{{url('/member')}}" class="nav-link">
+                    <a href="{{url('/member')}}" class="nav-link {{ request()->is('memberPusdalop') || request()->is('memberTRC') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Member
