@@ -332,16 +332,21 @@ class PoskoController extends Controller
         //
     }
 
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $delete = Posko::destroy($id);yy
+            Bencana::where('id', $request->session()->get('idBencana'))
+            ->update([
+                'jmlPosko'=> DB::raw('jmlPosko-1'), 
+                'updated_at' => Carbon::now(),
+             ]);
 
             // $getIdBencana = Integrasi::select('bencana_id')->where('posko_id', $id)->value('bencana_id');
             $getIdIntegrasi = Integrasi::where('posko_id', $id)->value('id');
             $getPosko = Posko::where('id', $id)->value('id');
             // $getBencana = Bencana::where('id', $getIdBencana)->value('id');
-
+            
             $delIntegrasi = Integrasi::destroy($getIdIntegrasi);
             // $delBencana = Bencana::destroy($getBencana);
             $delPosko = Posko::destroy($getPosko);
