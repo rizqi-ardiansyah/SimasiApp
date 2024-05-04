@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\MemberTeam;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -136,6 +137,12 @@ class MemberTeamController extends Controller
     public function deleteAnggota($id)
     {
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            $getTim = User::where('id', $id)->get();
+            $getMemberTeam = MemberTeam::where('tim', $id)->get();
+
+            $delTim = Integrasi::destroy($getTim);
+            $delTeam = Bencana::destroy($getBencana);
+            $delPosko = Posko::destroy($getPosko);
             $delete = MemberTeam::destroy($id);
 
             // check data deleted or not

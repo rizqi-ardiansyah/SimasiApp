@@ -138,6 +138,7 @@
                                     @role('pusdalop')
                                     <th>Aksi</th>
                                     @endrole
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody id="result">
@@ -543,6 +544,7 @@
                                             </select>
                                             </div>
 
+                                            
                                             <!-- <div class="form-group">
                                                 <label for="position-option">Peran</label>
                                                 <select class="form-control" id="peran" name="peran" required>

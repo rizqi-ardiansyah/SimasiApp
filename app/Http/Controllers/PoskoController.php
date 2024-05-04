@@ -290,11 +290,11 @@ class PoskoController extends Controller
             // Akan melakukan validasi kecuali punyanya sendiri
             'nama' => ['string', Rule::unique('posko')->ignore($id)],
         ]);
-        // $role = Role::where('id', $request->peran)->first();
+        
         $posko = Posko::where('id', $id)->first();
 
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            $posko->nama = $request->nama;
+            // $posko->nama = $request->nama;
             // $posko->provinsi = $request->provinsi;
             // $posko->kota = $request->kota;
             // $posko->kecamatan = $request->kecamatan;
@@ -302,15 +302,17 @@ class PoskoController extends Controller
             $posko->detail = $request->detail_lokasi;
             $posko->update();
 
-            $eksekusi = Integrasi::select('id')->where('posko_id',$id)->first();
+            $eksekusi =  Integrasi::where('posko_id', $id)->update(['user_id' => $request->trc_id]);
+            
+            // $eksekusi = Integrasi::select('id')->where('posko_id',$id)->get();
             // $getIdPosko = Posko::select('id')->orderBy('id','desc')->value('id');
             // $getIdTrc = $request->trc_id;
             // $eksekusi->update([
             //     'posko_id' => $getIdPosko,
             //     'user_id' => $getIdTrc,
             // ]);
-            $eksekusi->user_id = $request->trc_id;
-            $eksekusi->update();
+            // $eksekusi->user_id = $request->trc_id;
+            // $eksekusi->update();
             // $member->syncRoles($role);
             Alert::success('Success', 'Data berhasil diubah');
             return redirect()->back();
