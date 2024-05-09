@@ -354,6 +354,8 @@
                                     @endrole
                                 @endif
                             </tr>
+                            <td>{{ $member->alamat }}</td>
+
                             @endforeach
                         </tbody>
                     </table>

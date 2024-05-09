@@ -135,67 +135,148 @@
                                     <th>Nama</th>
                                     <th>Username</th>
                                     <th>Peran</th>
+                                    <th>Status</th>
                                     @role('pusdalop')
                                     <th>Aksi</th>
                                     @endrole
-                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody id="result">
 
-                                @foreach ($data as $key => $member)
+                            <?php
+                            $no = 0;
+                            ?>
 
-                                <tr>
-                                    <td>{{$data->firstItem() + $key  }}</td>
-                                    <td>{{$member->firstname}}</td>
-                                    <td>{{$member->email}}</td>
-                                    <td>{{$member->namaPeran}}</td>
+                            @foreach ($trcAktif as $key => $member)
 
-                                    @role('pusdalop')
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                                                <i class="fas fa-bars"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                                                    <i class="fas fa-eye mr-1"></i> Detail
-                                                </a>
-                                                <div class="dropdown-divider"></div> -->
-                                                <a href="#" class="dropdown-item " title="Edit Tim" data-toggle="modal" data-target="#modal-edit-{{$member->idAdmin}}">
-                                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                                                    </svg>
-                                                    Edit
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Pengungsi" onclick="deleteConfirmation({{$member->idAdmin}})">
+<tr>
+    <!-- <td>{{$trcAktif->firstItem() + $key  }}</td> -->
+    <?php $no++;?>
+    <td><?php echo $no;?></td>
+    <td>{{$member->firstname}}</td>
+    <td>{{$member->email}}</td>
+    <td>{{$member->namaPeran}}</td>
+    <td>
+<div class="btn-group">
+            <button  class="btn btn-primary btn-sm btn-success" data-offset="-52">
+                <i class="fas fa-info mr-1"></i> Aktif
+            </button>
+            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
+                    <i class="fas fa-plus mr-1"></i> Tambah Tim
+            </a> -->
+        </div>
+</td>
+
+    @role('pusdalop')
+    <td>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
+                    <i class="fas fa-eye mr-1"></i> Detail
+                </a>
+                <div class="dropdown-divider"></div> -->
+                <a href="#" class="dropdown-item " title="Edit Tim" data-toggle="modal" data-target="#modal-edit-{{$member->idAdmin}}">
+                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                    </svg>
+                    Edit
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item " title="Hapus Pengungsi" onclick="deleteTrcAktif({{$member->idMember}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
-                                            </div>
-                                          
+            </div>
+          
 
 
-                                        </div>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-primary btn-sm btn-info" data-toggle="modal" data-target="#modal-cekAnggota-{{$member->idAdmin}}" data-offset="-52">
-                                                <i class="fas fa-info mr-1"></i> Cek Anggota
-                                            </button>
-                                            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
-                                                    <i class="fas fa-plus mr-1"></i> Tambah Tim
-                                            </a> -->
-                                        </div>
-                                    </td>
-                                    @endrole
-                                </tr>
-                                @endforeach
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary btn-sm btn-info" data-toggle="modal" data-target="#modal-cekAnggota-{{$member->idAdmin}}" data-offset="-52">
+                <i class="fas fa-info mr-1"></i> Cek Anggota
+            </button>
+            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
+                    <i class="fas fa-plus mr-1"></i> Tambah Tim
+            </a> -->
+        </div>
+    </td>
+    @endrole
 
+</tr>
+@endforeach
+
+
+
+
+                            @foreach ($trcNonAktif as $key => $member)
+
+<tr>
+    <!-- <td>{{$trcAktif->firstItem() + $key  }}</td> -->
+    <?php $no++;?>
+    <td><?php echo $no;?></td>
+    <td>{{$member->firstname}}</td>
+    <td>{{$member->email}}</td>
+    <td>{{$member->namaPeran}}</td>
+    <td>
+<div class="btn-group">
+            <button  class="btn btn-primary btn-sm btn-danger" data-offset="-52">
+                <i class="fas fa-info mr-1"></i> Nonaktif
+            </button>
+            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
+                    <i class="fas fa-plus mr-1"></i> Tambah Tim
+            </a> -->
+        </div>
+</td>
+
+    @role('pusdalop')
+    <td>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
+                    <i class="fas fa-eye mr-1"></i> Detail
+                </a>
+                <div class="dropdown-divider"></div> -->
+                <a href="#" class="dropdown-item " title="Edit Tim" data-toggle="modal" data-target="#modal-edit-{{$member->idAdmin}}">
+                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                    </svg>
+                    Edit
+                </a>
+                <div class="dropdown-divider"></div>
+                <a href="#" class="dropdown-item " title="Hapus Pengungsi" onclick="deleteConfirmation({{$member->idAdmin}})">
+                    <i class="fas fa-trash mr-1"></i> Hapus
+                </a>
+            </div>
+          
+
+
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-primary btn-sm btn-info" data-toggle="modal" data-target="#modal-cekAnggota-{{$member->idAdmin}}" data-offset="-52">
+                <i class="fas fa-info mr-1"></i> Cek Anggota
+            </button>
+            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
+                    <i class="fas fa-plus mr-1"></i> Tambah Tim
+            </a> -->
+        </div>
+    </td>
+    @endrole
+
+</tr>
+@endforeach
+
+        
                             </tbody>
                         </table>
 
 
                         <br />
-                        {{ $data->links() }}
+                        {{ $trcNonAktif->links() }}
                         <br />
 
                     </div>
@@ -577,6 +658,19 @@
                 @endforeach
 
 <!-- end -->
+<script type="text/javascript">
+        function deleteTrcAktif(id) {
+            swal.fire({
+                title: "TRC Aktif tidak bisa dihapus!",
+                icon: 'info',
+                type: "warning",
+                cancelButtonText: "Batal!",
+                reverseButtons: !0
+            }), function(dismiss) {
+                return false;
+            }
+        }
+    </script>
 
     <script type="text/javascript">
         function deleteConfirmation(id) {
