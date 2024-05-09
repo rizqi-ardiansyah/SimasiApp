@@ -11,8 +11,8 @@
                     <div class="icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <a href="#" class="small-box-footer" data-toggle="modal" data-target="#modal-ttlpengungsi">Tampil
-                        Detail <i class="fas fa-arrow-circle-right"></i></a>
+                    <a href="#" class="small-box-footer" data-toggle="modal" data-target="#modal-ttlpengungsi"><i>Ter-update 
+                    secara real-time</i></a>
                 </div>
             </div>
             <div class="col-lg-3 col-6">
@@ -143,7 +143,7 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Jumlah anggota</th>
-                                <th>Alamat</th>
+                                <th>Detail alamat</th>
                                 <!-- <th>Jenis Kelamin</th> -->
                                 <!-- <th>Umur</th> -->
                                 <!-- <th>Kondisi</th>
@@ -219,21 +219,25 @@
                                 <td><?php echo $gender; ?></td>
                                 <td>{{ $balita->umur }}</td>
                                 <td>
-                                    <?php
-                                    $kondisi = $balita->statKon;
-                                    if ($kondisi == 0) {
-                                        echo "Sehat";
-                                    } else if ($kondisi == 1) {
-                                        echo "Luka Ringan";
-                                    } else if ($kondisi == 2) {
-                                        echo "Luka Sedang";
-                                    } else if ($kondisi == 3) {
-                                        echo "Luka Berat";
-                                    } else if ($kondisi == 4) {
-                                        echo "Difabel";
-                                    }
-                                    ?>
-                                </td>
+                                        <?php
+                                        $kondisi = $pengungsi->statKon;
+                                        if ($kondisi == 0) {
+                                            echo "Sehat";
+                                        } else if ($kondisi == 1) {
+                                            echo "Luka Ringan";
+                                        } else if ($kondisi == 2) {
+                                            echo "Luka Sedang";
+                                        } else if ($kondisi == 3) {
+                                            echo "Luka Berat";
+                                        }
+                                            else if ($kondisi == 4) {
+                                                echo "Hamil atau menyusui";
+                                            
+                                        } else if ($kondisi == 5) {
+                                            echo "Difabel";
+                                        }
+                                        ?>
+                                    </td>
                                 <td>
                                     <?php
                                     $statPos = $balita->statPos;
@@ -291,7 +295,7 @@
                         <tbody>
                             <?php $m = 0; ?>
                             @foreach($getLansia as $lansia)
-                            @if ($lansia->umur >= 60)
+                            @if ($lansia->umur >= 59)
                             <?php $m++; ?>
                             <tr>
                                 <td>{{ $m }}</td>
@@ -310,21 +314,25 @@
                                 <td><?php echo $gender; ?></td>
                                 <td>{{ $lansia->umur }}</td>
                                 <td>
-                                    <?php
-                                    $kondisi = $lansia->statKon;
-                                    if ($kondisi == 0) {
-                                        echo "Sehat";
-                                    } else if ($kondisi == 1) {
-                                        echo "Luka Ringan";
-                                    } else if ($kondisi == 2) {
-                                        echo "Luka Sedang";
-                                    } else if ($kondisi == 3) {
-                                        echo "Luka Berat";
-                                    } else if ($kondisi == 4) {
-                                        echo "Difabel";
-                                    }
-                                    ?>
-                                </td>
+                                        <?php
+                                        $kondisi = $pengungsi->statKon;
+                                        if ($kondisi == 0) {
+                                            echo "Sehat";
+                                        } else if ($kondisi == 1) {
+                                            echo "Luka Ringan";
+                                        } else if ($kondisi == 2) {
+                                            echo "Luka Sedang";
+                                        } else if ($kondisi == 3) {
+                                            echo "Luka Berat";
+                                        }
+                                            else if ($kondisi == 4) {
+                                                echo "Hamil atau menyusui";
+                                            
+                                        } else if ($kondisi == 5) {
+                                            echo "Difabel";
+                                        }
+                                        ?>
+                                    </td>
                                 <td>
                                     <?php
                                     $statPos = $lansia->statPos;
@@ -381,12 +389,12 @@
                     <tbody>
                         <?php $n = 0; ?>
                         @foreach($getDifabel as $sakit)
-                        @if ($sakit->statKon == 4)
+                        @if ($sakit->statKon == 5)
                         <?php $n++; ?>
                         <tr>
                             <td>{{ $n }}</td>
                             <td>{{ $sakit->nama }}</td>
-                            <td>{{ $sakit->namaKep }}</td>
+                            <td>{{ $sakit->namKep }}</td>
                             <td>{{ $sakit->telpon }}</td>
                             <td>{{ $sakit->lokasi }}</td>
                             <?php
@@ -400,21 +408,25 @@
                             <td><?php echo $gender; ?></td>
                             <td>{{ $sakit->umur }}</td>
                             <td>
-                                <?php
-                                $kondisi = $sakit->statKon;
-                                if ($kondisi == 0) {
-                                    echo "Sehat";
-                                } else if ($kondisi == 1) {
-                                    echo "Luka Ringan";
-                                } else if ($kondisi == 2) {
-                                    echo "Luka Sedang";
-                                } else if ($kondisi == 3) {
-                                    echo "Luka Berat";
-                                } else if ($kondisi == 4) {
-                                    echo "Difabel";
-                                }
-                                ?>
-                            </td>
+                                        <?php
+                                        $kondisi = $pengungsi->statKon;
+                                        if ($kondisi == 0) {
+                                            echo "Sehat";
+                                        } else if ($kondisi == 1) {
+                                            echo "Luka Ringan";
+                                        } else if ($kondisi == 2) {
+                                            echo "Luka Sedang";
+                                        } else if ($kondisi == 3) {
+                                            echo "Luka Berat";
+                                        }
+                                            else if ($kondisi == 4) {
+                                                echo "Hamil atau menyusui";
+                                            
+                                        } else if ($kondisi == 5) {
+                                            echo "Difabel";
+                                        }
+                                        ?>
+                                    </td>
                             <td>
                                 <?php
                                 $statPos = $sakit->statPos;
@@ -458,7 +470,7 @@
                             <th>Nama</th>
                             <th>Kepala Keluarga</th>
                             <th>No Telepon</th>
-                            <th>Alamat</th>
+                            <th>Detail alamat</th>
                             <th>Jenis Kelamin</th>
                             <th>Umur</th>
                             <th>Kondisi</th>
@@ -469,14 +481,14 @@
                     <tbody>
                         <?php $n = 0; ?>
                         @foreach($getSakit as $sakit)
-                        @if ($sakit->statKon > 0 && $sakit->statKon != 4)
+                        @if ($sakit->statKon > 0 && $sakit->statKon != 5)
                         <?php $n++; ?>
                         <tr>
                             <td>{{ $n }}</td>
                             <td>{{ $sakit->nama }}</td>
                             <td>{{ $sakit->namKep }}</td>
                             <td>{{ $sakit->telpon }}</td>
-                            <td>{{ $sakit->lokasi }}</td>
+                            <td>{{ $sakit->detail }}</td>
                             <?php
                             $getGender = $sakit->gender;
                             if ($getGender == 0) {
@@ -548,7 +560,7 @@
                                 <th>Status Keluarga</th>
                                 <th>Kepala Keluarga</th>
                                 <th>No Telepon</th>
-                                <th>Alamat</th>
+                                <th>Detail alamat</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Umur</th>
                                 <th>Tanggal masuk</th>
@@ -577,7 +589,7 @@
                                 </td>
                                 <td>{{ $pengungsi->namaKepala}}</td>
                                 <td>{{ $pengungsi->telpon }}</td>
-                                <td>{{ $pengungsi->lokasi }}</td>
+                                <td>{{ $pengungsi->detail }}</td>
                                 <td>
                                     <?php
                                     $gender = $pengungsi->gender;
@@ -656,7 +668,7 @@
                                 </td>
                                 <td>{{ $pengungsis->namaKepala}}</td>
                                 <td>{{ $pengungsis->telpon }}</td>
-                                <td>{{ $pengungsis->lokasi }}</td>
+                                <td>{{ $pengungsis->detail }}</td>
                                 <td>
                                     <?php
                                     $gender = $pengungsis->gender;

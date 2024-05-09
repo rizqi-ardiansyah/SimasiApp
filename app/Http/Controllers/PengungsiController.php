@@ -51,7 +51,7 @@ class PengungsiController extends Controller
         as lokasi"),
             DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
             Daerah ',kpl.detail,' ')
-        as lokKel"),
+        as lokKel"),'kpl.detail',
             'pengungsi.nama',
             'pengungsi.id as idPengungsi',
             'int.kpl_id',
@@ -82,16 +82,16 @@ class PengungsiController extends Controller
             ->orderBy('int.kpl_id', 'desc')
             ->distinct()
             // model paginate agar banyak paginate bisa muncul dalam 1 page
-            ->paginate(5, ['*'], 'p');
+            ->paginate(10, ['*'], 'p');
 
         $pengungsiKeluar = Pengungsi::select(
             DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
             Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
-            Daerah ',kpl.detail,' ')
+             Daerah ',kpl.detail,' ')
         as lokasi"),
             DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
             Daerah ',kpl.detail,' ')
-        as lokKel"),
+        as lokKel"),'kpl.detail',
             'pengungsi.nama',
             'pengungsi.id as idPengungsi',
             'int.kpl_id',
@@ -161,10 +161,13 @@ class PengungsiController extends Controller
             ->get();
 
         $anggotaKpl = Integrasi::select('integrasi.kpl_id','kpl.nama',
-        DB::raw("concat('Prov. ',provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,', Daerah ',detail,' ')
-        as lokasi"),'kpl.anggota')
+        DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,',
+            Kec. ',b.kecamatan,', Ds. ',b.kelurahan,',
+             Daerah ',kpl.detail,' ')
+        as lokasi"),'kpl.anggota','kpl.detail')
             ->join('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
             ->join('pengungsi as p','p.id','=','integrasi.png_id')
+            ->join('bencana as b','b.id','=','integrasi.bencana_id')
             ->where('integrasi.posko_id', '=', $request->id)
             ->where('p.statkel','=',0)
             ->distinct()
@@ -178,13 +181,14 @@ class PengungsiController extends Controller
                 'kpl.id',
                 'kpl.anggota',
                 'kpl.nama',
-                'kpl.provinsi',
-                'kpl.kota',
-                'kpl.kecamatan',
-                'kpl.kelurahan',
+                'b.provinsi',
+                'b.kota',
+                'b.kecamatan',
+                'b.kelurahan',
                 'kpl.detail',
                 'kpl.created_at',
                 'kpl.updated_at',
+                'kpl.detail'
             )
             
             ->get();
@@ -220,7 +224,7 @@ class PengungsiController extends Controller
         as lokasi"))
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
-            ->where('umur', '<', 5)
+            ->where('umur', '<', 6)
             ->where('int.posko_id', '=', $request->id)->get();
 
         $getTtlBalita = $getBalita->count();
@@ -244,11 +248,11 @@ class PengungsiController extends Controller
 
         $getSakit = Pengungsi::select('*','pengungsi.nama','kpl.nama as namKep',DB::raw("concat('Prov. ',
         provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
-        as lokasi"))
+        as lokasi"),'kpl.detail')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             ->where('statKon', '>', 0)
-            ->where('statKon', '!=', 4)
+            ->where('statKon', '!=', 5)
             ->where('int.posko_id', '=', $request->id)->get();
 
         $getTtlSakit = $getSakit->count();
@@ -258,7 +262,7 @@ class PengungsiController extends Controller
         as lokasi"))
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
-            ->where('statKon', '=', 4)
+            ->where('statKon', '=', 5)
             ->where('int.posko_id', '=', $request->id)->get();
 
         $getTtlDifabel = $getDifabel->count();
@@ -637,8 +641,12 @@ class PengungsiController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        $pengungsi = Pengungsi::where('id', $id)->first();
-        $kepalaKeluarga = KepalaKeluarga::where('id', $request->kpl)->first();
+        $pengungsi = Pengungsi::select('id')->where('id', $id);
+        $kepalaKeluarga = KepalaKeluarga::select('id')->where('id', $request->kpl);
+        $getIdIntegrasi = Integrasi::select('id')->where('png_id', $id);
+        $idPengungsi = Pengungsi::select('id')->where('id', $id)->value('id');
+        $idKepalaKeluarga = KepalaKeluarga::select('id')->where('id', $request->kpl)->value('id');
+        // $kepalaKeluarga = KepalaKeluarga::where('id', $request->kpl);
 
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $request->validate([
@@ -648,13 +656,13 @@ class PengungsiController extends Controller
 
             // ]);
 
-            $statKel = $pengungsi->statKel;
+            $statKel = $request->statKel;
 
             if ($statKel == 0) {
                 $pengungsi->update([
                     'nama' => $request->nama,
                     'telpon' => $request->telpon,
-                    'statKel' => $request->statKel,
+                    // 'statKel' => $request->statKel,
                     'gender' => $request->gender,
                     'umur' => $request->umur,
                     'statPos' => $request->statPos,
@@ -663,10 +671,10 @@ class PengungsiController extends Controller
                 ]);
                 $kepalaKeluarga->update([
                     'nama' => $request->nama,
-                    'provinsi' => $request->provinsi,
-                    'kota' => $request->kota,
-                    'kecamatan' => $request->kecamatan,
-                    'kelurahan' => $request->kelurahan,
+                    // 'provinsi' => $request->provinsi,
+                    // 'kota' => $request->kota,
+                    // 'kecamatan' => $request->kecamatan,
+                    // 'kelurahan' => $request->kelurahan,
                     'detail' => $request->detail,
                 ]);
                 // 'kplklg_id' => $request->kpl,
@@ -683,6 +691,10 @@ class PengungsiController extends Controller
                     'statKon' => $request->statKon,
                 ]);
             }
+            $getIdIntegrasi->update([
+                'kpl_id' => $idKepalaKeluarga,
+                'png_id' => $idPengungsi,
+             ]);
             Alert::success('Success', 'Data berhasil diubah');
             return back();
         }

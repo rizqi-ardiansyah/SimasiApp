@@ -48,7 +48,7 @@
                     <a href="{{url('/cadang')}}" class="nav-link {{ request()->is('cadang') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-window-restore"></i>
                         <p>
-                            Cadang dan Pulihkan
+                            Cadangkan
                         </p>
                     </a>
                 </li>

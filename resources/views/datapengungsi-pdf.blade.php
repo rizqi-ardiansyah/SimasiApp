@@ -5,6 +5,7 @@
     <style>
     #customers {
         font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
         border-collapse: collapse;
         width: 100%;
     }
@@ -49,22 +50,20 @@
 
                                 </h3>
 
-                                <center> {{ Carbon\Carbon::parse($bencana->tgl)->format('d/m/Y') }},
-                                    {{$bencana->lokasi}}</center>
+                                <center> {{ Carbon\Carbon::parse($bencana->tgl)->format('d/m/Y') }}</center>
                                 <br><br>
                                 <b>Jenis bencana</B> : {{$bencana->namaBencana}}<br>
                                 <b>Waktu</b> : {{ Carbon\Carbon::parse($bencana->tgl)->format('d/m/Y') }},
                                 {{$bencana->time}}<br>
-                                <b>Lokasi</b> : {{$bencana->lokasi}}</br>
+                                <b>Lokasi</b> : {{$bencana->lokasiBencana}}</br>
 
                                 <br>
-                                <b>Total posko : {{ $bencana->ttlPosko }}</b><br>
+                                <b>Daftar posko : {{ $bencana->jmlPosko }}</b><br>
                                 @endif
                                 @endforeach
                                 @foreach ($data as $key => $bencana)
                                 @if($key < 1) <b>{{$key+=1}}. {{$bencana->namaPosko}}</b> : {{ $jmlPeng }} orang
-                                    ({{ $ttlBalita }} balita, {{ $ttlDewasa }} dewasa, {{ $ttlLansia }} lansia,
-                                    {{ $ttlDifabel }} difabel)</br>
+                                    ({{ $ttlBalita }} balita, {{ $ttlDewasa }} dewasa, {{ $ttlLansia }} lansia)</br>
                                     @endif
                                     @endforeach
 
@@ -144,7 +143,9 @@ if ($kondisi == 0) {
 } else if ($kondisi == 3) {
     echo "LB";
 } else if ($kondisi == 4) {
-    echo "D";
+    echo "HM";
+}else if ($kondisi == 5) {
+    echo "DF";
 }
 ?>
                 </td>

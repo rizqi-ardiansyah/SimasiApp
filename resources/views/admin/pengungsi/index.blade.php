@@ -170,7 +170,7 @@
                                                 </div> -->
 
                                                 <div class="form-group">
-                                                    <label for="detail">Detail</label>
+                                                    <label for="detail">Detail alamat</label>
                                                     <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
                                                 </div>
                                             </div>
@@ -387,8 +387,11 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <!-- form start -->
-                                                    <form action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}" method="POST">
+
+                                                <?php
+                                                    if($pengungsi->statKel == 0){
+                                                        ?>
+                                                        <form id="form_4" action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}" method="POST">
                                                         @csrf
                                                         <div class="card-body">
                                                             <!-- <div class="form-group"> -->
@@ -405,9 +408,10 @@
                                                                 <input type="text" class="form-control" id="telpon" name="telpon" placeholder="Masukan nomor telepon" value="{{$pengungsi->telpon}}" required>
                                                             </div>
 
+                                                            <input type="text" class="form-control" id="kpl" name="kpl" value="{{$pengungsi->idKepala}}" hidden>
+
                                                             <div class="form-group">
                                                                 <label for="sKeluarga">Status Keluarga</label>
-                                                                <select class="form-control" id="statKel" name="statKel" onchange="showDiv(this)">
                                                                     <?php
                                                                     $getStatKel = $pengungsi->statKel;
                                                                     if ($getStatKel == 0) {
@@ -421,57 +425,35 @@
                                                                     }
 
                                                                     ?>
-                                                                    <option selected value="{{ $pengungsi->statKel }}" hidden><?php echo $status; ?></option>
-                                                                    <option value=0>Kepala Keluarga</option>
-                                                                    <option value=1>Ibu</option>
-                                                                    <option value=2>Anak</option>
-                                                                    <option value=3>Lainnya</option>
-                                                                </select>
+                                                                <input type="text" class="form-control" id="statKel" name="statKel" value="{{$getStatKel}}" hidden>
+                                                                <input type="text" class="form-control" id="statKel" name="statKels" value="{{$status}}" readonly>
+                                                                
                                                             </div>
+
+                                                        
                                                             <!-- script form status keluarga -->
-                                                            <script type="text/javascript">
-                                                                // var idForm_1 = document.getElementById('form_1');
-                                                                // var idForm_2 = document.getElementById('form_2');
+                                                            <!-- <script type="text/javascript">
 
                                                                 function showDiv(select) {
-                                                                    console.log(select);
                                                                     if (select.value == 0) {
                                                                         document.getElementById("form_3").style.display = "none";
                                                                         document.getElementById("form_4").style.display ="block";
                                                                         // idForm_1.style.display = "block";
                                                                         // idForm_2.style.display = "none";
-                                                                    } else if (select.value == 1 || select.value == 2) {
+                                                                    } else {
                                                                         document.getElementById("form_3").style.display = "block";
                                                                         document.getElementById("form_4").style.display =  "none";
-                                                                    } else if (select.value == 0) {
-                                                                        document.getElementById("form_3").style.display =
-                                                                            "none";
-                                                                        document.getElementById("form_4").style.display =
-                                                                            "block";
+                                                                    } if (select.value == 1 || select.value == 2){
+                                                                         document.getElementById("form_3").style.display = "block";
+                                                                        document.getElementById("form_4").style.display =  "none";
                                                                     }
 
                                                                 }
-                                                            </script>
+                                                            </script> -->
                                                             <!-- end -->
 
                                                             <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
-                                                            <div class="form-group" id="form_3" style="display:none;">
-                                                                <label for="kpl">Kepala Keluarga</label>
-                                                                <select class="form-control" id="kpl" name="kpl" required>
-                                                                    <option selected value="{{$pengungsi->idKepala}}" hidden>{{$pengungsi->namaKepala}}
-                                                                        <!-- {{ $pengungsi->lokKel}} -->
-                                                                        ({{ $pengungsi->detail}})
-                                                                    </option>
-                                                                    @foreach ($kpl as $kplk)
-                                                                    <option value="{{$kplk->id}}">{{$kplk->nama}} 
-                                                                        <!-- (Kec.
-                                                                        {{$kplk->kecamatan}}, Kel. {{$kplk->kelurahan}}, -->
-                                                                        ({{ $kplk->detail }})
-                                                                    </option>
-                                                                    @endforeach
-                                                                    <option value="">Kosongkan dahulu</option>
-                                                                </select>
-                                                            </div>
+                                                        
 
                                                             <!-- jika belum perlu menambahkan alamat -->
                                                             <!-- <div class="wrapper-kk" class="hidden" id="form_4">
@@ -502,7 +484,7 @@
                                                             </div> -->
 
                                                                <!-- jika belum perlu menambahkan alamat -->
-                                            <div class="wrapper-kk" class="hidden" id="form_4" style="display:none;">
+                                            <div class="wrapper-kk" class="hidden" id="form_4">
                                                 @foreach ($getLokasi as $lokasi)
                                                 <div class="form-group">
                                                     <label for="exampleInputProvinsi">Lokasi bencana</label>
@@ -533,7 +515,7 @@
 
                                                 <div class="form-group">
                                                     <label for="detail">Detail</label>
-                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
+                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail" value="{{$pengungsi->detail}}">
                                                 </div>
                                             </div>
 
@@ -613,6 +595,234 @@
                                                             <button type="submit" class="btn btn-primary">Submit</button>
                                                         </div>
                                                     </form>
+                                                    <?php
+                                                    }
+                                                    else{
+                                                ?> 
+                                                    <!-- form start -->
+                                                    <form id="form_3" action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}" method="POST">
+                                                        @csrf
+                                                        <div class="card-body">
+                                                            <!-- <div class="form-group"> -->
+                                                            <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
+                                                            <!-- </div> -->
+
+                                                            <div class="form-group">
+                                                                <label for="nama">Nama Pengungsi</label>
+                                                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan nama pengungsi" value="{{$pengungsi->nama}}">
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="telpon">Nomor HP</label>
+                                                                <input type="text" class="form-control" id="telpon" name="telpon" placeholder="Masukan nomor telepon" value="{{$pengungsi->telpon}}" required>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="sKeluarga">Status Keluarga</label>
+                                                                <select class="form-control" id="statKel" name="statKel">
+                                                                    <?php
+                                                                    $getStatKel = $pengungsi->statKel;
+                                                                    if ($getStatKel == 0) {
+                                                                        $status = "Kepala Keluarga";
+                                                                    } else if ($getStatKel == 1) {
+                                                                        $status = "Ibu";
+                                                                    } else if ($getStatKel == 2) {
+                                                                        $status = "Anak";
+                                                                    } else if ($getStatKel == 3) {
+                                                                        $status = "Lainnya";
+                                                                    }
+
+                                                                    ?>
+                                                                    <!-- <option selected value="{{ $pengungsi->statKel }}" hidden></option> -->
+                                                                    <option selected value="{{ $pengungsi->statKel }}" hidden><?php echo $status; ?></option>
+                                                                    <option value=1>Ibu</option>
+                                                                    <option value=2>Anak</option>
+                                                                    <option value=3>Lainnya</option>
+                                                                </select>
+                                                            </div>
+
+                                                        
+                                                            <!-- script form status keluarga -->
+                                                            <!-- <script type="text/javascript">
+
+                                                                function showDiv(select) {
+                                                                    if (select.value == 0) {
+                                                                        document.getElementById("form_3").style.display = "none";
+                                                                        document.getElementById("form_4").style.display ="block";
+                                                                        // idForm_1.style.display = "block";
+                                                                        // idForm_2.style.display = "none";
+                                                                    } else {
+                                                                        document.getElementById("form_3").style.display = "block";
+                                                                        document.getElementById("form_4").style.display =  "none";
+                                                                    } if (select.value == 1 || select.value == 2){
+                                                                         document.getElementById("form_3").style.display = "block";
+                                                                        document.getElementById("form_4").style.display =  "none";
+                                                                    }
+
+                                                                }
+                                                            </script> -->
+                                                            <!-- end -->
+
+                                                            <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
+                                                            <div class="form-group">
+                                                                <label for="kpl">Kepala Keluarga</label>
+                                                                <select class="form-control" id="kpl" name="kpl" required>
+                                                                    <option selected value="{{$pengungsi->idKepala}}" hidden>{{$pengungsi->namaKepala}}
+                                                                        <!-- {{ $pengungsi->lokKel}} -->
+                                                                        ({{ $pengungsi->detail}})
+                                                                    </option>
+                                                                    @foreach ($kpl as $kplk)
+                                                                    <option value="{{$kplk->id}}">{{$kplk->nama}} 
+                                                                        <!-- (Kec.
+                                                                        {{$kplk->kecamatan}}, Kel. {{$kplk->kelurahan}}, -->
+                                                                        ({{ $kplk->detail }})
+                                                                    </option>
+                                                                    @endforeach
+                                                                    <option value="">Kosongkan dahulu</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- jika belum perlu menambahkan alamat -->
+                                                            <!-- <div class="wrapper-kk" class="hidden" id="form_4">
+                                                                <div class="form-group">
+                                                                    <label for="provinsi">Provinsi</label>
+                                                                    <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi" value="{{$pengungsi->provinsi}}">
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="kota">Kota</label>
+                                                                    <input type="text" class="form-control" id="kota" placeholder="Masukan kota" name="kota" value="{{$pengungsi->kota}}">
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="kecamatan">Kecamatan</label>
+                                                                    <input type="text" class="form-control" id="kecamatan" placeholder="Masukan kecamatan" name="kecamatan" value="{{$pengungsi->kecamatan}}">
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="kelurahan">Kelurahan</label>
+                                                                    <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan" value="{{$pengungsi->kelurahan}}">
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="detail">Detail</label>
+                                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail" value="{{$pengungsi->detail}}">
+                                                                </div>
+                                                            </div> -->
+
+                                                               <!-- jika belum perlu menambahkan alamat -->
+                                            <div class="wrapper-kk" class="hidden" id="form_4"">
+                                                @foreach ($getLokasi as $lokasi)
+                                                <div class="form-group">
+                                                    <label for="exampleInputProvinsi">Lokasi bencana</label>
+                                                    <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="lokasi" value="{{$lokasi->lokasi}}" readonly>
+                                                </div>
+                                                @break
+                                                @endforeach
+
+                                                <!-- <div class="form-group">
+                                                    <label for="provinsi">Provinsi</label>
+                                                    <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="kota">Kota</label>
+                                                    <input type="text" class="form-control" id="kota" placeholder="Masukan kota" name="kota">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="kecamatan">Kecamatan</label>
+                                                    <input type="text" class="form-control" id="kecamatan" placeholder="Masukan kecamatan" name="kecamatan">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="kelurahan">Kelurahan</label>
+                                                    <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan">
+                                                </div> -->
+
+                                                <!-- <div class="form-group">
+                                                    <label for="detail">Detail</label>
+                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
+                                                </div> -->
+                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="gender">Jenis Kelamin</label>
+                                                                <select class="form-control" id="gender" name="gender" required>
+                                                                    <?php
+                                                                    $getGender = $pengungsi->gender;
+                                                                    if ($getGender == 0) {
+                                                                        $statGen = "Perempuan";
+                                                                    } else if ($getGender == 1) {
+                                                                        $statGen = "Laki-laki";
+                                                                    }
+                                                                    ?>
+                                                                    <option selected value="{{$pengungsi->gender}}" hidden><?php echo $statGen; ?></option>
+                                                                    <option value=1>Laki - Laki</option>
+                                                                    <option value=0>Perempuan</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="umur">Umur</label>
+                                                                <input type="text" class="form-control" id="umur" name="umur" placeholder="Masukan umur" value="{{$pengungsi->umur}}" required>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="statKon">Kondisi</label>
+                                                                <select class="form-control" id="statKon" name="statKon" required>
+                                                                    <?php
+                                                                    $getKon = $pengungsi->statKon;
+                                                                    if ($getKon == 0) {
+                                                                        $statKon = "Sehat";
+                                                                    } else if ($getKon == 1) {
+                                                                        $statKon = "Luka Ringan";
+                                                                    } else if ($getKon == 2) {
+                                                                        $statKon = "Luka Sedang";
+                                                                    } else if ($getKon == 3) {
+                                                                        $statKon = "Luka Berat";
+                                                                    } else if ($getKon == 4) {
+                                                                        $statKon = "Hamil atau menyusui";
+                                                                    } else if ($getKon == 5) {
+                                                                        $statKon = "Difabel";
+                                                                    }
+                                                                    ?>
+                                                                    <option selected value="{{$pengungsi->statKon}}" hidden><?php echo $statKon; ?></option>
+                                                                    <option value=0>Sehat</option>
+                                                                    <option value=1>Luka Ringan</option>
+                                                                    <option value=2>Luka Sedang</option>
+                                                                    <option value=3>Luka Berat</option>
+                                                                    <option value=4>Hamil atau menyusui</option>
+                                                                    <option value=5>Difabel</option>
+                                                                </select>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="statPos">Status</label>
+                                                                <select class="form-control" id="statPos" name="statPos" required>
+                                                                    <?php
+                                                                    $getPos = $pengungsi->statPos;
+                                                                    if ($getPos == 0) {
+                                                                        $statPos = "Keluar";
+                                                                    } else if ($getPos == 1) {
+                                                                        $statPos = "Di Posko";
+                                                                    }
+                                                                    ?>
+                                                                    <option selected value="{{$pengungsi->statPos}}" hidden><?php echo $statPos; ?></option>
+                                                                    <option value=1>Di Posko</option>
+                                                                    <option value=0>Keluar</option>
+                                                                </select>
+                                                            </div>
+
+
+                                                        </div>
+                                                        <!-- /.card-body -->
+
+                                                        <div class="card-footer">
+                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                    </form>
+                                                              <?php  }?>
                                                 </div>
                                             </div>
                                             <!-- /.modal-content -->

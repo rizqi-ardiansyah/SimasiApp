@@ -57,7 +57,7 @@ class SecondSheetImport implements ToArray, WithCalculatedFormulas, WithValidati
     public function rules(): array
     {
         return [
-            'nama_kepala' => 'unique:kepala_keluarga,nama',
+            'nama_pengungsi' => 'unique:pengungsi,nama,detail',
         ];
 
     }

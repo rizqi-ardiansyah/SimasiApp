@@ -80,7 +80,7 @@
                                     <td>{{$laporan->namaBencana}}</td>
                                     <td>{{$laporan->waktu}}</td>
                                     <td>{{$laporan->lokasi}}</td>
-                                    <td>{{$laporan->ttlPosko}}</td>
+                                    <td>{{$laporan->jmlPosko}}</td>
 
                                     @role('pusdalop')
                                     <td>

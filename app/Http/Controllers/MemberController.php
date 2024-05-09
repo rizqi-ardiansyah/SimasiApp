@@ -45,6 +45,9 @@ class MemberController extends Controller
         'memberteam.email', 'memberteam.nohp','memberteam.alamat','memberteam.peran',
         'memberteam.tim','memberteam.id as idMember')
             ->leftJoin('users as u', 'u.id', '=', 'memberteam.tim')
+            ->leftJoin('model_has_roles as mr', 'u.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->where('r.id','=',1)
             ->orderBy('firstname', 'asc')
             ->paginate(5);
 
@@ -73,6 +76,9 @@ class MemberController extends Controller
         'memberteam.email', 'memberteam.nohp','memberteam.alamat','memberteam.peran',
         'memberteam.tim','memberteam.id as idMember')
             ->leftJoin('users as u', 'u.id', '=', 'memberteam.tim')
+            ->leftJoin('model_has_roles as mr', 'u.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->where('r.id','=',2)
             ->orderBy('firstname', 'asc')
             ->paginate(5);
 

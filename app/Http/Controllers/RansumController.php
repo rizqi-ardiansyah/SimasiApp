@@ -64,14 +64,13 @@ class RansumController extends Controller
 
         $getTtlBalita4 = $getBalita4->count();
 
-        $getDewasa = Pengungsi::select('*','pengungsi.nama','kpl.nama as namKep',DB::raw("concat('Prov. ',
-        provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
-        as lokasi"))
-            ->join('integrasi as int','int.png_id','=','pengungsi.id')
-            ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
-            ->where('umur', '>', 5)
-            ->where('umur', '<', 60)
-            ->where('int.posko_id', '=', $request->id)->get();
+        $getDewasa = Pengungsi::select('*')
+        ->join('integrasi as int','int.png_id','=','pengungsi.id')
+        ->join('posko as p','p.id','=','int.posko_id')
+        ->where('umur', '>', 4)
+        ->where('umur', '<', 60)
+        ->where('statKon', '!=', 4)
+        ->where('int.posko_id', '=', $request->id)->get();
 
         $getDewasa = $getDewasa->count();
 
@@ -80,7 +79,7 @@ class RansumController extends Controller
         as lokasi"))
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
-            ->where('umur', '>', 60)
+            ->where('umur', '>', 59)
             ->where('int.posko_id', '=', $request->id)->get();
 
         $getLansia = $getLansia->count();
