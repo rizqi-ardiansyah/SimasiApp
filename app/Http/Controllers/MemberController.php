@@ -72,16 +72,16 @@ class MemberController extends Controller
             ->orderBy('fullName', 'asc')
             ->paginate(5);
 
-            $trcAktif = User::select(DB::raw("concat(users.firstname,' ',users.lastname) as fullName"), 
-            'users.firstname', 'users.lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
-            'r.id as idRole', 'r.name as namaPeran')
-                ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
-                ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
-                ->join('integrasi as int','users.id','=','int.user_id')
-                ->where('r.id','=',2)
-                ->distinct()
-                ->orderBy('fullName', 'asc')
-                ->paginate(100);
+        $trcAktif = User::select(DB::raw("concat(users.firstname,' ',users.lastname) as fullName"), 
+        'users.firstname', 'users.lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
+        'r.id as idRole', 'r.name as namaPeran')
+            ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->join('integrasi as int','users.id','=','int.user_id')
+            ->where('r.id','=',2)
+            ->distinct()
+            ->orderBy('fullName', 'asc')
+            ->paginate(100);
 
         $memberTRC = MemberTeam::select(DB::raw("concat(memberteam.firstname,' ',memberteam.lastname) 
         as fullName"), 'memberteam.firstname', 'memberteam.lastname', 
@@ -114,7 +114,7 @@ class MemberController extends Controller
         return view('admin.member.indexTRC', [
             'data' => $users,
             'trcAktif' =>$trcAktif,
-            'trcNonAktif' =>$trcNonaktif,
+            'trcNonAktif' => $trcNonaktif,
             'memberTRC' => $memberTRC,
             'role' => $roles,
         ]);
