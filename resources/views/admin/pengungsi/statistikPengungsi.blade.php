@@ -302,7 +302,7 @@
                                 <td>{{ $lansia->nama }}</td>
                                 <td>{{ $lansia->namKep }}</td>
                                 <td>{{ $lansia->telpon }}</td>
-                                <td>{{ $lansia->lokasi }}</td>
+                                <td>{{ $lansia->detail}}</td>
                                 <?php
                                 $getGender = $lansia->gender;
                                 if ($getGender == 0) {
@@ -396,7 +396,7 @@
                             <td>{{ $sakit->nama }}</td>
                             <td>{{ $sakit->namKep }}</td>
                             <td>{{ $sakit->telpon }}</td>
-                            <td>{{ $sakit->lokasi }}</td>
+                            <td>{{ $sakit->detail}}</td>
                             <?php
                             $getGender = $sakit->gender;
                             if ($getGender == 0) {

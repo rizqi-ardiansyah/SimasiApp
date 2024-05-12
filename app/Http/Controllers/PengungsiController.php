@@ -231,7 +231,7 @@ class PengungsiController extends Controller
 
         $getLansia = Pengungsi::select('*','pengungsi.nama','kpl.nama as namKep',DB::raw("concat('Prov. ',
         provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
-        as lokasi"))
+        as lokasi"), 'kpl.detail')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             ->where('umur', '>=', 60)
@@ -259,7 +259,7 @@ class PengungsiController extends Controller
 
         $getDifabel = Pengungsi::select('*','pengungsi.nama','kpl.nama as namKep',DB::raw("concat('Prov. ',
         provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
-        as lokasi"))
+        as lokasi"), 'kpl.detail')
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             ->where('statKon', '=', 5)
@@ -268,7 +268,7 @@ class PengungsiController extends Controller
         $getTtlDifabel = $getDifabel->count();
 
         $getNmTrc = Posko::select(
-            DB::raw("concat(u.firstname,' ',u.lastname) as fullName")
+            DB::raw("concat(u.firstname) as fullName")
         )
             // ->join('posko as p','pengungsi.posko_id','=','p.id')
             ->join('integrasi as int','int.posko_id','=','posko.id')

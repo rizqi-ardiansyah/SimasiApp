@@ -223,18 +223,19 @@
 
                                 @role('trc')
                                 <?php $i = 0; ?>
-                                @foreach ($data2 as $bencana)
+                                @foreach ($data2 as $key => $bencana)
                                 <tr>
                                     @if($bencana->trc == auth()->user()->id)
                                     <?php $i++; ?>
-                                    <td>{{ $i }}</td>
+                                    <td>{{ $data2->firstItem() + $key }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
-                                    <!-- <td>{{ $bencana->lokasi }}</td> -->
+                                    <td>{{ $bencana->alamat }}</td>
                                     <!-- <td>{{ $bencana->posko }}</td> -->
-                                    <td>{{ $bencana->ttlPosko }} tempat</br>
+                                    <td>{{ $bencana->jmlPosko }} tempat</br>
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
                                     </td>
+                                    <td>{{ $bencana->jmlPengungsi }} orang</br>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)
@@ -524,8 +525,7 @@
         form.addEventListener('beforeinput', e => {
             const formdata = new FormData(form);
             let search = formdata.get('search');
-            let url = "{{ route('searchBencana', "
-            search = ") }}" + search
+            let url = "{{route('searchBencana',"search= ")}}"+search
 
 
             if (url === "") {
