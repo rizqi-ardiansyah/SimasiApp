@@ -497,7 +497,7 @@ class PengungsiController extends Controller
     public function createPengungsi(Request $request)
     {
         // $getDataKpl =
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $request->validate([
             //     // 'namaBelakang' => ['required', 'max:50'],
             //     // 'nama' => ['string', 'unique:posko'],
@@ -592,8 +592,8 @@ class PengungsiController extends Controller
             // return Redirect::to('admin/ingresos');
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
-        }
-        return back();
+        // }
+        // return back();
     }
 
     /**
@@ -648,7 +648,7 @@ class PengungsiController extends Controller
         $idKepalaKeluarga = KepalaKeluarga::select('id')->where('id', $request->kpl)->value('id');
         // $kepalaKeluarga = KepalaKeluarga::where('id', $request->kpl);
 
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $request->validate([
             //     // 'namaBelakang' => ['required', 'max:50'],
             //     // 'nama' => ['string', 'unique:posko'],
@@ -697,8 +697,6 @@ class PengungsiController extends Controller
              ]);
             Alert::success('Success', 'Data berhasil diubah');
             return back();
-        }
-        return back();
     }
 
     /**
@@ -715,7 +713,7 @@ class PengungsiController extends Controller
 
     public function delete($id)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $getStatkel = Pengungsi::where('id', $id)->value('statKel');
             // $statKel = $getIdKepala->statKel;
             $getIdKepala = Integrasi::where('png_id', $id)->value('kpl_id');
@@ -745,8 +743,8 @@ class PengungsiController extends Controller
                 'success' => $success,
                 'message' => $message,
             ]);
-        }
-        return back();
+        // }
+        // return back();
     }
 
     // show filter keluarga

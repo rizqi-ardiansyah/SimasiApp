@@ -16,7 +16,7 @@
 
 <body class="login-page">
   <div class="login-logo">
-              <img class="lgn-logo" src="{{url('/assets/img/logo.png')}}" alt="logo-login">
+              <img class="lgn-logo" src="{{url('/assets/img/logoMangsi.png')}}" alt="logo-login"> <br>
           </div>
     <div class="form">
       <p class="login-box-msg">{{$title}}</p>

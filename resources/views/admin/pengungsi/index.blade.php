@@ -960,7 +960,6 @@
                                     <td>${statKel}</td>
                                     <td>${pengungsi.namaKepala}</td>
                                     <td>${pengungsi.telpon }</td>
-                                    <td>${pengungsi.lokasi }</td>
                                     <td>${gender}</td>
                                     <td>${pengungsi.umur }</td>
                                     <td>${kondisi}</td>
