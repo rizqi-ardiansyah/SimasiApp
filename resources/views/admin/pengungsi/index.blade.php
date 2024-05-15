@@ -49,7 +49,7 @@
                             @endforeach
                         </div>
                         @endif
-                        <div class="card-tools">
+                        <!-- <div class="card-tools">
                             <form id="search">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right" placeholder="Search">
@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="modal fade" id="modal-default">
@@ -941,9 +941,9 @@
                                     kondisi = "Luka Sedang";
                                 } else if (kondisi == 3) {
                                     kondisi = "Luka Berat";
-                                else if ($getKon == 4) 
+                                else if (kondisi == 4) 
                                     kondisi = "Hamil atau menyusui";
-                                } else if (kondisi == 4) {
+                                } else if (kondisi == 5) {
                                     kondisi = "Difabel";
                                 }
                                 let statPos = pengungsi.statPos;

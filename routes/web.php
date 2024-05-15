@@ -104,6 +104,9 @@ Route::post('pengungsi/store', [PengungsiController::class, 'store'])->name('pen
 Route::get('laporan/exportPdf/{id}', [LaporanController::class, 'exportPdf']);
 Route::get('laporan/exportExcel/{id}', [LaporanController::class, 'exportExcel']);
 
+Route::get("search/bencana", [BencanaController::class, 'searchBencana'])->name('bencana.searchBencana');
+// Route::get('bencana/cari',[BencanaController::class, 'search'])->name('searchBencana');
+
 
 
 // Route::post('cadang/delete/{id}', [CadangController::class, 'destroy']);

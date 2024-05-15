@@ -45,39 +45,39 @@ class DashboardController extends Controller
 
         // $getTtl2014 = $getBThn->count();
 
-        $getPthn2014 = Posko::select('b.nama as namaBencana', DB::raw('count(int.png_id) as ttlPengungsi'))
-        ->join('integrasi as int', 'int.posko_id','=','posko.id')
-        ->join('bencana as b','b.id','=','int.bencana_id')
-        // ->leftJoin('bencana as b','posko.bencana_id','=','b.id')
-        ->join('pengungsi as p','p.id','=','int.png_id')
-        // ->leftJoin('pengungsi as p','posko.id','=','p.posko_id')
-        // ->join('users as u','posko.trc_id','=','u.id')
-        ->groupBy('int.bencana_id', 'b.tanggal', 'b.waktu', 'b.id',
-                'b.nama', 'status', 'b.updated_at',
-                'posko.id', 'posko.nama', 'int.bencana_id', 'b.id', 'posko.created_at',
-                'posko.updated_at', 'int.user_id')
-        ->whereYear('b.tanggal','=',2014)
-        // ->where('posko.bencana_id', 4)
-        ->paginate(5);
-
-        $getPthn2018 = Posko::select('b.nama as namaBencana', DB::raw('count(int.png_id) as ttlPengungsi'))
-        ->join('integrasi as int', 'int.posko_id','=','posko.id')
-        ->join('bencana as b','b.id','=','int.bencana_id')
-        // ->leftJoin('bencana as b','posko.bencana_id','=','b.id')
-        ->join('pengungsi as p','p.id','=','int.png_id')
-        // ->leftJoin('pengungsi as p','posko.id','=','p.posko_id')
-        // ->join('users as u','posko.trc_id','=','u.id')
-        // ->leftJoin('pengungsi as p','posko.id','=','p.posko_id')
+        // $getPthn2023 = Posko::select('b.nama as namaBencana', DB::raw('count(int.png_id) as ttlPengungsi'))
+        // ->join('integrasi as int', 'int.posko_id','=','posko.id')
+        // ->join('bencana as b','b.id','=','int.bencana_id')
+        // // ->leftJoin('bencana as b','posko.bencana_id','=','b.id')
+        // ->join('pengungsi as p','p.id','=','int.png_id')
+        // // ->leftJoin('pengungsi as p','posko.id','=','p.posko_id')
         // // ->join('users as u','posko.trc_id','=','u.id')
-        ->groupBy('int.bencana_id', 'b.tanggal', 'b.waktu', 'b.id',
-                'b.nama', 'status', 'b.updated_at',
-                'posko.id', 'posko.nama', 'int.bencana_id', 'b.id', 'posko.created_at',
-                'posko.updated_at', 'int.user_id')
-        ->whereYear('b.tanggal','=',2024)
-        // ->where('posko.bencana_id', 4)
-        ->paginate(5);
+        // ->groupBy('int.bencana_id', 'b.tanggal', 'b.waktu', 'b.id',
+        //         'b.nama', 'status', 'b.updated_at',
+        //         'posko.id', 'posko.nama', 'int.bencana_id', 'b.id', 'posko.created_at',
+        //         'posko.updated_at', 'int.user_id')
+        // ->whereYear('b.tanggal','=',2014)
+        // // ->where('posko.bencana_id', 4)
+        // ->paginate(5);
 
-        $getPthn2022 = Posko::select('int.bencana_id as idBencana','b.nama as namaBencana', DB::raw('count(int.png_id) as ttlPengungsi'))
+        // $getPthn2018 = Posko::select('b.nama as namaBencana', DB::raw('count(int.png_id) as ttlPengungsi'))
+        // ->join('integrasi as int', 'int.posko_id','=','posko.id')
+        // ->join('bencana as b','b.id','=','int.bencana_id')
+        // // ->leftJoin('bencana as b','posko.bencana_id','=','b.id')
+        // ->join('pengungsi as p','p.id','=','int.png_id')
+        // // ->leftJoin('pengungsi as p','posko.id','=','p.posko_id')
+        // // ->join('users as u','posko.trc_id','=','u.id')
+        // // ->leftJoin('pengungsi as p','posko.id','=','p.posko_id')
+        // // // ->join('users as u','posko.trc_id','=','u.id')
+        // ->groupBy('int.bencana_id', 'b.tanggal', 'b.waktu', 'b.id',
+        //         'b.nama', 'status', 'b.updated_at',
+        //         'posko.id', 'posko.nama', 'int.bencana_id', 'b.id', 'posko.created_at',
+        //         'posko.updated_at', 'int.user_id')
+        // ->whereYear('b.tanggal','=',2024)
+        // // ->where('posko.bencana_id', 4)
+        // ->paginate(5);
+
+        $getPthn2024 = Posko::select('int.bencana_id as idBencana','b.nama as namaBencana', DB::raw('count(int.png_id) as ttlPengungsi'))
         ->join('integrasi as int', 'int.posko_id','=','posko.id')
         ->join('bencana as b','b.id','=','int.bencana_id')
         // ->leftJoin('bencana as b','posko.bencana_id','=','b.id')
@@ -109,7 +109,7 @@ class DashboardController extends Controller
                 'b.nama', 'status', 'b.updated_at',
                 'posko.id', 'posko.nama', 'int.bencana_id', 'b.id', 'posko.created_at',
                 'posko.updated_at', 'int.user_id')
-        ->whereYear('b.tanggal','=',2024    )
+        ->whereYear('b.tanggal','=',2023)
         // ->where('posko.bencana_id', 4)
         ->paginate(5);
 
@@ -118,10 +118,10 @@ class DashboardController extends Controller
             'ttlBB' => $getBBTotal,
             'ttlRP' => $getRPTotal,
             'ttlRT' => $getRTTotal,
-            'ttlP2014' => $getPthn2014,
-            'ttlP2018' => $getPthn2018,
-            'ttlP2022' => $getPthn2022,
             'ttlP2023' => $getPthn2023,
+            // 'ttlP2018' => $getPthn2018,
+            // 'ttlP2022' => $getPthn2022,
+            'ttlP2024' => $getPthn2024,
         ]);
     }
 

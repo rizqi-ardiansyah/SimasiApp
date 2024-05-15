@@ -191,8 +191,10 @@ class CadangController extends Controller
             $message = "Data berhasil dihapus";
 
         } else {
+            $success = true;
             // dd('File does not exists.');
-            $message = "Data gagal dihapus";
+            $message = "Data berhasil dihapus";
+            // $message = "Data gagal dihapus";
         }
 
         return response()->json([

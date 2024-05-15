@@ -123,9 +123,9 @@
                         <div class="card-tools">
                             <!-- Dropdown -->
                             <select class="form-control" id="thn" name="thn" onchange="showDivs(this)">
-                                <option value=2014 selected>2014</option>
-                                <option value=2018>2018</option>
-                                <option value=2022>2022</option>
+                                <option value=2023 selected>2023</option>
+                                <option value=2024>2024</option>
+                                <!-- <option value=2022>2022</option> -->
                                 <!-- <option value=2023>2023</option> -->
                             </select>
                         </div>
@@ -138,7 +138,7 @@
                         var areaChartData = {
                             // Menyajikan nama bencana
                             labels: [
-                                @foreach($ttlP2014 as $i)['{{ $i->namaBencana }}'],
+                                @foreach($ttlP2023 as $i)['{{ $i->namaBencana }}'],
                                 @endforeach
                             ], //data bisa angka dan huruf(harus dikasih petik)
 
@@ -154,7 +154,7 @@
                                 // Menyajikan data jumlah pengungsi
                                 data: [
                                     <?php
-                                                foreach ($ttlP2014 as $i) 
+                                                foreach ($ttlP2023 as $i) 
                                                 {
                                                     echo ($i->ttlPengungsi) . ',';
                                             }
@@ -208,7 +208,7 @@
                         console.log(selects);
 
                         // Jika berada pada tahun 2014
-                        if (selects.value == 2014) {
+                        if (selects.value == 2023) {
                             // Data akan tampil
                             document.getElementById("form_4").style.display = "block";
                             // Proses chart
@@ -217,7 +217,7 @@
                                 var areaChartData = {
                                     // Menyajikan nama bencana
                                     labels: [
-                                        @foreach($ttlP2014 as $i)['{{ $i->namaBencana }}'],
+                                        @foreach($ttlP2023 as $i)['{{ $i->namaBencana }}'],
                                         @endforeach
                                     ], //data bisa angka dan huruf(harus dikasih petik)
 
@@ -233,7 +233,7 @@
                                         // Menyajikan data jumlah pengungsi
                                         data: [
                                             <?php
-                                                foreach ($ttlP2014 as $i) {echo $i->ttlPengungsi . ',';
+                                                foreach ($ttlP2023 as $i) {echo $i->ttlPengungsi . ',';
                                             }
                                             ?>
                                         ] //data harus angka dan sesuai jumlah label
@@ -270,8 +270,8 @@
                                 })
                             });
 
-                            // Jika pada tahun 2018
-                        } else if (selects.value == 2018) {
+                            // Jika pada tahun 2024
+                        } else if (selects.value == 2024) {
 
                             document.getElementById("form_4").style.display = "block";
 
@@ -279,7 +279,7 @@
                                 var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
                                 var areaChartData = {
                                     labels: [
-                                        @foreach($ttlP2018 as $i)['{{ $i->namaBencana }}'],
+                                        @foreach($ttlP2024 as $i)['{{ $i->namaBencana }}'],
                                         @endforeach
                                     ], //data bisa angka bisa huruf(harus dikasih petik)
 
@@ -294,7 +294,7 @@
                                         pointHighlightStroke: 'rgba(60,141,188,1)',
                                         data: [
                                             <?php
-                                                        foreach ($ttlP2018 as $i) {echo $i->ttlPengungsi . ',';
+                                                        foreach ($ttlP2024 as $i) {echo $i->ttlPengungsi . ',';
                                                     }
                                                     ?>
 
@@ -332,131 +332,6 @@
                                 })
                             });
 
-                            // Jika data di tahun 2022
-                        } else if (selects.value == 2022) {
-
-                            document.getElementById("form_4").style.display = "block";
-
-                            $(function() {
-                                var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
-                                var areaChartData = {
-                                    labels: [
-                                        @foreach($ttlP2022 as $i)['{{ $i->namaBencana }}'],
-                                        @endforeach
-                                    ], //data bisa angka bisa huruf(harus dikasih petik)
-
-                                    datasets: [{
-                                        label: 'Digital Goods',
-                                        backgroundColor: 'rgba(60,141,188,0.9)',
-                                        borderColor: 'rgba(60,141,188,0.8)',
-                                        pointRadius: false,
-                                        pointColor: '#3b8bba',
-                                        pointStrokeColor: 'rgba(60,141,188,1)',
-                                        pointHighlightFill: '#fff',
-                                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                                        data: [
-                                            <?php
-                                                    foreach ($ttlP2022 as $i) {echo $i->ttlPengungsi . ',';
-                                                 }
-                                                ?>
-
-                                        ] //data harus angka dan sesuai jumlah label
-                                    }, ]
-                                }
-
-                                var areaChartOptions = {
-                                    maintainAspectRatio: false,
-                                    responsive: true,
-                                    legend: {
-                                        display: false
-                                    },
-                                    scales: {
-                                        xAxes: [{
-                                            gridLines: {
-                                                display: false,
-                                            }
-                                        }],
-                                        yAxes: [{
-                                            ticks: {
-                                                stepSize: 1
-                                            },
-                                            gridLines: {
-                                                display: false,
-                                            }
-                                        }]
-                                    }
-                                }
-
-                                new Chart(areaChartCanvas, {
-                                    type: 'line',
-                                    data: areaChartData,
-                                    options: areaChartOptions
-                                })
-                            });
-
-                            //tahun 2023
-                        } else if (selects.value == 2023) {
-
-                            document.getElementById("form_4").style.display = "block";
-
-                            $(function() {
-                                var areaChartCanvas = $('#areaChart').get(0).getContext('2d')
-                                var areaChartData = {
-                                    labels: [
-                                        @foreach($ttlP2023 as $i)['{{ $i->namaBencana }}'],
-                                        @endforeach
-                                    ], //data bisa angka bisa huruf(harus dikasih petik)
-
-                                    datasets: [{
-                                        label: 'Digital Goods',
-                                        backgroundColor: 'rgba(60,141,188,0.9)',
-                                        borderColor: 'rgba(60,141,188,0.8)',
-                                        pointRadius: false,
-                                        pointColor: '#3b8bba',
-                                        pointStrokeColor: 'rgba(60,141,188,1)',
-                                        pointHighlightFill: '#fff',
-                                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                                        data: [
-                                            <?php
-                                            foreach ($ttlP2023 as $i) {echo $i->ttlPengungsi . ',';
-                                        }
-                                        ?>
-
-                                        ] //data harus angka dan sesuai jumlah label
-                                    }, ]
-                                }
-
-                                var areaChartOptions = {
-                                    maintainAspectRatio: false,
-                                    responsive: true,
-                                    legend: {
-                                        display: false
-                                    },
-                                    scales: {
-                                        xAxes: [{
-                                            gridLines: {
-                                                display: false,
-                                            }
-                                        }],
-                                        yAxes: [{
-                                            ticks: {
-                                                stepSize: 1
-                                            },
-                                            gridLines: {
-                                                display: false,
-                                            }
-                                        }]
-                                    }
-                                }
-
-                                new Chart(areaChartCanvas, {
-                                    type: 'line',
-                                    data: areaChartData,
-                                    options: areaChartOptions
-                                })
-                            });
-
-                            // Jika data di tahun 2022
                         
                         } else {
                             document.getElementById("form_4").style.display = "none";
