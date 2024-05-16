@@ -62,26 +62,11 @@
                                                 <input type="text" class="form-control" id="namaDepan" placeholder="Masukan nama depan" name="namaDepan" required>
                                             </div>
 
-                                            <!-- <div class="form-group">
-                                                <label for="namaBelakang">Nama belakang Tim</label>
-                                                <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="namaBelakang" required>
-                                            </div> -->
-
                                             <div class="form-group">
                                                 <label for="email">Username</label>
                                                 <input type="text" class="form-control" id="email" placeholder="Masukan username" name="email" required>
 
                                             </div>
-
-                                            <!-- <div class="form-group">
-                                                <label for="position-option">Peran</label>
-                                                <select class="form-control" id="peran" name="peran" required>
-                                                    @foreach ($role as $peran)
-                                                    <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
 
                                             <div class="form-group">
                                                 <label for="peran">Peran</label>
@@ -157,12 +142,8 @@
                                                 <i class="fas fa-bars"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                                                    <i class="fas fa-eye mr-1"></i> Detail
-                                                </a>
-                                                <div class="dropdown-divider"></div> -->
                                                 <a href="#" class="dropdown-item " title="Edit Tim" data-toggle="modal" data-target="#modal-edit-{{$member->idAdmin}}">
-                                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                                                         <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
                                                     </svg>
                                                     Edit
@@ -180,9 +161,6 @@
                                             <button type="button" class="btn btn-primary btn-sm btn-info" data-toggle="modal" data-target="#modal-cekAnggota-{{$member->idAdmin}}" data-offset="-52">
                                                 <i class="fas fa-info mr-1"></i> Cek Anggota
                                             </button>
-                                            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
-                                                    <i class="fas fa-plus mr-1"></i> Tambah Tim
-                                            </a> -->
                                         </div>
                                     </td>
                                     @endrole
@@ -221,28 +199,10 @@
                                             <input type="text" class="form-control" id="namaTim" placeholder="Masukan nama tim" name="namaTim" value="{{ $detail->firstname }}" required>
                                         </div>
 
-                                        <!-- <div class="form-group">
-                                            <label for="namaBelakang">Nama belakang</label>
-                                            <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="namaBelakang" value="{{ $detail->lastname }}" required>
-                                        </div> -->
-
                                         <div class="form-group">
                                             <label for="email">Username</label>
                                             <input type="text" class="form-control" id="email" placeholder="Masukan username" name="email" value="{{ $detail->email }}" required>
                                         </div>
-
-                                        <!-- <div class="form-group">
-                                            <label for="position-option">Peran</label>
-                                            <select class="form-control" id="peran" name="peran" required>
-                                                <option selected value="{{ $detail->idRole }}" hidden>
-                                                    {{ $detail->namaPeran }}
-                                                </option>
-                                                @foreach ($role as $peran)
-                                                <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                        </div> -->
 
                                         <div class="form-group">
                                                 <label for="peran">Peran</label>
@@ -331,10 +291,6 @@
                                                 <i class="fas fa-bars"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                                                    <i class="fas fa-eye mr-1"></i> Detail
-                                                </a>
-                                                <div class="dropdown-divider"></div> -->
                                                 <a href="#" class="dropdown-item " title="Edit Anggota" data-toggle="modal" data-target="#modal-editAnggota-{{$member->idMember}}">
                                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                                                         <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />

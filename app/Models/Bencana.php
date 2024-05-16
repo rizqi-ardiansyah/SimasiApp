@@ -16,7 +16,12 @@ class Bencana extends Model
         'tanggal',
         'waktu',
         'jmlPengungsi',
-        'lokasi',
+        'provinsi',
+        'kota',
+        'kecamatan',
+        'kelurahan',
+        'jmlPosko',
+        'jmlPengungsi',
         'status',
     ];
 }

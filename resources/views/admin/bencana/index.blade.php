@@ -60,31 +60,31 @@ var subjectObject = {
   "Batu": {
     "Oro-oro Ombo": ["Links", "Images", "Tables", "Lists"],
     "Pesanggrahan": ["Borders", "Margins", "Backgrounds", "Float"],
-    "Sumberejo": ["Variables", "Operators", "Functions", "Conditions"],   
-    "Ngaglik": ["Variables", "Operators", "Functions", "Conditions"],    
-    "Sisir": ["Variables", "Operators", "Functions", "Conditions"],    
-    "Songgokerto": ["Variables", "Operators", "Functions", "Conditions"], 
-    "Temas": ["Variables", "Operators", "Functions", "Conditions"],    
+    "Sumberejo": ["Variables", "Operators", "Functions", "Conditions"],
+    "Ngaglik": ["Variables", "Operators", "Functions", "Conditions"],
+    "Sisir": ["Variables", "Operators", "Functions", "Conditions"],
+    "Songgokerto": ["Variables", "Operators", "Functions", "Conditions"],
+    "Temas": ["Variables", "Operators", "Functions", "Conditions"],
   },
   "Bumiaji": {
     "Bulukerto": ["Variables", "Strings", "Arrays"],
     "Bumiaji": ["SELECT", "UPDATE", "DELETE"],
     "Giripurno": ["Borders", "Margins", "Backgrounds", "Float"],
-    "Gunungsari": ["Variables", "Operators", "Functions", "Conditions"],   
-    "Pandanrejo": ["Variables", "Operators", "Functions", "Conditions"],    
-    "Punten": ["Variables", "Operators", "Functions", "Conditions"], 
+    "Gunungsari": ["Variables", "Operators", "Functions", "Conditions"],
+    "Pandanrejo": ["Variables", "Operators", "Functions", "Conditions"],
+    "Punten": ["Variables", "Operators", "Functions", "Conditions"],
     "Sumbergondo": ["Borders", "Margins", "Backgrounds", "Float"],
-    "Tulungrejo": ["Variables", "Operators", "Functions", "Conditions"],   
-    "Sumber Brantas": ["Variables", "Operators", "Functions", "Conditions"],    
+    "Tulungrejo": ["Variables", "Operators", "Functions", "Conditions"],
+    "Sumber Brantas": ["Variables", "Operators", "Functions", "Conditions"],
   },
   "Junrejo": {
     "Beji": ["Links", "Images", "Tables", "Lists"],
     "Dadaprejo": ["Borders", "Margins", "Backgrounds", "Float"],
-    "Junrejo": ["Variables", "Operators", "Functions", "Conditions"],   
-    "Mojorejo": ["Variables", "Operators", "Functions", "Conditions"],    
-    "Pendem": ["Variables", "Operators", "Functions", "Conditions"],    
-    "Tlekung": ["Variables", "Operators", "Functions", "Conditions"], 
-    "Torongrejo": ["Variables", "Operators", "Functions", "Conditions"],    
+    "Junrejo": ["Variables", "Operators", "Functions", "Conditions"],
+    "Mojorejo": ["Variables", "Operators", "Functions", "Conditions"],
+    "Pendem": ["Variables", "Operators", "Functions", "Conditions"],
+    "Tlekung": ["Variables", "Operators", "Functions", "Conditions"],
+    "Torongrejo": ["Variables", "Operators", "Functions", "Conditions"],
   },
 }
 window.onload = function() {
@@ -196,7 +196,7 @@ window.onload = function() {
                     <!-- /.card-header -->
 
 
-                    
+
                     <div class="card-body table-responsive">
                         @role('pusdalop')
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah" style="font-size: 14px;">
@@ -227,8 +227,8 @@ window.onload = function() {
                                 @if(empty($bencana->namaBencana))
                                     <p>Data kosong</p>
                                     // whatever you need to do here
-                                @else 
-                               
+                                @else
+
                                 <tr>
                                     <td>{{ $data->firstItem() + $key }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
@@ -286,11 +286,11 @@ window.onload = function() {
                                 @endrole
 
                                 @role('trc')
-                                <?php $i = 0; ?>
+                                <?php $i = 0;?>
                                 @foreach ($data2 as $key => $bencana)
                                 <tr>
                                     @if($bencana->trc == auth()->user()->id)
-                                    <?php $i++; ?>
+                                    <?php $i++;?>
                                     <td>{{ $data2->firstItem() + $key }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
@@ -321,11 +321,11 @@ window.onload = function() {
 
 
                                 @role('relawan')
-                                <?php $i = 0; ?>
+                                <?php $i = 0;?>
                                 @foreach ($data2 as $bencana)
                                 <tr>
                                     @if($bencana->trc == auth()->user()->id)
-                                    <?php $i++; ?>
+                                    <?php $i++;?>
                                     <td>{{ $i }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
@@ -425,14 +425,14 @@ window.onload = function() {
 
 
                                                         <?php
-                                                        $value = $detail->status;
-                                                        if ($value == 1) {
-                                                            $value = 'Berjalan';
-                                                        } elseif ($value == 0) {
-                                                            $value = 'Selesai';
-                                                        }
-                                                        // if()
-                                                        ?>
+$value = $detail->status;
+if ($value == 1) {
+    $value = 'Berjalan';
+} elseif ($value == 0) {
+    $value = 'Selesai';
+}
+// if()
+?>
 
                                                         <div class="form-group">
                                                             <label for="status">Status</label>
