@@ -1,4 +1,4 @@
-# SIMASI (Sistem Manajemen Pengungsi)
+# Sistem Manajemen Pengungsi
 
 The creation of a refugee management system in collaboration with the Regional Disaster Management Agency (BPBD) of Batu City, East Java, was based on an urgent need to increase the efficiency and effectiveness of handling refugees in situations of natural disasters or emergencies.
 
@@ -87,6 +87,30 @@ The creation of a refugee management system in collaboration with the Regional D
   *Display deletes refugee data*
   
   <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/8e9890ec-d691-48ca-867b-60add0c151b5" width="800" />
+
+### 5. Backup Feature
+
+- Backup is used to backup refugee data become format .sql. This feature also includes data on incoming and outgoing refugees
+
+  *Backup data display*
+
+  <img src="https://github.com/rizqi-ardiansyah/SimasiApp/assets/86498942/58b1616d-2353-4916-986b-27240b0d9c87" width="800" />
+  
+### 6. Report Feature
+
+- Report is used to report refugee data become format excel or pdf. This feature also includes data on incoming and outgoing refugees
+
+  *Backup data display*
+
+  <img src="https://github.com/rizqi-ardiansyah/SimasiApp/assets/86498942/88752ed6-f103-4f69-8339-151665293df3" width="800" />
+
+### 7. Member Feature
+
+- Member is contain data tim Pusdalop and TRC (Tim Reaksi Cepat)
+
+  *Backup data display*
+
+  <img src="https://github.com/rizqi-ardiansyah/SimasiApp/assets/86498942/207e681f-740e-4ea7-9fc5-6f334973c3b0" width="800" />
 
 # Installation
 
