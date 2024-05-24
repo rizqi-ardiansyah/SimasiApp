@@ -88,6 +88,14 @@ The creation of a refugee management system in collaboration with the Regional D
   
   <img src="https://github.com/rizqi-ardiansyah/simoyam/assets/86498942/8e9890ec-d691-48ca-867b-60add0c151b5" width="800" />
 
+  ### 5. Backup Feature
+
+- Refugee management is used to manage refugee data at the command post. This feature also includes data on incoming and outgoing refugees
+
+  *Backup data display*
+
+  <img src="https://github.com/rizqi-ardiansyah/SimasiApp/assets/86498942/58b1616d-2353-4916-986b-27240b0d9c87 width="800" />
+
 # Installation
 
 1. Clone the repository
