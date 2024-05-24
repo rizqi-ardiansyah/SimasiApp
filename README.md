@@ -1,4 +1,4 @@
-# SIMASI (Sistem Manajemen Pengungsi)
+# Sistem Manajemen Pengungsi
 
 The creation of a refugee management system in collaboration with the Regional Disaster Management Agency (BPBD) of Batu City, East Java, was based on an urgent need to increase the efficiency and effectiveness of handling refugees in situations of natural disasters or emergencies.
 
