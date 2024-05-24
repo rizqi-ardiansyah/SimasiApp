@@ -94,7 +94,7 @@ The creation of a refugee management system in collaboration with the Regional D
 
   *Backup data display*
 
-  <img src="https://github.com/rizqi-ardiansyah/SimasiApp/assets/86498942/58b1616d-2353-4916-986b-27240b0d9c87 width="800" />
+  <img src="https://github.com/rizqi-ardiansyah/SimasiApp/assets/86498942/58b1616d-2353-4916-986b-27240b0d9c87" width="800" />
 
 # Installation
 
