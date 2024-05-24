@@ -35,7 +35,6 @@
 </head>
 
 <body>
-
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -43,8 +42,8 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header laporan-title">
-                            @foreach ($data as $key => $bencana)
-                            @if($key < 1) <h3>
+                            @foreach ($dataBencana as $key => $bencana)
+                           <h3>
 
                                 <center>{{$bencana->namaBencana}}</center>
 
@@ -56,16 +55,58 @@
                                 <b>Waktu</b> : {{ Carbon\Carbon::parse($bencana->tgl)->format('d/m/Y') }},
                                 {{$bencana->time}}<br>
                                 <b>Lokasi</b> : {{$bencana->lokasiBencana}}</br>
-
                                 <br>
-                                <b>Daftar posko : {{ $bencana->jmlPosko }}</b><br>
-                                @endif
-                                @endforeach
-                                @foreach ($data as $key => $bencana)
-                                @if($key < 1) <b>{{$key+=1}}. {{$bencana->namaPosko}}</b> : {{ $jmlPeng }} orang
-                                    ({{ $ttlBalita }} balita, {{ $ttlDewasa }} dewasa, {{ $ttlLansia }} lansia)</br>
+                                <b>Daftar posko : <br>
+                                 <b>{{$key+=1}}. {{$bencana->namaPosko}}</b> : <br>
+                                    <?php
+                                    $index = 0;
+                                    ?>
+                                    @foreach ($getJml as $jml)
+                                    @if($jml->idPospeng == $bencana->idPospengs)
+                                    <?php $index++;?>
                                     @endif
                                     @endforeach
+                                    <?php
+                                    echo $index;
+                                    ?> orang
+
+                                    <?php
+                                    $index = 0;
+                                    ?>
+                                    @foreach ($getBalita as $jml)
+                                    @if($jml->idPospeng == $bencana->idPospengs)
+                                    <?php $index++;?>
+                                    @endif
+                                    @endforeach
+                                    (<?php
+                                    echo $index;
+                                    ?> balita,
+
+                                    <?php
+                                    $index = 0;
+                                    ?>
+                                    @foreach ($getDewasa as $jml)
+                                    @if($jml->idPospeng == $bencana->idPospengs)
+                                    <?php $index++;?>
+                                    @endif
+                                    @endforeach
+                                    <?php
+                                    echo $index;
+                                    ?> dewasa,
+
+                                    <?php
+                                    $index = 0;
+                                    ?>
+                                    @foreach ($getLansia as $jml)
+                                    @if($jml->idPospeng == $bencana->idPospengs)
+                                    <?php $index++;?>
+                                    @endif
+                                    @endforeach
+                                    <?php
+                                    echo $index;
+                                    ?> lansia)
+
+                                   </br>
 
                         </div>
                         <!-- /.card-header -->
@@ -100,7 +141,8 @@ $no = 1;
 ?>
         </thead>
         <tbody id="result">
-            @foreach ($data as $pengungsi)
+            @foreach ($dataPengungsi as $pengungsi)
+            @if($pengungsi->idPospeng == $bencana->idPospengs)
             <tr>
                 <td>{{$no++}}</td>
                 </td>
@@ -151,9 +193,13 @@ if ($kondisi == 0) {
                 </td>
 
             </tr>
+            @endif
             @endforeach
+
         </tbody>
     </table>
+    @endforeach
+    <br>
 
 </body>
 

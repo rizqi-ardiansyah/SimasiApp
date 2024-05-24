@@ -120,10 +120,68 @@ class LaporanController extends Controller
     public function exportPdf($id){
         // $data = Pengungsi::all();
         $getIdBencana = Bencana::where('id', $id)->value('id');
-        $getIdPosko = Integrasi::where('bencana_id', $id)->value('id');
+        $getIdPosko = Integrasi::where('bencana_id', $id)->value('posko_id');
         // $getIdPosko = Posko::where('bencana_id', $id)->value('id');
 
-        $data = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
+        $dataBencana = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
+        'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
+        'bencana.nama as namaBencana', 'status',
+        'bencana.updated_at as waktuUpdate', 'int.bencana_id',
+        DB::raw('count(int.bencana_id) as ttlPosko'),
+        'p.nama as namaPosko',
+        // 'peng.nama',
+        // 'peng.id as idPengungsi',
+        // 'int.kpl_id',
+        // 'peng.statKel',
+        // 'peng.telpon',
+        // 'peng.gender',
+        // 'peng.umur',
+        // 'peng.statPos',
+        'int.posko_id as idPospengs',
+        // 'statKon',
+        // 'peng.created_at as tglMasuk',
+        // 'kpl.id as idKepala',
+        // 'kpl.nama as namaKepala',
+        // 'kpl.detail as detail',
+        DB::raw("concat('Prov. ',bencana.provinsi,', Kota ',bencana.kota,', Kec. ',
+        bencana.kecamatan,', Ds. ',bencana.kelurahan) as lokasiBencana" ),
+        DB::raw("concat('Prov. ',bencana.provinsi,', Kota ',bencana.kota,', Kec. ',
+        bencana.kecamatan,', Ds. ',bencana.kelurahan) as lokasi" ),
+        //  DB::raw('count(p.id) as ttlPengungsi')
+    )
+        ->join('integrasi as int','int.bencana_id','bencana.id')
+        ->join('posko AS p', 'p.id', '=', 'int.posko_id')
+        // ->join('pengungsi as peng','peng.id','=','int.png_id')
+        // ->leftJoin('kepala_keluarga as kpl', 'kpl.id', '=', 'int.kpl_id')
+        ->orderBy('bencana.tanggal', 'desc')
+        // ->distinct()
+        ->where('int.bencana_id', '=', $id)
+    // ->where('peng.posko_id','=','p.id')
+        ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
+            'bencana.nama', 'status', 'bencana.updated_at',
+            'p.nama',
+            // 'peng.nama',
+            // 'peng.id',
+            // 'int.kpl_id',
+            // 'peng.statKel',
+            // 'peng.telpon',
+            // 'peng.gender',
+            // 'peng.umur',
+            // 'peng.statPos',
+            'int.posko_id',
+            // 'statKon',
+            // 'peng.created_at',
+            // 'kpl.id',
+            // 'kpl.nama',
+            // 'kpl.provinsi',
+            // 'kpl.kota',
+            // 'kpl.kecamatan',
+            // 'kpl.kelurahan',
+            // 'kpl.detail',
+            'lokasi','lokasiBencana')
+        ->paginate(100);
+
+        $dataPengungsi = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
         'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
         'bencana.nama as namaBencana', 'status',
         'bencana.updated_at as waktuUpdate', 'int.bencana_id',
@@ -156,7 +214,7 @@ class LaporanController extends Controller
         ->orderBy('bencana.tanggal', 'desc')
         ->distinct()
         ->where('int.bencana_id', '=', $id)
-    // ->where('peng.posko_id','=','p.id')
+        // ->where('int.posko_id','=', $getIdPosko)
         ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
             'bencana.nama', 'status', 'bencana.updated_at',
             'p.nama','peng.nama',
@@ -180,7 +238,7 @@ class LaporanController extends Controller
             'lokasi','lokasiBencana')
         ->paginate(100);
 
-    $getJml = Pengungsi::select('*')
+    $getJml = Pengungsi::select('*','p.id as idPospeng')
     ->join('integrasi as int','int.png_id','=','pengungsi.id')
     ->join('posko as p','p.id','=','int.posko_id')
     ->where('int.bencana_id', '=', $getIdBencana)
@@ -188,53 +246,59 @@ class LaporanController extends Controller
 
     $getJmlPengungsi = $getJml->count();
 
-    $getBalita = Pengungsi::select('*')
+    $getBalita = Pengungsi::select('*','p.id as idPospeng')
     ->where('umur', '<', 6)
     ->join('integrasi as int','int.png_id','=','pengungsi.id')
     ->join('posko as p','p.id','=','int.posko_id')
-    ->where('int.bencana_id', '=', $getIdBencana)->get();
+    ->where('int.bencana_id', '=', $getIdBencana)
+    ->get();
 
     $getTtlBalita = $getBalita->count();
 
-    $getLansia = Pengungsi::select('*')
+    $getLansia = Pengungsi::select('*','p.id as idPospeng')
     ->join('integrasi as int','int.png_id','=','pengungsi.id')
     ->join('posko as p','p.id','=','int.posko_id')
     ->where('umur', '>', 59)
-    ->where('int.bencana_id', '=', $getIdBencana)->get();
+    ->where('int.bencana_id', '=', $getIdBencana)
+    ->get();
 
     $getTtlLansia = $getLansia->count();
 
-    $getDewasa = Pengungsi::select('*')
+    $getDewasa = Pengungsi::select('*','p.id as idPospeng')
         ->join('integrasi as int','int.png_id','=','pengungsi.id')
         ->join('posko as p','p.id','=','int.posko_id')
         ->where('umur', '>', 4)
         ->where('umur', '<', 60)
-        ->where('int.bencana_id', '=', $getIdBencana)->get();
+        ->where('int.bencana_id', '=', $getIdBencana)
+        ->get();
 
     $getTtlDewasa = $getDewasa->count();
     
-    $getSehat = Pengungsi::select('*')
+    $getSehat = Pengungsi::select('*','p.id as idPospeng')
         ->join('integrasi as int','int.png_id','=','pengungsi.id')
         ->join('posko as p','p.id','=','int.posko_id')
         ->where('statKon', '=', 0)
-        ->where('int.bencana_id', '=', $getIdBencana)->get();
+        ->where('int.bencana_id', '=', $getIdBencana)
+        ->get();
 
     $getTtlSehat = $getSehat->count();
 
-    $getSakit = Pengungsi::select('*')
+    $getSakit = Pengungsi::select('*','p.id as idPospeng')
         ->join('integrasi as int','int.png_id','=','pengungsi.id')
         ->join('posko as p','p.id','=','int.posko_id')
         ->where('statKon', '>', 0)
         ->where('statKon', '<', 5)
-        ->where('int.bencana_id', '=', $getIdBencana)->get();
+        ->where('int.bencana_id', '=', $getIdBencana)
+        ->get();
 
     $getTtlSakit = $getSakit->count();
 
-    $getDifabel = Pengungsi::select('*')
+    $getDifabel = Pengungsi::select('*','p.id as idPospeng')
         ->join('integrasi as int','int.png_id','=','pengungsi.id')
         ->join('posko as p','p.id','=','int.posko_id')
         ->where('statKon', '=', 5)
-        ->where('int.bencana_id', '=', $getIdBencana)->get();
+        ->where('int.bencana_id', '=', $getIdBencana)
+        ->get();
 
     $getTtlDifabel = $getDifabel->count();
 
@@ -242,13 +306,18 @@ class LaporanController extends Controller
         // view()->share('data', $data);
         view()->share(
         [
-            'data' => $data,
+            'dataBencana' => $dataBencana,
+            'dataPengungsi' => $dataPengungsi,
+            'getBalita' => $getBalita,
+            'getDewasa' => $getDewasa,
+            'getLansia' => $getLansia,
             'ttlBalita' => $getTtlBalita,
             'ttlDewasa' => $getTtlDewasa,
             'ttlLansia' => $getTtlLansia,
             'ttlSehat' => $getTtlSehat,
             'ttlDifabel' => $getTtlDifabel,
             'jmlPeng' => $getJmlPengungsi,
+            'getJml' => $getJml
         ]);
         $pdf = PDF::loadview('datapengungsi-pdf');
         return $pdf->download('dataPengungsi.pdf');

@@ -79,8 +79,7 @@
                                         <div class="card-body">
                                             <!-- <div class="form-group"> -->
                                             <!-- {{request()->id}}
-                
-                {{request()->trc_id}} -->
+                                            {{request()->trc_id}} -->
                                             <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
                                             <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->bencana_id}}" hidden required>
                                             <input type="text" class="form-control" id="trc_id" name="trc_id" value="{{request()->trc_id}}" hidden required>
@@ -148,26 +147,6 @@
                                                 </div>
                                                 @break
                                                 @endforeach
-
-                                                <!-- <div class="form-group">
-                                                    <label for="provinsi">Provinsi</label>
-                                                    <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kota">Kota</label>
-                                                    <input type="text" class="form-control" id="kota" placeholder="Masukan kota" name="kota">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kecamatan">Kecamatan</label>
-                                                    <input type="text" class="form-control" id="kecamatan" placeholder="Masukan kecamatan" name="kecamatan">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kelurahan">Kelurahan</label>
-                                                    <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan">
-                                                </div> -->
 
                                                 <div class="form-group">
                                                     <label for="detail">Detail alamat</label>

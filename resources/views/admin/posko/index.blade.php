@@ -74,7 +74,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                
+
                                 <div class="modal-body">
                                     <!-- form start -->
                                     <form action="{{ route('posko.create') }}" method="POST">
@@ -167,11 +167,11 @@
                                     <th>No</th>
                                     <th>Nama</th>
                                     <th>Lokasi</th>
-                                    <th>Detail</th>
+                                    <!-- <th>Detail</th> -->
                                     <th>TRC</th>
                                     <th>Pengungsi</th>
                                     <th>Sisa Kapasitas</th>
-                                    <th>Waktu Dibuat</th>
+                                    <th>Waktu Pelaporan</th>
                                     <th>Waktu Update</th>
                                     @role('pusdalop')
                                     <th>Aksi</th>
@@ -186,7 +186,7 @@
                                     <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
                                     <td>{{$namaBencana}} {{ $data->firstItem() + $key  }}</td>
                                     <td>{{ $posko->lokasi}}</td>
-                                    <td>{{ $posko->detail}}</td>
+                                    <!-- <td>{{ $posko->detail}}</td> -->
                                     <td>{{ $posko->firstname}}</td>
                                     <td>
                                         {{ $posko->ttlPengungsi}} orang
@@ -222,11 +222,11 @@
                                 @endrole
 
                                 @role('trc')
-                                <?php $i = 0; ?>
+                                <?php $i = 0;?>
                                 @foreach($data as $key => $posko)
                                 <tr>
                                     @if($posko->idTrc === auth()->user()->id)
-                                    <?php $i++; ?>
+                                    <?php $i++;?>
                                     <td>{{ $data->firstItem() + $key  }}</td>
                                     <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
                                     <td>{{$namaBencana}} {{ $data->firstItem() + $key  }}</td>
@@ -249,11 +249,11 @@
                                 @endrole
 
                                 @role('relawan')
-                                <?php $i = 0; ?>
+                                <?php $i = 0;?>
                                 @foreach($data as $key => $posko)
                                 <tr>
                                     @if($posko->idTrc === auth()->user()->id)
-                                    <?php $i++; ?>
+                                    <?php $i++;?>
                                     <td>{{ $i }}</td>
                                     <td>{{ $posko->namaPosko }}</td>
                                     <td>{{ $posko->lokasi}}</td>
@@ -293,7 +293,7 @@
                                                             <input type="text" class="form-control" id="exampleInputnama" name="namas" value="{{$namaBencana}} {{$jmlPosko-1}}" placeholder="Masukan nama posko" readonly>
                                                             <input type="text" class="form-control" id="exampleInputnama" name="nama" placeholder="Masukan nama posko" value="{{$detail->namaPosko}}" hidden readonly>
                                                         </div>
-                                                         
+
                                                         @foreach ($getLokasi as $lokasi)
                                                         <div class="form-group">
                                                             <label for="exampleInputProvinsi">Lokasi bencana</label>
@@ -531,7 +531,7 @@
                                 dateUpdate = dateUpdate.toLocaleString();
                                 result +=
                                     `<tr>
-                <td>${i+1}</td>
+                                    <td>${i+1}</td>
                                     <td>${posko.namaPosko }</td>
                                     <td>${posko.lokasi}</td>
                                     <td>${trc}</td>
@@ -543,7 +543,7 @@
                                     <td>${posko.kapasitas - posko.ttlPengungsi} orang</td>
                                     <td>${dateCreate}</td>
                                     <td>${dateUpdate}</td>
-                                
+
 
                                         <!-- /.modal-dialog -->
                                     </div>

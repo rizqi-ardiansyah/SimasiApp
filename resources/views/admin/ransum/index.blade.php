@@ -8,19 +8,11 @@
                 @foreach ($getNama as $nm)
                 @foreach ($getJmlPosko as $jml)
                 @foreach ($getNmTrc as $nmTrc)
-                <h3>Pos Pengungsi {{ $nm->nama }} {{$jml->jmlPosko}} ({{ $nmTrc->fullName  }})</h1>
+                <h3>Pos Pengungsi {{ $nm->nama }} {{$jml->jmlPosko}} ({{ $nmTrc->firstname}})</h1>
                 @endforeach
                 @endforeach
                 @endforeach
             </div>
-            <!-- <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="/bencana">Bencana</a></li>
-                    <li class="breadcrumb-item active"><a href="{{ url()->previous() }}">Posko</a></li>
-                    <li class="breadcrumb-item active">Pengungsi</li>
-                </ol>
-            </div> -->
         </div>
     </div><!-- /.container-fluid -->
 </section>

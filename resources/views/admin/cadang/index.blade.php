@@ -25,7 +25,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header justify-content-between">
-                        <h3 class="card-title">Cadangan & pulihkan data</h3>
+                        <h3 class="card-title">Cadangan data</h3>
                     </div>
 
                     <div class="card-body table-responsive">
@@ -139,18 +139,10 @@
                                         <a class="btn btn-info btn-sm" href="{{ route('cadang.download',$backup['file_name']) }}"><i class="fas fa-download"></i>
                                             <span>Download (.sql)</span>
                                         </a>
-                                        <!-- <button id="delete-form-{{ $key }}" type="button" class="btn btn-danger btn-sm" onclick="deleteData({{ $key }})">
-                                            <i class="fas fa-trash-alt"></i>
-                                            <span>Delete</span>
-                                        </button> -->
                                         <a href="#" class="btn btn-danger btn-sm" title="Delete" onclick="deleteData('<?php echo $file_name;?>')">
                                             <i class="fas fa-trash-alt"></i>
                                             <span>Delete</span>
                                             </a>
-                                        <!-- <form id="delete-form-{{ $key }}" action="{{ route('cadang.destroy', $backup['file_name']) }}" method="POST" style="display: none;">
-                                            @csrf()
-                                            @method('DELETE')
-                                        </form> -->
                                     </td>
                                 </tr>
                                 @endforeach

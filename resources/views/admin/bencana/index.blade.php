@@ -114,7 +114,7 @@ window.onload = function() {
                                     <h4 class="modal-title">Tambah Bencana</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
-                                    </button>
+                           A         </button>
                                 </div>
                                 <div class="modal-body">
                                     <!-- form start -->
@@ -159,17 +159,6 @@ window.onload = function() {
                                                     <option selected value="" hidden>Pilih kelurahan</option>
                                                 </select>
                                             </div>
-
-                                            <!-- <div class="form-group">
-                                                <label for="exampleInputKel">Kelurahan</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kelurahan" name="kelurahan" required>
-                                            </div> -->
-
-                                            <!-- <div class="form-group">
-                                                <label for="exampleInputDetail">Detail</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan detail" name="detail" required>
-                                            </div> -->
-
 
                                             <div class="form-group">
                                                 <label for="status">Status</label>
@@ -384,55 +373,36 @@ window.onload = function() {
                                                         </div>
 
                                                         <div class="form-group">
-                                                <label for="exampleInputProvinsi">Provinsi</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$detail->provinsi}}" required>
-                                            </div>
+                                                            <label for="exampleInputProvinsi">Provinsi</label>
+                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$detail->provinsi}}" required>
+                                                        </div>
 
-                                            <div class="form-group">
-                                                <label for="exampleInputKota">Kota</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kota" value="{{$detail->kota}}" required>
-                                            </div>
+                                                        <div class="form-group">
+                                                            <label for="exampleInputKota">Kota</label>
+                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kota" value="{{$detail->kota}}" required>
+                                                        </div>
 
 
-                                            <div class="form-group">
-                                                <label for="kecamatan">Kecamatan</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kecamatan" value="{{$detail->kecamatan}}" required>
-                                            </div>
+                                                        <div class="form-group">
+                                                            <label for="kecamatan">Kecamatan</label>
+                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kecamatan" value="{{$detail->kecamatan}}" required>
+                                                        </div>
 
-                                            <div class="form-group">
-                                                <label for="kelurahan">Kelurahan</label>
-                                                <!-- <select class="form-control" id="kelurahan" name="kelurahan" required>
-                                                    <option selected value="{{$detail->kelurahan}}" hidden>{{$detail->kelurahan}}</option>
-                                                </select> -->
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kelurahan" value="{{$detail->kelurahan}}" required>
+                                                        <div class="form-group">
+                                                            <label for="kelurahan">Kelurahan</label>
+                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kelurahan" value="{{$detail->kelurahan}}" required>
 
-                                            </div>
-
-                                            <!-- <div class="form-group">
-                                                <label for="exampleInputKec">Kecamatan</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kecamatan" name="kecamatan" value="{{$detail->kecamatan}}" required>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="exampleInputKel">Kelurahan</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kelurahan" name="kelurahan" value="{{$detail->kelurahan}}" required>
-                                            </div> -->
-
-                                            <!-- <div class="form-group">
-                                                <label for="exampleInputDetail">Detail</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan detail" name="detail" value="{{$detail->detail}}" required>
-                                            </div> -->
-
+                                                        </div>
 
                                                         <?php
-$value = $detail->status;
-if ($value == 1) {
-    $value = 'Berjalan';
-} elseif ($value == 0) {
-    $value = 'Selesai';
-}
-// if()
-?>
+                                                            $value = $detail->status;
+                                                            if ($value == 1) {
+                                                                $value = 'Berjalan';
+                                                            } elseif ($value == 0) {
+                                                                $value = 'Selesai';
+                                                            }
+                                                            // if()
+                                                        ?>
 
                                                         <div class="form-group">
                                                             <label for="status">Status</label>

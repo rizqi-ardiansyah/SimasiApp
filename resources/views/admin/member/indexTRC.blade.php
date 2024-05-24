@@ -62,26 +62,11 @@
                                                 <input type="text" class="form-control" id="namaDepan" placeholder="Masukan nama depan" name="namaDepan" required>
                                             </div>
 
-                                            <!-- <div class="form-group">
-                                                <label for="namaBelakang">Nama belakang Tim</label>
-                                                <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="namaBelakang" required>
-                                            </div> -->
-
                                             <div class="form-group">
                                                 <label for="email">Username</label>
                                                 <input type="text" class="form-control" id="email" placeholder="Masukan username" name="email" required>
 
                                             </div>
-
-                                            <!-- <div class="form-group">
-                                                <label for="position-option">Peran</label>
-                                                <select class="form-control" id="peran" name="peran" required>
-                                                    @foreach ($role as $peran)
-                                                    <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
 
                                             <div class="form-group">
                                                 <label for="peran">Peran</label>
@@ -149,23 +134,23 @@
 
                             @foreach ($trcAktif as $key => $member)
 
-<tr>
-    <!-- <td>{{$trcAktif->firstItem() + $key  }}</td> -->
-    <?php $no++;?>
-    <td><?php echo $no;?></td>
-    <td>{{$member->firstname}}</td>
-    <td>{{$member->email}}</td>
-    <td>{{$member->namaPeran}}</td>
-    <td>
-<div class="btn-group">
-            <button  class="btn btn-primary btn-sm btn-success" data-offset="-52">
-                <i class="fas fa-info mr-1"></i> Aktif
-            </button>
-            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
-                    <i class="fas fa-plus mr-1"></i> Tambah Tim
-            </a> -->
-        </div>
-</td>
+                            <tr>
+                                <!-- <td>{{$trcAktif->firstItem() + $key  }}</td> -->
+                                <?php $no++;?>
+                                <td><?php echo $no; ?></td>
+                                <td>{{$member->firstname}}</td>
+                                <td>{{$member->email}}</td>
+                                <td>{{$member->namaPeran}}</td>
+                                <td>
+                            <div class="btn-group">
+                            <button  class="btn btn-primary btn-sm btn-success" data-offset="-52">
+                                <i class="fas fa-info mr-1"></i> Aktif
+                            </button>
+                                <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
+                                        <i class="fas fa-plus mr-1"></i> Tambah Tim
+                                </a> -->
+                            </div>
+                    </td>
 
     @role('pusdalop')
     <td>
@@ -174,11 +159,6 @@
                 <i class="fas fa-bars"></i>
             </button>
             <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                    <i class="fas fa-eye mr-1"></i> Detail
-                </a>
-                <div class="dropdown-divider"></div> -->
-               
                 <a href="#" class="dropdown-item " title="Edit Tim" data-toggle="modal" data-target="#modal-edit-{{$member->idAdmin}}">
                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
@@ -190,9 +170,6 @@
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
             </div>
-          
-
-
         </div>
         <div class="btn-group">
             <button type="button" class="btn btn-primary btn-sm btn-info" data-toggle="modal" data-target="#modal-cekAnggotaAktif-{{$member->idAdmin}}" data-offset="-52">
@@ -209,14 +186,11 @@
 @endforeach
 
 
-
-
-                            @foreach ($trcNonAktif as $key => $member)
-
+@foreach ($trcNonAktif as $key => $member)
 <tr>
     <!-- <td>{{$trcAktif->firstItem() + $key  }}</td> -->
     <?php $no++;?>
-    <td><?php echo $no;?></td>
+    <td><?php echo $no; ?></td>
     <td>{{$member->firstname}}</td>
     <td>{{$member->email}}</td>
     <td>{{$member->namaPeran}}</td>
@@ -225,9 +199,6 @@
             <button  class="btn btn-primary btn-sm btn-danger" data-offset="-52">
                 <i class="fas fa-info mr-1"></i> Nonaktif
             </button>
-            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
-                    <i class="fas fa-plus mr-1"></i> Tambah Tim
-            </a> -->
         </div>
 </td>
 
@@ -253,7 +224,7 @@
                     <i class="fas fa-trash mr-1"></i> Hapus
                 </a>
             </div>
-          
+
 
 
         </div>
@@ -261,9 +232,6 @@
             <button type="button" class="btn btn-primary btn-sm btn-info" data-toggle="modal" data-target="#modal-cekAnggotaNonaktif-{{$member->idAdmin}}" data-offset="-52">
                 <i class="fas fa-info mr-1"></i> Cek Anggota
             </button>
-            <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
-                    <i class="fas fa-plus mr-1"></i> Tambah Tim
-            </a> -->
         </div>
     </td>
     @endrole
@@ -271,7 +239,7 @@
 </tr>
 @endforeach
 
-        
+
                             </tbody>
                         </table>
 
@@ -284,6 +252,7 @@
 
                     <!-- /.card-body -->
                 </div>
+
                 @foreach ($trcAktif as $detail)
                 <div class="modal fade" id="modal-edit-{{ $detail->idAdmin }}">
                     <div class="modal-dialog">
@@ -304,28 +273,10 @@
                                             <input type="text" class="form-control" id="namaTim" placeholder="Masukan nama tim" name="namaTim" value="{{ $detail->firstname }}" required>
                                         </div>
 
-                                        <!-- <div class="form-group">
-                                            <label for="namaBelakang">Nama belakang</label>
-                                            <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="namaBelakang" value="{{ $detail->lastname }}" required>
-                                        </div> -->
-
                                         <div class="form-group">
                                             <label for="email">Username</label>
                                             <input type="text" class="form-control" id="email" placeholder="Masukan username" name="email" value="{{ $detail->email }}" required>
                                         </div>
-
-                                        <!-- <div class="form-group">
-                                            <label for="position-option">Peran</label>
-                                            <select class="form-control" id="peran" name="peran" required>
-                                                <option selected value="{{ $detail->idRole }}" hidden>
-                                                    {{ $detail->namaPeran }}
-                                                </option>
-                                                @foreach ($role as $peran)
-                                                <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                        </div> -->
 
                                         <div class="form-group">
                                                 <label for="peran">Peran</label>
@@ -343,7 +294,7 @@
                         </div>
                         <!-- /.modal-content -->
                     </div>
-                    
+
                     <!-- /.modal-dialog -->
                 </div>
                 @endforeach
@@ -407,7 +358,7 @@
                         </div>
                         <!-- /.modal-content -->
                     </div>
-                    
+
                     <!-- /.modal-dialog -->
                 </div>
                 @endforeach
@@ -420,8 +371,8 @@
     <!-- modal masuk -->
 <div class="modal fade" id="modal-cekAnggotaAktif-{{$members->idAdmin}}">
     <?php
-        $idAdmin = $members->idAdmin;
-    ?>
+$idAdmin = $members->idAdmin;
+?>
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -452,10 +403,10 @@
                         </thead>
                         <tbody id="result1">
                             <tr>
-                                <?php $i = 0; ?>
+                                <?php $i = 0;?>
                                 @foreach ($memberTRC as $member)
                                 @if($member->tim == $idAdmin)
-                                <?php $i++; ?>
+                                <?php $i++;?>
                                 <!-- <td> {{($data->currentPage() - 1) * $data->perPage() + $loop->iteration}}</td> -->
                                 <td>{{ $i }}</td>
                                 <td>{{ $member->fullName }}</td>
@@ -464,13 +415,13 @@
                                 <td>{{ $member->alamat }}</td>
                                 <td>
                                         <?php
-                                        $peran = $member->peran;
-                                        if ($peran == 1) {
-                                            echo "Ketua";
-                                        } else if ($peran == 2) {
-                                            echo "Anggota";
-                                        }
-                                        ?>
+$peran = $member->peran;
+if ($peran == 1) {
+    echo "Koordinator";
+} else if ($peran == 2) {
+    echo "Anggota";
+}
+?>
                                 </td>
                                 @role('pusdalop')
                                     <td>
@@ -494,7 +445,7 @@
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
-                                          
+
 
 
                                         </div>
@@ -522,8 +473,8 @@
     <!-- modal masuk -->
 <div class="modal fade" id="modal-cekAnggotaNonaktif-{{$members->idAdmin}}">
     <?php
-        $idAdmin = $members->idAdmin;
-    ?>
+$idAdmin = $members->idAdmin;
+?>
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -554,10 +505,10 @@
                         </thead>
                         <tbody id="result1">
                             <tr>
-                                <?php $i = 0; ?>
+                                <?php $i = 0;?>
                                 @foreach ($memberTRC as $member)
                                 @if($member->tim == $idAdmin)
-                                <?php $i++; ?>
+                                <?php $i++;?>
                                 <!-- <td> {{($data->currentPage() - 1) * $data->perPage() + $loop->iteration}}</td> -->
                                 <td>{{ $i }}</td>
                                 <td>{{ $member->fullName }}</td>
@@ -566,13 +517,13 @@
                                 <td>{{ $member->alamat }}</td>
                                 <td>
                                         <?php
-                                        $peran = $member->peran;
-                                        if ($peran == 1) {
-                                            echo "Ketua";
-                                        } else if ($peran == 2) {
-                                            echo "Anggota";
-                                        }
-                                        ?>
+$peran = $member->peran;
+if ($peran == 1) {
+    echo "Koordinator";
+} else if ($peran == 2) {
+    echo "Anggota";
+}
+?>
                                 </td>
                                 @role('pusdalop')
                                     <td>
@@ -596,7 +547,7 @@
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
-                                          
+
 
 
                                         </div>
@@ -623,12 +574,12 @@
 @foreach ($trcAktif as $members)
 <div class="modal fade" id="modal-tambahAnggotaTrcAktif-{{$members->idAdmin}}">
                         <?php
-                            $idAdmin = $members->idAdmin
-                        ?>
+$idAdmin = $members->idAdmin
+?>
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Tambah Anggota</h4> 
+                                    <h4 class="modal-title">Tambah Anggota</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -681,7 +632,7 @@
                                                 @endif
                                             @endforeach
                                             @if($cek == 0)
-                                                <option value="1">Ketua</option>
+                                                <option value="1">Koordnator</option>
                                                 <option value="2">Anggota</option>
                                             @else
                                                  <option value="2">Anggota</option>
@@ -722,14 +673,14 @@
 
 
                     @foreach ($trcNonAktif as $members)
-<div class="modal fade" id="modal-tambahAnggotaTrcNonaktif-{{$members->idAdmin}}">
-                        <?php
-                            $idAdmin = $members->idAdmin
-                        ?>
+                    <div class="modal fade" id="modal-tambahAnggotaTrcNonaktif-{{$members->idAdmin}}">
+                                            <?php
+                    $idAdmin = $members->idAdmin
+                    ?>
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Tambah Anggota</h4> 
+                                    <h4 class="modal-title">Tambah Anggota</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -782,29 +733,13 @@
                                                 @endif
                                             @endforeach
                                             @if($cek == 0)
-                                                <option value="1">Ketua</option>
+                                                <option value="1">Koordinator</option>
                                                 <option value="2">Anggota</option>
                                             @else
                                                  <option value="2">Anggota</option>
                                             @endif
                                             </select>
                                             </div>
-
-                                            <!-- <div class="form-group">
-                                                <label for="position-option">Peran</label>
-                                                <select class="form-control" id="peran" name="peran" required>
-                                                    @foreach ($role as $peran)
-                                                    <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
-
-                                            <!-- <div class="form-group">
-                                                <label for="peran">Peran</label>
-                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=pusdalop readonly>
-                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=1 hidden>
-                                            </div> -->
 
                                         </div>
                                         <!-- /.card-body -->
@@ -823,7 +758,7 @@
 
                 @foreach ($memberTRC as $detail)
                 <?php
-                    $noTim = $detail->tim;
+                $noTim = $detail->tim;
                 ?>
                 <div class="modal fade" id="modal-editAnggota-{{ $detail->idMember }}">
                     <div class="modal-dialog">
@@ -870,7 +805,7 @@
                                             <label for="peran">Peran</label>
                                             <select class="form-control" id="peranAnggota" name="peranAnggota" required>
                                                 <option selected value="{{$detail->peran}}" hidden>
-                                                @if($detail->peran == 1) Ketua
+                                                @if($detail->peran == 1) Koordinator
                                                 @else Anggota
                                                 @endif
                                                 </option>
@@ -886,31 +821,13 @@
                                                 @endif
                                             @endforeach
                                             @if($ceks == 0)
-                                                <option value="1">Ketua</option>
+                                                <option value="1">Koordinator</option>
                                                 <option value="2">Anggota</option>
                                             @else
                                                  <option value="2">Anggota</option>
                                             @endif
                                             </select>
                                             </div>
-
-                                            
-                                            <!-- <div class="form-group">
-                                                <label for="position-option">Peran</label>
-                                                <select class="form-control" id="peran" name="peran" required>
-                                                    @foreach ($role as $peran)
-                                                    <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
-
-                                            <!-- <div class="form-group">
-                                                <label for="peran">Peran</label>
-                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=pusdalop readonly>
-                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=1 hidden>
-                                            </div> -->
-
                                         </div>
                                         <!-- /.card-body -->
 
@@ -1044,16 +961,16 @@
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
-                                        
+
                                         </div>
                                     </td>
                                     @endrole
-                                           
+
                                             <!-- /.modal-dialog -->
-                                        </div> 
+                                        </div>
 
                                     </td>
-                                    
+
                     </tr>`;
                         }
                         document.getElementById('result').innerHTML = result;

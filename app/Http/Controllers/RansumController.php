@@ -100,7 +100,7 @@ class RansumController extends Controller
         $getJmlPosko = Bencana::select('jmlPosko')->where('id', $request->bencana_id)->get();
 
         $getNmTrc = Posko::select(
-            DB::raw("concat(u.firstname,' ',u.lastname) as fullName")
+            DB::raw("concat(u.firstname,' ',u.lastname) as fullName"),"u.firstname","u.lastname"
         )
             // ->join('posko as p','pengungsi.posko_id','=','p.id')
             ->join('integrasi as int','int.posko_id','=','posko.id')

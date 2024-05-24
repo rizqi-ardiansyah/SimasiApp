@@ -38,7 +38,7 @@ class PoskoController extends Controller
 
         $posko = Posko::select(
             DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,', Kec. ',
-            b.kecamatan,', Ds. ',b.kelurahan)
+            b.kecamatan,', Ds. ',b.kelurahan, ' ',posko.detail)
             as lokasi"),
             'posko.id as idPosko',
             'posko.detail',

@@ -153,9 +153,6 @@
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
-                                          
-
-
                                         </div>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm btn-info" data-toggle="modal" data-target="#modal-cekAnggota-{{$member->idAdmin}}" data-offset="-52">
@@ -179,6 +176,7 @@
 
                     <!-- /.card-body -->
                 </div>
+
                 @foreach ($data as $detail)
                 <div class="modal fade" id="modal-edit-{{ $detail->idAdmin }}">
                     <div class="modal-dialog">
@@ -278,7 +276,7 @@
                                         <?php
                                         $peran = $member->peran;
                                         if ($peran == 1) {
-                                            echo "Ketua";
+                                            echo "Koordinator";
                                         } else if ($peran == 2) {
                                             echo "Anggota";
                                         }
@@ -302,15 +300,11 @@
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
-                                          
-
-
                                         </div>
                                     </td>
                                     @endrole
                                 @endif
                             </tr>
-
                             @endforeach
                         </tbody>
                     </table>
@@ -388,7 +382,7 @@
                                                 @endif
                                             @endforeach
                                             @if($cek == 0)
-                                                <option value="1">Ketua</option>
+                                                <option value="1">Koordinator</option>
                                                 <option value="2">Anggota</option>
                                             @else
                                                  <option value="2">Anggota</option>
@@ -476,7 +470,7 @@
                                             <label for="peran">Peran</label>
                                             <select class="form-control" id="peranAnggota" name="peranAnggota">
                                                 <option selected value="{{$detail->peran}}" hidden>
-                                                @if($detail->peran == 1) Ketua
+                                                @if($detail->peran == 1) Koordinator
                                                 @else Anggota
                                                 @endif
                                                 </option>
@@ -492,7 +486,7 @@
                                                 @endif
                                             @endforeach
                                             @if($ceks == 0)
-                                                <option value="1">Ketua</option>
+                                                <option value="1">Koordinator</option>
                                                 <option value="2">Anggota</option>
                                             @else
                                                  <option value="2">Anggota</option>

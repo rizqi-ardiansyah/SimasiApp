@@ -220,7 +220,7 @@
                                 <td>{{ $balita->umur }}</td>
                                 <td>
                                         <?php
-                                        $kondisi = $pengungsi->statKon;
+                                        $kondisi = $balita->statKon;
                                         if ($kondisi == 0) {
                                             echo "Sehat";
                                         } else if ($kondisi == 1) {

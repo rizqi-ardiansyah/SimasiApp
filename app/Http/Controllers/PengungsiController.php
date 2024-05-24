@@ -219,7 +219,7 @@ class PengungsiController extends Controller
 
         $getTtlKpl = $dataKpl->count();
 
-        $getBalita = Pengungsi::select('*','pengungsi.nama','kpl.nama as namKep',DB::raw("concat('Prov. ',
+        $getBalita = Pengungsi::select('*','pengungsi.nama','pengungsi.umur','kpl.nama as namKep',DB::raw("concat('Prov. ',
         provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
         as lokasi"))
             ->join('integrasi as int','int.png_id','=','pengungsi.id')

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>SIMASI</title>
+    <title>MANGSI</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -238,9 +238,6 @@
     <script src="{{url('/assets/template/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{url('/assets/template/js/adminlte.js')}}"></script>
-    <!-- AdminLTE for demo purposes -->
-    <!-- <script src="{{url('/assets/template/js/demo.js')}}"></script> -->
-    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="{{url('/assets/template/js/pages/dashboard.js')}}"></script>
 </body>
 
