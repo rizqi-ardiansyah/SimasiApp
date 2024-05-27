@@ -120,17 +120,116 @@ class MemberController extends Controller
         ]);
     }
 
-    public function search()
+    public function searchPusdalop(Request $request)
     {
-        $filter = request()->query();
-        return User::select(DB::raw("concat(users.firstname,' ',users.lastname) as fullName"), 'users.firstname', 'users.lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 'r.id as idRole', 'r.name as namaPeran')
+        $cari = $request->search;
+
+        $users = User::select('users.firstname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
+        'r.id as idRole', 'r.name as namaPeran')
             ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
             ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
-            ->where('users.firstname', 'LIKE', "%{$filter['search']}%")
-            ->orWhere('users.lastname', 'LIKE', "%{$filter['search']}%")
-            ->orWhere('users.email', 'LIKE', "%{$filter['search']}%")
+            ->orderBy('firstname', 'asc')
+            ->where('r.id','=',1)
+            ->where(function ($query) use ($cari) {
+                $query->where('users.firstname', 'LIKE', "%".$cari."%")
+                ->orWhere('users.lastname', 'LIKE', "%".$cari."%")
+                ->orWhere('users.email', 'LIKE', "%".$cari."%");
+            })
+            ->paginate(5);
+
+
+            $memberPusdalop = MemberTeam::select(DB::raw("concat(memberteam.firstname,' ',memberteam.lastname) 
+        as fullName"), 'memberteam.firstname', 'memberteam.lastname', 
+        'memberteam.email', 'memberteam.nohp','memberteam.alamat','memberteam.peran',
+        'memberteam.tim','memberteam.id as idMember')
+            ->leftJoin('users as u', 'u.id', '=', 'memberteam.tim')
+            ->leftJoin('model_has_roles as mr', 'u.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->where('r.id','=',1)
+            ->orderBy('firstname', 'asc')
+            ->paginate(5);
+
+
+        $roles = Role::all();
+
+        return view('admin.member.indexPusdalop', [
+            'data' => $users,
+            'memberPusdalop' => $memberPusdalop,
+            'role' => $roles,
+        ]);
+        
+    }
+
+    public function searchTRC(Request $request)
+    {
+        $cari = $request->search;
+
+        $users = User::select(DB::raw("concat(users.firstname,' ',users.lastname) as fullName"), 
+        'users.firstname', 'users.lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
+        'r.id as idRole', 'r.name as namaPeran')
+            ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->join('integrasi as int','users.id','=','int.user_id')
+            ->where('r.id','=',2)
+            ->where(function ($query) use ($cari) {
+                $query->where('users.firstname', 'LIKE', "%".$cari."%")
+                ->orWhere('users.lastname', 'LIKE', "%".$cari."%")
+                ->orWhere('users.email', 'LIKE', "%".$cari."%");
+            })
+            ->paginate(5);
+
+        $trcAktif = User::select(DB::raw("concat(users.firstname,' ',users.lastname) as fullName"), 
+        'users.firstname', 'users.lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
+        'r.id as idRole', 'r.name as namaPeran')
+            ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->join('integrasi as int','users.id','=','int.user_id')
+            ->distinct()
             ->orderBy('fullName', 'asc')
-            ->get();
+            ->where('r.id','=',2)
+            ->where(function ($query) use ($cari) {
+                $query->where('users.firstname', 'LIKE', "%".$cari."%")
+                ->orWhere('users.lastname', 'LIKE', "%".$cari."%")
+                ->orWhere('users.email', 'LIKE', "%".$cari."%");
+            })
+            ->paginate(100);
+
+        $memberTRC = MemberTeam::select(DB::raw("concat(memberteam.firstname,' ',memberteam.lastname) 
+        as fullName"), 'memberteam.firstname', 'memberteam.lastname', 
+        'memberteam.email', 'memberteam.nohp','memberteam.alamat','memberteam.peran',
+        'memberteam.tim','memberteam.id as idMember')
+            ->leftJoin('users as u', 'u.id', '=', 'memberteam.tim')
+            ->leftJoin('model_has_roles as mr', 'u.id', '=', 'mr.model_id')
+            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            ->where('r.id','=',2)
+            ->orderBy('firstname', 'asc')
+            ->paginate(100);
+
+        $trcNonaktif = User::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
+        'users.id as idAdmin', 'lastname', 'users.email', 'users.id AS idAdmin', 'mr.role_id', 
+        'r.id as idRole', 'r.name as namaPeran')
+            ->join('model_has_roles as mr', 'mr.model_id', '=', 'users.id')
+            ->join('roles as r', 'r.id', '=', 'mr.role_id')
+            ->where(function ($query) {
+                $query->where('r.id', 2)
+                    ->orWhere('r.id', 3);
+                }) //memilih role yang akan ditampilkan (p,trc,r)
+            ->whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('integrasi')
+                    ->whereRaw('users.id = integrasi.user_id');
+            })->orderBy('firstname', 'asc')->paginate(100);
+
+
+        $roles = Role::all();
+        return view('admin.member.indexTRC', [
+            'data' => $users,
+            'trcAktif' =>$trcAktif,
+            'trcNonAktif' => $trcNonaktif,
+            'memberTRC' => $memberTRC,
+            'role' => $roles,
+        ]);
+        
     }
 
     public function createMember(Request $request)

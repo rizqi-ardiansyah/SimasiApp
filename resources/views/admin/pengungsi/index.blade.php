@@ -49,8 +49,8 @@
                             @endforeach
                         </div>
                         @endif
-                        <!-- <div class="card-tools">
-                            <form id="search">
+                        <div class="card-tools">
+                        <form id="search" action="{{ route('searchPengungsi') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right" placeholder="Search">
                                     <div class="input-group-append">
@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                             </form>
-                        </div> -->
+                        </div>
                     </div>
 
                     <div class="modal fade" id="modal-default">

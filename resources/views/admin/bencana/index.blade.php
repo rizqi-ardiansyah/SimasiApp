@@ -26,7 +26,7 @@
                 <div class="card">
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">List Bencana</h3>
-                        <!-- <div class="card-tools">
+                        <div class="card-tools">
                             @role('pusdalop')
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
@@ -51,7 +51,7 @@
                                 </div>
                             </form>
                             @endrole
-                        </div> -->
+                        </div>
                     </div>
 
                     <!-- Data yang di dalam kurung [] tidak terpakai -->
@@ -114,7 +114,7 @@ window.onload = function() {
                                     <h4 class="modal-title">Tambah Bencana</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
-                           A         </button>
+                                    </button>
                                 </div>
                                 <div class="modal-body">
                                     <!-- form start -->
@@ -259,7 +259,7 @@ window.onload = function() {
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Pengungsi" onclick="deleteConfirmation({{$bencana->idBencana}})">
+                                                <a href="#" class="dropdown-item " title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idBencana}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>

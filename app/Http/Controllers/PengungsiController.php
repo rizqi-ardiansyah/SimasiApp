@@ -328,11 +328,12 @@ class PengungsiController extends Controller
         // return view('admin.pengungsi.index',['data' => $pengungsi],['kpl'=>$getKpl],['datas' => $pengungsi]);
     }
 
-    public function search()
+    public function searchPengungsi(Request $request)
     {
+        $cari = $request->search;
 
-        $filter = request()->query();
-        return $pengungsi = Pengungsi::select(
+        // $filter = request()->query();
+        $pengungsi = Pengungsi::select(
             DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
             Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
             Daerah ',kpl.detail,' ')
@@ -365,20 +366,267 @@ class PengungsiController extends Controller
             ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
             ->leftJoin('kepala_keluarga as kpl', 'int.kpl_id', '=', 'kpl.id')
             ->where('int.posko_id', session()->get('idPosko'))
-            ->where(function ($query) use ($filter) {
-                $query->where('pengungsi.nama', 'LIKE', "%{$filter['search']}%")
-                    ->orWhere('pengungsi.telpon', 'LIKE', "%{$filter['search']}%")
-                    ->orWhere('pengungsi.umur', 'LIKE', "%{$filter['search']}%")
-                    ->orWhere('kpl.nama', 'LIKE', "%{$filter['search']}%")
-                    ->orWhere('kpl.provinsi', 'LIKE', "%{$filter['search']}%")
-                    ->orWhere('kpl.kota', 'LIKE', "%{$filter['search']}%")
-                    ->orWhere('kpl.kecamatan', 'LIKE', "%{$filter['search']}%")
-                    ->orWhere('kpl.kelurahan', 'LIKE', "%{$filter['search']}%")
-                    ->orWhere('kpl.detail', 'LIKE', "%{$filter['search']}%");
+            ->where(function ($query) use ($cari) {
+                $query->where('pengungsi.nama', 'LIKE', "%".$cari."%")
+                    ->orWhere('pengungsi.telpon', 'LIKE', "%".$cari."%")
+                    ->orWhere('pengungsi.umur', 'LIKE', "%".$cari."%")
+                    ->orWhere('kpl.nama', 'LIKE', "%".$cari."%")
+                    ->orWhere('kpl.provinsi', 'LIKE', "%".$cari."%")
+                    ->orWhere('kpl.kota', 'LIKE', "%".$cari."%")
+                    ->orWhere('kpl.kecamatan', 'LIKE', "%".$cari."%")
+                    ->orWhere('kpl.kelurahan', 'LIKE', "%".$cari."%")
+                    ->orWhere('kpl.detail', 'LIKE', "%".$cari."%");
             })
             ->orderBy('pengungsi.nama', 'asc')
             ->distinct()
+            ->paginate(10);
+
+            $pengungsiKeluar = Pengungsi::select(
+                DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
+                Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+                 Daerah ',kpl.detail,' ')
+            as lokasi"),
+                DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+                Daerah ',kpl.detail,' ')
+            as lokKel"),'kpl.detail',
+                'pengungsi.nama',
+                'pengungsi.id as idPengungsi',
+                'int.kpl_id',
+                'statKel',
+                'telpon',
+                'gender',
+                'umur',
+                'statPos',
+                'int.posko_id as idPospeng',
+                'statKon',
+                'pengungsi.created_at as tglMasuk',
+                'p.id as idPosko',
+                'p.nama as namaPosko',
+                'kpl.id as idKepala',
+                'kpl.nama as namaKepala',
+                'kpl.provinsi as provinsi',
+                'kpl.kota as kota',
+                'kpl.kecamatan as kecamatan',
+                'kpl.kelurahan as kelurahan',
+                'kpl.detail as detail',
+            )
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->join('posko as p','p.id','=','int.posko_id')
+                ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+                // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
+                // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
+                ->where('int.posko_id', $request->id)
+                ->where('pengungsi.statPos', 0)
+                ->orderBy('int.kpl_id', 'desc')
+                ->distinct()
+                ->paginate(5, ['*'], 'k');
+    
+    
+            $getKpl = KepalaKeluarga::all();
+    
+            $getNmPosko = Posko::select('nama')->where('id', $request->id)->get();
+    
+            $getNmBencana = Bencana::select('nama')->where('id', $request->bencana_id)->get();
+    
+            $getJmlPosko = Bencana::select('jmlPosko')->where('id', $request->bencana_id)->get();
+    
+            $dataKpl = Pengungsi::select('*', DB::raw('count(int.png_id) as ttlAnggota'))
+                // ->join('kepala_keluarga as kp','kp.id','=','pengungsi.kpl_id')
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->where('int.posko_id', '=', $request->id)
+                ->where('pengungsi.statKel', '=', 0)
+                ->groupBy(
+                    'int.kpl_id',
+                    'pengungsi.nama',
+                    'statKel',
+                    'telpon',
+                    'gender',
+                    'umur',
+                    'statPos',
+                    'int.posko_id',
+                    'statKon',
+                    'pengungsi.created_at',
+                    'pengungsi.updated_at',
+                    'pengungsi.id',
+                    'int.id',
+                    'int.png_id',
+                    'int.bencana_id',
+                    'int.user_id',
+                    'int.created_at',
+                    'int.updated_at',
+                )
+                ->get();
+    
+            $anggotaKpl = Integrasi::select('integrasi.kpl_id','kpl.nama',
+            DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,',
+                Kec. ',b.kecamatan,', Ds. ',b.kelurahan,',
+                 Daerah ',kpl.detail,' ')
+            as lokasi"),'kpl.anggota','kpl.detail')
+                ->join('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
+                ->join('pengungsi as p','p.id','=','integrasi.png_id')
+                ->join('bencana as b','b.id','=','integrasi.bencana_id')
+                ->where('integrasi.posko_id', '=', $request->id)
+                ->where('p.statkel','=',0)
+                ->distinct()
+                ->groupBy(
+                    'integrasi.id',
+                    'integrasi.kpl_id',
+                    'integrasi.png_id',
+                    'integrasi.posko_id',
+                    'integrasi.bencana_id',
+                    'integrasi.user_id',
+                    'kpl.id',
+                    'kpl.anggota',
+                    'kpl.nama',
+                    'b.provinsi',
+                    'b.kota',
+                    'b.kecamatan',
+                    'b.kelurahan',
+                    'kpl.detail',
+                    'kpl.created_at',
+                    'kpl.updated_at',
+                    'kpl.detail'
+                )
+                
+                ->get();
+    
+    
+                $anggotaKpl2 = Integrasi::select('integrasi.kpl_id')
+                ->join('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
+                ->where('integrasi.posko_id', '=', $request->id)
+                
+                ->get();
+    
+            $getJml = Pengungsi::select('*')
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->where('int.posko_id', '=', $request->id)
+                ->get();
+    
+    
+            $getJmlAnggota = $getJml->count();
+            
+            $getJmlAnggotaKpl = $anggotaKpl2->count();
+    
+            $getAlamat = KepalaKeluarga::select('*', DB::raw("concat('Prov. ',
+            provinsi,', Kota ',kota,',
+            Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
+            as lokasi"))
+                ->where('kepala_keluarga.id', '=', $request->id)
+                ->get();
+    
+            $getTtlKpl = $dataKpl->count();
+    
+            $getBalita = Pengungsi::select('*','pengungsi.nama','pengungsi.umur','kpl.nama as namKep',DB::raw("concat('Prov. ',
+            provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
+            as lokasi"))
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+                ->where('umur', '<', 6)
+                ->where('int.posko_id', '=', $request->id)->get();
+    
+            $getTtlBalita = $getBalita->count();
+    
+            $getLansia = Pengungsi::select('*','pengungsi.nama','kpl.nama as namKep',DB::raw("concat('Prov. ',
+            provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
+            as lokasi"), 'kpl.detail')
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+                ->where('umur', '>=', 60)
+                ->where('int.posko_id', '=', $request->id)->get();
+    
+            $getTtlLansia = $getLansia->count();
+    
+            $getSehat = Pengungsi::select('*')
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->where('statKon', '=', 0)
+                ->where('int.posko_id', '=', $request->id)->get();
+    
+            $getTtlSehat = $getSehat->count();
+    
+            $getSakit = Pengungsi::select('*','pengungsi.nama','kpl.nama as namKep',DB::raw("concat('Prov. ',
+            provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
+            as lokasi"),'kpl.detail')
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+                ->where('statKon', '>', 0)
+                ->where('statKon', '!=', 5)
+                ->where('int.posko_id', '=', $request->id)->get();
+    
+            $getTtlSakit = $getSakit->count();
+    
+            $getDifabel = Pengungsi::select('*','pengungsi.nama','kpl.nama as namKep',DB::raw("concat('Prov. ',
+            provinsi,', Kota ',kota,', Kec. ',kecamatan,', Ds. ',kelurahan,',Daerah ',detail,' ')
+            as lokasi"), 'kpl.detail')
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+                ->where('statKon', '=', 5)
+                ->where('int.posko_id', '=', $request->id)->get();
+    
+            $getTtlDifabel = $getDifabel->count();
+    
+            $getNmTrc = Posko::select(
+                DB::raw("concat(u.firstname) as fullName")
+            )
+                // ->join('posko as p','pengungsi.posko_id','=','p.id')
+                ->join('integrasi as int','int.posko_id','=','posko.id')
+                ->join('users as u', 'u.id', '=', 'int.user_id')
+                ->where('posko.id', $request->id)
+                ->distinct()
+                ->get();
+    
+            $getMasuk = Pengungsi::select('*')
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->where('statPos', '=', 1)
+                ->where('int.posko_id', '=', $request->id)->get();
+    
+            $getMasuk = $getMasuk->count();
+    
+            $getKeluar = Pengungsi::select('*')
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->where('statPos', '=', 0)
+                ->where('int.posko_id', '=', $request->id)->get();
+    
+            $getKeluar = $getKeluar->count();
+    
+            $getLokasi = Bencana::select( DB::raw("concat('Ds. ',kelurahan, ', Kec. ',kecamatan, ', Kota ',kota,
+            ', Prov. ',provinsi) as lokasi"))
+            ->join('integrasi as int','int.bencana_id','=','bencana.id')
+            ->where('int.bencana_id', $request->bencana_id)
             ->get();
+    
+            return view('admin.pengungsi.index', [
+                'idBencana' => $this->idBencana,
+                'anggotaKpl' => $anggotaKpl,
+                'pengKel' => $pengungsiKeluar,
+                'data' => $pengungsi,
+                'kpl' => $getKpl,
+                'dataKpl' => $dataKpl,
+                // 'getNama' => $getNmPosko,
+                'getNama' => $getNmBencana,
+                'getNmTrc' => $getNmTrc,
+                'getJmlPosko' => $getJmlPosko,
+                'getDifabel' => $getDifabel,
+                'ttlDifabel' => $getTtlDifabel,
+                'jmlAnggota' => $getJmlAnggota,
+                'getJmlAnggotaKpl' => $getJmlAnggotaKpl,
+                'getAlamat' => $getAlamat,
+                'ttlKpl' => $getTtlKpl,
+                'getBalita' => $getBalita,
+                'ttlBalita' => $getTtlBalita,
+                'getLansia' => $getLansia,
+                'ttlLansia' => $getTtlLansia,
+                'getSakit' => $getSakit,
+                'ttlSakit' => $getTtlSakit,
+                'getMasuk' => $getMasuk,
+                'getKeluar' => $getKeluar,
+                'getSehat' => $getTtlSehat,
+                'getLokasi' => $getLokasi
+            ]);
+
+            // return view('admin.pengungsi.index', [
+            //     'data' => $data,
+               
+            // ]);
     }
 
     public function searchPengMasuk()

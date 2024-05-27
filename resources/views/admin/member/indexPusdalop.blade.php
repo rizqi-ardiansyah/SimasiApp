@@ -28,11 +28,9 @@
                         <h3 class="card-title">List Tim Pusdalop</h3>
 
                         <div class="card-tools">
-                            <form id="search">
+                            <form id="search" action="{{ route('searchPusdalop') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
-
                                     <input type="text" name="search" class="form-control float-right" placeholder="Search">
-
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -149,7 +147,7 @@
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Pengungsi" onclick="deleteConfirmation({{$member->idAdmin}})">
+                                                <a href="#" class="dropdown-item " title="Hapus Tim" onclick="deleteConfirmation({{$member->idAdmin}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
@@ -296,7 +294,7 @@
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Pengungsi" onclick="deleteConfirmation({{$member->idMember}})">
+                                                <a href="#" class="dropdown-item " title="Hapus Anggota" onclick="deleteConfirmation({{$member->idMember}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>

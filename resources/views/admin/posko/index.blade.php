@@ -34,11 +34,12 @@
                 <div class="card">
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">List Posko</h3>
-                        <!-- <div class="card-tools">
+                        <div class="card-tools">
                             @role('pusdalop')
-                            <form id="search">
+                            <form id="search" action="{{ route('posko.searchPosko') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right" placeholder="Search">
+                                    <input type="text" class="form-control" id="idBencana" name="idBencana" value="{{request()->id}}" hidden required>
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -61,7 +62,7 @@
                             </form>
                             @endrole
 
-                        </div> -->
+                        </div>
                     </div>
 
                     <!-- Tambah posko -->
@@ -403,8 +404,7 @@
         form.addEventListener('beforeinput', e => {
             const formdata = new FormData(form);
             let search = formdata.get('search');
-            let url = "{{ route('searchPosko', "
-            search = ")   }}" + search
+            let url = "{{ route('posko.searchPosko', "search = ")   }}" + search
 
             // let data = url;
             // alert(data);

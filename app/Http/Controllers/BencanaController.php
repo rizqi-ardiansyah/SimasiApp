@@ -86,52 +86,41 @@ class BencanaController extends Controller
 
     public function searchBencana(Request $request)
     {
-        // $filter = request()->query();
-        // return $bencana = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
-        //     'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
-        //     'bencana.nama as namaBencana', 'status',
-        //     'bencana.updated_at as waktuUpdate', 'int.bencana_id',
-        //     DB::raw('count(int.bencana_id) as ttlPosko'),
-        //     DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
-        //      ' ',bencana.kelurahan) as alamat")
-        // )
-        //     ->join('integrasi AS int', 'bencana.id', '=', 'int.bencana_id')
-        //     ->distinct()
-        //     ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
-        //         'bencana.nama', 'alamat', 'status', 'bencana.updated_at')
-        //     ->where('bencana.nama', 'LIKE', "%{$filter['search']}%")
-        //     ->orWhere('alamat', 'LIKE', "%{$filter['search']}%")
-        //     ->orderBy('bencana.tanggal', 'desc')
-        //     ->get();
+        
+        $cari = $request->search;
 
-        $cari = $request->cari;
-
-        $bencana = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
-            'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
-            'bencana.nama as namaBencana', 'status',
-            'bencana.updated_at as waktuUpdate', 'int.bencana_id',
-            DB::raw('count(int.bencana_id) as ttlPosko'),
-            DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
-             ' ',bencana.kelurahan) as alamat")
-        )
-            ->join('integrasi AS int', 'bencana.id', '=', 'int.bencana_id')
-            ->distinct()
-            ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
-                'bencana.nama', 'alamat', 'status', 'bencana.updated_at')
-            ->where('bencana.nama', 'LIKE', "%".$cari."%")
+        $data = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
+        'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
+        'bencana.nama as namaBencana', 'status',
+        'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
+        'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+        // DB::raw('count(int.png_id) as ttlPengungsi'),
+        //  DB::raw('count(int.posko_id) as ttlPosko'),
+        'bencana.jmlPosko',
+        DB::raw('count(int.png_id) as ttlPengungsi'),
+        DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
+         ' ',bencana.kelurahan) as alamat")
+    )
+        ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
+        ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
+        ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
+        ->orderBy('bencana.tanggal', 'desc')
+        ->distinct()
+    // ->where('p.bencana_id', '=', 'b.id')
+    // ->where('peng.posko_id','=','p.id')
+        ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
+            'bencana.nama', 'status', 'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+            'bencana.updated_at', 'bencana.jmlPengungsi', 'bencana.jmlPosko')
+            ->where('bencana.nama', )
             ->orWhere('bencana.kelurahan', 'LIKE', "%".$cari."%")
             ->orderBy('bencana.tanggal', 'desc')
             ->paginate(5);
-
-            // return view('index',['pegawai' => $pegawai]);
-            return view('admin.bencana.index', [
-                // 'data2' => $bencana2,
-                'data' => $bencana
-                // 'ttlPengungsi' => $ttlPeng,
-            ]);
-
-
+    
+            return view('admin.bencana.index', compact('data'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
+
+
+    
 
     public function searchForTrc($id)
     {

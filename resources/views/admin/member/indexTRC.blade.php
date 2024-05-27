@@ -28,7 +28,7 @@
                         <h3 class="card-title">List Tim TRC</h3>
 
                         <div class="card-tools">
-                            <form id="search">
+                            <form id="search" action="{{ route('searchTRC') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
 
                                     <input type="text" name="search" class="form-control float-right" placeholder="Search">
