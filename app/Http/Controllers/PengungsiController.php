@@ -54,6 +54,7 @@ class PengungsiController extends Controller
         as lokKel"),'kpl.detail',
             'pengungsi.nama',
             'pengungsi.id as idPengungsi',
+            'pengungsi.alamat as alamatPengungsi',
             'int.kpl_id',
             'statKel',
             'telpon',
@@ -141,6 +142,7 @@ class PengungsiController extends Controller
             ->groupBy(
                 'int.kpl_id',
                 'pengungsi.nama',
+                'pengungsi.alamat',
                 'statKel',
                 'telpon',
                 'gender',
@@ -803,6 +805,7 @@ class PengungsiController extends Controller
                     'nama' => $request->nama,
                     'telpon' => $request->telpon,
                     'statKel' => $request->statKel,
+                    'alamat' => $request->alamat,
                     // 'kpl_id' => $request->kpl,
                     'gender' => $request->gender,
                     'umur' => $request->umur,

@@ -98,17 +98,6 @@ class MemberTeamController extends Controller
 
         Alert::success('Success', 'Data berhasil diubah');
         return redirect()->back();
-
-        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
-        //     $member->firstname = $request->namaDepan;
-        //     $member->lastname = $request->namaBelakang;
-        //     $member->email = $request->email;
-        //     $member->nohp = $request->telepon;
-        //     $member->update();
-        //     $member->syncRoles($role);
-            
-        // }
-        // return redirect()->back();
     }
 
     /**
@@ -139,10 +128,6 @@ class MemberTeamController extends Controller
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $getTim = User::where('id', $id)->get();
             $getMemberTeam = MemberTeam::where('tim', $id)->get();
-
-            // $delTim = Integrasi::destroy($getTim);
-            // $delTeam = Bencana::destroy($getBencana);
-            // $delPosko = Posko::destroy($getPosko);
             $delete = MemberTeam::destroy($id);
 
             // check data deleted or not

@@ -20,7 +20,6 @@ return new class extends Migration
             $table->unsignedBigInteger('posko_id');
             $table->unsignedBigInteger('bencana_id');
             $table->unsignedBigInteger('user_id');
-   
             $table->foreign('kpl_id')->references('id')->on('kepala_keluarga');
             $table->foreign('png_id')->references('id')->on('pengungsi');
             $table->foreign('posko_id')->references('id')->on('posko');

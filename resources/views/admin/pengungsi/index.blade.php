@@ -100,7 +100,7 @@
                                                 <select class="form-control" id="statKel" name="statKel" onchange="showDivs(this)">
                                                     <option value=0>Kepala Keluarga</option>
                                                     <option value=1>Ibu</option>
-                                                    <option value=2 selected>Anak</option>
+                                                    <option value=2>Anak</option>
                                                     <option value=3 selected>Lainnya</option>
                                                 </select>
                                             </div>
@@ -127,16 +127,41 @@
                                             <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
                                             <div class="form-group" id="form_1">
                                                 <label for="kpl">Kepala Keluarga</label>
-                                                <select class="form-control" id="kpl" name="kpl" required>
+                                                <select class="form-control" id="kpl" name="kpl" onchange="showDiv(this)" required>
                                                     @foreach ($kpl as $kplk)
                                                     <option value="{{$kplk->id}}">
                                                         {{$kplk->nama}} 
                                                         ({{ $kplk->detail }})
                                                     </option>
                                                     @endforeach
-                                                    <option value="">Kosongkan dahulu</option>
+                                                    <option value=0 selected>Kosongkan dahulu</option>
                                                 </select>
                                             </div>
+
+                                            <div class="form-group" id ="formAlamat">
+                                                <label for="alamat">Detail Alamat</label>
+                                                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Masukan detail alamat pengungsi" required>
+                                            </div>
+
+                                            <script type="text/javascript">
+                                                // var idForm_1 = document.getElementById('form_1');
+                                                // var idForm_2 = document.getElementById('form_2');
+
+                                                function showDiv(selectKepala) {
+                                                    console.log(selectKepala);
+                                                    if (selectKepala.value != 0) {
+                                                        document.getElementById("formAlamat").style.display = "none";
+                                                        // document.getElementById("form_2").style.display = "block";
+                                                        // idForm_1.style.display = "block";
+                                                        // idForm_2.style.display = "none";
+                                                    } else if (selectKepala.value == 0) {
+                                                        document.getElementById("formAlamat").style.display = "block";
+                                                        // document.getElementById("form_2").style.display = "none";
+                                                    }
+                                                }
+                                            </script>
+
+                                            <!-- end -->
 
                                             <!-- jika belum perlu menambahkan alamat -->
                                             <div class="wrapper-kk" class="hidden" id="form_2" style="display:none;">
@@ -184,6 +209,7 @@
                                                 <select class="form-control" id="statPos" name="statPos" required>
                                                     <option value=1>Di Posko</option>
                                                     <option value=0>Keluar</option>
+                                                    <option value=2>Pencarian</option>
                                                 </select>
                                             </div>
 
@@ -285,7 +311,20 @@
                                     </td>
                                     <td>{{ $pengungsi->namaKepala}}</td>
                                     <td>{{ $pengungsi->telpon }}</td>
-                                    <td> {{ $pengungsi->detail }}</td>
+                                    <td> 
+                                    <?php
+                                        $alamatKepala = $pengungsi->detail;
+                                        // alamat pengungsi yang ikut kepala keluarga
+                                        $alamatPengungsi = $pengungsi->alamatPengungsi;
+                                        // alamat pengungsi yang kebetulan belum mempunyai kepala keluarga
+                                        if ($alamatKepala == null) {
+                                            echo $alamatPengungsi;
+                                        } else {
+                                            echo $alamatKepala;
+                                        }
+                                        ?>
+                                        <!-- {{ $pengungsi->alamatPengungsi }} -->
+                                    </td>
                                     <!-- <td>{{ $pengungsi->lokasi }}</td> -->
                                     <td>
                                         <?php
@@ -325,6 +364,8 @@
                                             echo "<span class='badge badge-danger'>Keluar</span>";
                                         } else if ($statPos == 1) {
                                             echo "<span class='badge badge-success'>Di Posko</span>";
+                                        }else if ($statPos == 2) {
+                                            echo "<span class='badge badge-danger'>Pencarian</span>";
                                         }
                                         ?>
                                     </td>
@@ -558,11 +599,14 @@
                                                                         $statPos = "Keluar";
                                                                     } else if ($getPos == 1) {
                                                                         $statPos = "Di Posko";
+                                                                    }else if ($getPos == 2) {
+                                                                        $statPos = "Pencarian";
                                                                     }
                                                                     ?>
                                                                     <option selected value="{{$pengungsi->statPos}}" hidden><?php echo $statPos; ?></option>
                                                                     <option value=1>Di Posko</option>
                                                                     <option value=0>Keluar</option>
+                                                                    <option value=2>Pencarian</option>
                                                                 </select>
                                                             </div>
 
@@ -790,6 +834,7 @@
                                                                     <option selected value="{{$pengungsi->statPos}}" hidden><?php echo $statPos; ?></option>
                                                                     <option value=1>Di Posko</option>
                                                                     <option value=0>Keluar</option>
+                                                                    <option value=2>Pencarian</option>
                                                                 </select>
                                                             </div>
 
@@ -930,6 +975,8 @@
                                     statPos = "<span class='badge badge-danger'>Keluar</span>";
                                 } else if (statPos == 1) {
                                     statPos = "<span class='badge badge-success'>Di Posko</span>";
+                                } else if (statPos == 2) {
+                                    statPos = "<span class='badge badge-success'>Pencarian</span>";
                                 }
 
                                 result +=

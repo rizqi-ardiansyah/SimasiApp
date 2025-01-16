@@ -18,15 +18,13 @@ return new class extends Migration
             $table->string('nama');
             $table->date('tanggal');
             $table->time('waktu');
-            $table->string('lokasi');
+            $table->string('provinsi');
+            $table->string('kota');
+            $table->string('kecamatan');
+            $table->string('kelurahan');
+            $table->unsignedBigInteger('jmlPosko')->nullable();
             $table->unsignedBigInteger('jmlPengungsi')->nullable();
-            // $table->unsignedBigInteger('posko_id')->nullable();
-            // $table->unsignedBigInteger('pengungsi_id')->nullable();
-            // $table->string('korban')->nullable();
             $table->unsignedBigInteger('status')->nullable();
-            // $table->unsignedBigInteger('posko_id')->nullable();
-            // $table->foreign('posko_id')->references('id')->on('posko');
-            // $table->foreign('pengungsi_id')->references('id')->on('pengungsi');
             $table->timestamps(); 
         });
     }

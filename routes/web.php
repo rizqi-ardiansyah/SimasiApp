@@ -1,15 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BencanaController;
 use App\Http\Controllers\PoskoController;
-use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberTeamController;
 use App\Http\Controllers\PengungsiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\CadangController;
 use App\Http\Controllers\RansumController;
+use App\Http\Controllers\KepulanganController;
 
 
 use App\Http\Controllers\LoginController;
@@ -42,6 +43,7 @@ Route::resource('dashboard', DashboardController::class)->middleware('auth');
 Route::resource('bencana', BencanaController::class);
 Route::resource('posko', PoskoController::class);
 Route::resource('member', MemberController::class);
+Route::resource('kepulangan', KepulanganController::class);
 Route::resource('memberTeam', MemberTeamController::class);
 Route::resource('pengungsi', PengungsiController::class);
 Route::resource('cadang', CadangController::class)->only(['index', 'store', 'destroy']);
@@ -60,6 +62,7 @@ Route::post('memberTRC/deleteAnggota/{id}', [MemberTeamController::class, 'delet
 
 Route::get('/pengungsi/keluarga', 'App\Http\Controllers\PengungsiController@showKeluarga');
 
+Route::resource('member', MemberController::class);
 Route::post('member/create', [MemberController::class, 'createMember'])->name('member.create');
 Route::match(['get', 'post'], 'member/edit/{id}', [MemberController::class, 'edit']);
 Route::post('member/delete/{id}', [MemberController::class, 'delete']);
@@ -72,6 +75,8 @@ Route::post('posko/create', [PoskoController::class, 'createPosko'])->name('posk
 Route::match(['get', 'post'], 'posko/edit/{id}', [PoskoController::class, 'edit']);
 Route::post('posko/delete/{id}', [PoskoController::class, 'delete']);
 Route::get('/listPosko/{id}', [PoskoController::class, 'index']);
+
+Route::get('/rumahRusak/{id}', [KepulanganController::class, 'rumahRusak']);
 
 Route::get('/listPengungsi/{id}/{bencana_id}/{trc_id}', [PengungsiController::class, 'index']);
 Route::post('pengungsi/create', [PengungsiController::class, 'createPengungsi'])->name('pengungsi.create');

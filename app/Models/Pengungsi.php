@@ -20,6 +20,7 @@ class Pengungsi extends Model
         'gender',
         'umur',
         'statPos',
+        'alamat',
         // 'posko_id',
         'statKon',
     ];

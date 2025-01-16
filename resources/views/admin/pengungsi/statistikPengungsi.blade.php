@@ -202,7 +202,7 @@
                         <tbody>
                             <?php $l = 0; ?>
                             @foreach($getBalita as $balita)
-                            @if ($balita->umur < 5) <?php $l++; ?> <tr>
+                            @if ($balita->umur <= 5) <?php $l++; ?> <tr>
                                 <td>{{ $l }}</td>
                                 <td>{{ $balita->nama }}</td>
                                 <td>{{ $balita->namKep }}</td>
@@ -230,7 +230,7 @@
                                         } else if ($kondisi == 3) {
                                             echo "Luka Berat";
                                         }
-                                            else if ($kondisi == 4) {
+                                           else if ($kondisi == 4) {
                                                 echo "Hamil atau menyusui";
                                             
                                         } else if ($kondisi == 5) {

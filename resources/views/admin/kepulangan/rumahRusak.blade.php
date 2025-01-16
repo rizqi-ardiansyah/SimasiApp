@@ -7,12 +7,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Bencana</h1>
+                <h1>Daftar Rumah Rusak</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                    <li class="breadcrumb-item active">Bencana</li>
+                    <li class="breadcrumb-item">Bencana</li>
+                    <li class="breadcrumb-item active">Daftar Rumah Rusak</li>
                 </ol>
             </div>
         </div>
@@ -25,7 +26,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header justify-content-between">
-                        <h3 class="card-title">List Bencana</h3>
+                        <h3 class="card-title">Daftar rumah rusak pada bencana <b>{{ $namaBencana }}</b></h3>
                         <div class="card-tools">
                             @role('pusdalop')
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
@@ -111,7 +112,7 @@ window.onload = function() {
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Tambah Bencana</h4>
+                                    <h4 class="modal-title">Tambah Data</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -122,8 +123,20 @@ window.onload = function() {
                                         @csrf
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="exampleInputNama">Nama Bencana</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" name="namaBencana" placeholder="Masukan nama bencana" required>
+                                                <label for="exampleInputNama">Nama Pemilik</label>
+                                                <select class="form-control" id="kelurahan" name="kelurahan" required>
+                                                        <option value="" disabled selected>Pilih nama pengungsi</option>
+                                                            @foreach($pengungsi as $p)
+                                                        <option value="{{ $p->id }}">{{ $p->nama }}({{ $p->lokKel }})</option>
+                                                              @endforeach
+                                                </select>
+                                                
+                                                <!-- <input type="text" class="form-control" id="exampleInputnama" name="namaPemilik" placeholder="Masukan nama pengungsi" required> -->
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputProvinsi">Alamat Detail</label>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="Jawa Timur" required>
                                             </div>
 
                                             <div class="form-group">
@@ -189,26 +202,22 @@ window.onload = function() {
                     <div class="card-body table-responsive">
                         @role('pusdalop')
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah" style="font-size: 14px;">
-                            <i class="fas fa-plus mr-1"></i> Tambah Bencana
+                            <i class="fas fa-plus mr-1"></i> Tambah Data
                         </a>
                         @endrole
 
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Waktu</th>
-                                    <th>Lokasi</th>
-                                    <th>Posko</th>
-                                    <th>Pengungsi</th>
-                                    <th>Kondisi Rumah</th>
-                                    <th>Kondisi Sekitar</th>
-                                    <th>Waktu Update</th>
-                                    <th>Status</th>
-                                    @role('pusdalop')
+                                    <!-- <th>No</th> -->
+                                    <th>Nama Pemilik</th>
+                                    <th>Alamat Rumah</th>
+                                    <th>Status Pengungsi</th>
+                                    <th>Tanggal Peninjauan</th>
                                     <th>Aksi</th>
-                                    @endrole
+                                    <!-- @role('pusdalop')
+                                    <th>Aksi</th>
+                                    @endrole -->
                                 </tr>
                             </thead>
                             <tbody id="result">
@@ -221,7 +230,7 @@ window.onload = function() {
                                 @else
 
                                 <tr>
-                                    <td>{{ $data->firstItem() + $key }}</td>
+                                    <!-- <td>{{ $data->firstItem() + $key }}</td>ss -->
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
                                     <td>{{ $bencana->alamat }}</td>

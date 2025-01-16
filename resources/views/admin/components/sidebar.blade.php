@@ -118,8 +118,19 @@
                         </li>
                      </li>
 
-       
-     
+                     <li class="nav-item">
+                        <a href="{{url('/kepulangan')}}" class="nav-link {{ request()->is('kepulangan') ? 'active' : ''}}">
+                            <i class="nav-icon fas fa-solid fa-home"></i>
+                            <!-- <i class="fas fa-home"></i> -->
+                            <!-- <i class="fa-solid fa-house"></i> -->
+                            <p>
+                                Kepulangan
+                            </p>
+                        </a>
+                    </li>
+
+
+
     </nav>
         <!-- /.sidebar-menu -->
     </div>

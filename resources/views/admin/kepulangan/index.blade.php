@@ -110,12 +110,12 @@ window.onload = function() {
                     <div class="modal fade" id="tambah">
                         <div class="modal-dialog">
                             <div class="modal-content">
-                                <div class="modal-header">
+                                <!-- <div class="modal-header">
                                     <h4 class="modal-title">Tambah Bencana</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
-                                </div>
+                                </div> -->
                                 <div class="modal-body">
                                     <!-- form start -->
                                     <form action="{{ route('bencana.create') }}" method="post">
@@ -196,7 +196,7 @@ window.onload = function() {
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>No</th>
+                                    <!-- <th>No</th> -->
                                     <th>Nama</th>
                                     <th>Waktu</th>
                                     <th>Lokasi</th>
@@ -206,22 +206,32 @@ window.onload = function() {
                                     <th>Kondisi Sekitar</th>
                                     <th>Waktu Update</th>
                                     <th>Status</th>
-                                    @role('pusdalop')
+                                    <!-- @role('pusdalop')
                                     <th>Aksi</th>
-                                    @endrole
+                                    @endrole -->
                                 </tr>
                             </thead>
                             <tbody id="result">
-
-                                @role('pusdalop')
-                                @foreach ($data as $key => $bencana)
-                                @if(empty($bencana->namaBencana))
-                                    <p>Data kosong</p>
-                                    // whatever you need to do here
+                            @role('pusdalop')
+                                @php
+                                    // Cek apakah ada data dengan status 3
+                                    $isAllowedToReturn = false;
+                                    foreach ($data as $bencana) {
+                                        if ($bencana->status == 3) {
+                                            $isAllowedToReturn = true;
+                                            break;
+                                        }
+                                    }
+                                @endphp
+                                @if (!$isAllowedToReturn)
+                                    <tr>
+                                        <td colspan="11" style="text-align: center;">Belum ada pengungsi yang diperbolehkan pulang</td>
+                                    </tr>
                                 @else
-
+                                @foreach ($data as $key => $bencana)
+                                @if(!empty($bencana->namaBencana) && $bencana->status ==3)
                                 <tr>
-                                    <td>{{ $data->firstItem() + $key }}</td>
+                                    <!-- <td>{{ $data->firstItem() + $key }}</td> -->
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
                                     <td>{{ $bencana->alamat }}</td>
@@ -262,17 +272,17 @@ window.onload = function() {
                                         <span class="badge badge-info">Selesai</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
                                                 <i class="fas fa-bars"></i>
                                             </button>
-                                            <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                            <div class="dropdown-menu dropdown-menu-lg" role="menu"> -->
                                                 <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
                                                     <i class="fas fa-eye mr-1"></i> Detail
                                                 </a>
                                                 <div class="dropdown-divider"></div> -->
-                                                <a href="#" class="dropdown-item " title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-{{$bencana->idBencana}}">
+                                                <!-- <a href="#" class="dropdown-item " title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-{{$bencana->idBencana}}">
                                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                                                         <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
                                                     </svg>
@@ -282,17 +292,18 @@ window.onload = function() {
                                                 <a href="#" class="dropdown-item " title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idBencana}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
-                                            </div>
+                                            </div> -->
                                             <!-- /.modal-dialog -->
-                                        </div>
+                                        <!-- </div> -->
                                         <!-- <a href="#" class="btn btn-danger btn-sm" title="Hapus Pengungsi">
                                             Hapus
                                         </a> -->
-                                    </td>
+                                    <!-- </td> -->
                                 </tr>
                                 @endif
                                 @endforeach
-                                @endrole
+                                @endif
+                            @endrole
 
                                 @role('trc')
                                 <?php $i = 0;?>
@@ -540,6 +551,10 @@ window.onload = function() {
                             let bencana = data[i]
                             result +=
                                 `<tr>
+                                       @if(empty($bencana->namaBencana) || $bencana->status !=3)
+                                       <p>Data kosong</p>
+                                       
+                                       @else 
                                    <td>${i+1}</td>
                                     <td>${bencana.namaBencana }</td>
                                     <td>${bencana.time}</td>
@@ -598,6 +613,7 @@ window.onload = function() {
                                     </div>
 
                                 </td>
+                                @endif
 
                 </tr>`;
                         }
@@ -634,7 +650,10 @@ window.onload = function() {
                             let bencana = data[i]
                             result +=
                                 `<tr>
-                <td>${i+1}</td>
+                                       @if(empty($bencana->namaBencana) || $bencana->status !=3)
+                                         <p>Data kosong</p>
+                                       @else 
+                                    <td>${i+1}</td>
                                     <td>${bencana.namaBencana }</td>
                                     <td>${bencana.waktu}</td>
                                     <td>${bencana.lokasi}</td>
@@ -663,6 +682,7 @@ window.onload = function() {
                                     </div>
 
                                 </td>
+                                @endif
 
                 </tr>`;
                         }

@@ -35,7 +35,7 @@
         @endif
 
       <form class="login-form" action="/simasi/public/login" method="post">
-      @csrf
+        @csrf
         <input type="text" placeholder="username" name="email"/>
         <input type="password" placeholder="password" name="password"/>
         <button>login</button>
