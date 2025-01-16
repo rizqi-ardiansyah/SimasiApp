@@ -294,7 +294,7 @@ class PengungsiController extends Controller
         $getKeluar = $getKeluar->count();
 
         $getLokasi = Bencana::select( DB::raw("concat('Ds. ',kelurahan, ', Kec. ',kecamatan, ', Kota ',kota,
-        ', Prov. ',provinsi) as lokasi"))
+        ', Prov. ',provinsi) as lokasi"), 'bencana.kelurahan','bencana.kecamatan','bencana.kota','bencana.provinsi')
         ->join('integrasi as int','int.bencana_id','=','bencana.id')
         ->where('int.bencana_id', $request->bencana_id)
         ->get();

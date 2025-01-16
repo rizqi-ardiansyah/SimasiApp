@@ -114,9 +114,11 @@
                                                     if (selects.value == 0) {
                                                         document.getElementById("form_1").style.display = "none";
                                                         document.getElementById("form_2").style.display = "block";
+                                                        document.getElementById("formAlamat").style.display = "none";
                                                         // idForm_1.style.display = "block";
                                                         // idForm_2.style.display = "none";
                                                     } else if (selects.value == 1 || selects.value == 2) {
+                                                        document.getElementById("formAlamat").style.display = "none";
                                                         document.getElementById("form_1").style.display = "block";
                                                         document.getElementById("form_2").style.display = "none";
                                                     }
@@ -140,7 +142,7 @@
 
                                             <div class="form-group" id ="formAlamat">
                                                 <label for="alamat">Detail Alamat</label>
-                                                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Masukan detail alamat pengungsi" required>
+                                                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Masukan detail alamat pengungsi">
                                             </div>
 
                                             <script type="text/javascript">
@@ -173,11 +175,18 @@
                                                 @break
                                                 @endforeach
 
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="kelurahan" value="{{$lokasi->kelurahan}}" hidden>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="kecamatan" value="{{$lokasi->kecamatan}}" hidden>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="kota" value="{{$lokasi->kota}}" hidden>
+                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$lokasi->provinsi}}" hidden>
+
                                                 <div class="form-group">
                                                     <label for="detail">Detail alamat</label>
                                                     <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
                                                 </div>
                                             </div>
+
+                       
 
                                             <div class="form-group">
                                                 <label for="gender">Jenis Kelamin</label>
