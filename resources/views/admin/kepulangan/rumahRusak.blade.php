@@ -122,22 +122,93 @@ window.onload = function() {
                                     <form action="{{ route('bencana.create') }}" method="post">
                                         @csrf
                                         <div class="card-body">
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="exampleInputNama">Nama Pemilik</label>
-                                                <select class="form-control" id="kelurahan" name="kelurahan" required>
+                                                <select class="form-control" id="kelurahan" name="nama" required>
                                                         <option value="" disabled selected>Pilih nama pengungsi</option>
                                                             @foreach($pengungsi as $p)
                                                         <option value="{{ $p->id }}">{{ $p->nama }}({{ $p->lokKel }})</option>
                                                               @endforeach
-                                                </select>
-                                                
+                                                </select> -->
+
                                                 <!-- <input type="text" class="form-control" id="exampleInputnama" name="namaPemilik" placeholder="Masukan nama pengungsi" required> -->
-                                            </div>
+                                            <!-- </div> -->
+
+                                            <style>
+                                                    .select2-selection--single {
+                                                    height: 100% !important;
+                                                    }
+                                                    /* Input field */
+                                                    .select2-selection__rendered{
+                                                    word-wrap: break-word !important;
+                                                    text-overflow: inherit !important;
+                                                    white-space: normal !important;
+                                                    }
+
+                                                    .select2-selection__rendered {
+                                                        color: black;
+                                                        height: 100% !important;
+                                                    }
+
+                                                        .select2-search input { color: black }
+                                            </style>
 
                                             <div class="form-group">
+                                                <label for="exampleInputNama">Pilih pemilik</label>
+                                                <select class="form-controll js-example-basic-single" name="carinama[]" multiple="multiple" style="width: 100%;"
+                                                onchange="showifEmpty(this)">
+                                                <option value="" disabled>Pilih nama pengungsi</option>
+                                                        @foreach($pengungsi as $p)
+                                                        <option value="{{ $p->id }}">{{ $p->nama }}({{ $p->lokKel }})</option>
+                                                        @endforeach
+                                                        <option value=0>Tidak ada</option>
+                                                </select>
+                                            </div>
+
+                                            <script>
+                                                $(document).ready(function() {
+                                                    $('.js-example-basic-single').select2({
+                                                        theme: "classic",
+                                                 });
+                                                });
+                                            </script>
+
+                                              <!-- script form status keluarga -->
+                                              <script type="text/javascript">
+                                                // var idForm_1 = document.getElementById('form_1');
+                                                // var idForm_2 = document.getElementById('form_2');
+
+                                                function showifEmpty(selects) {
+                                                    console.log(selects);
+                                                    if (selects.value != 0 || selects.value == "") {
+                                                        document.getElementById("formNama").style.display = "none";
+                                                        document.getElementById("formAlamat").style.display = "none";
+                                                        // idForm_1.style.display = "block";
+                                                        // idForm_2.style.display = "none";
+                                                    } else if (selects.value == 0) {
+                                                        document.getElementById("formAlamat").style.display = "block";
+                                                        document.getElementById("formNama").style.display = "block";
+                                                    }
+                                                }
+                                            </script>
+                                            <!-- end -->
+
+                                            <div class="form-group" id="formNama">
+                                                <label for="nama">Masukkan Nama Pemilik</label>
+                                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan nama pengungsi">
+                                            </div>
+
+                                            <div class="form-group" id ="formAlamat">
+                                                <label for="alamat">Detail Alamat</label>
+                                                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Masukan detail alamat pengungsi">
+                                            </div>
+
+                                            
+                                           
+                                            <!-- <div class="form-group">
                                                 <label for="exampleInputProvinsi">Alamat Detail</label>
                                                 <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="Jawa Timur" required>
-                                            </div>
+                                            </div> -->
 
                                             <div class="form-group">
                                                 <label for="exampleInputPosko">Tanggal</label>
@@ -304,11 +375,11 @@ window.onload = function() {
                                 @endrole
 
                                 @role('trc')
-                                <?php $i = 0;?>
+                                <?php $i = 0; ?>
                                 @foreach ($data2 as $key => $bencana)
                                 <tr>
                                     @if($bencana->trc == auth()->user()->id)
-                                    <?php $i++;?>
+                                    <?php $i++; ?>
                                     <td>{{ $data2->firstItem() + $key }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
@@ -339,11 +410,11 @@ window.onload = function() {
 
 
                                 @role('relawan')
-                                <?php $i = 0;?>
+                                <?php $i = 0; ?>
                                 @foreach ($data2 as $bencana)
                                 <tr>
                                     @if($bencana->trc == auth()->user()->id)
-                                    <?php $i++;?>
+                                    <?php $i++; ?>
                                     <td>{{ $i }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
@@ -424,18 +495,18 @@ window.onload = function() {
                                                         </div>
 
                                                         <?php
-                                                            $value = $detail->status;
-                                                            if ($value == 1) {
-                                                                $value = 'Siaga';
-                                                            } elseif ($value == 2) {
-                                                                $value = 'Tanggap Darurat';
-                                                            } elseif ($value == 3) {
-                                                                $value = 'Pemulihan';
-                                                            } elseif ($value == 0) {
-                                                                $value = 'Selesai';
-                                                            }
-                                                            // if()
-                                                        ?>
+$value = $detail->status;
+if ($value == 1) {
+    $value = 'Siaga';
+} elseif ($value == 2) {
+    $value = 'Tanggap Darurat';
+} elseif ($value == 3) {
+    $value = 'Pemulihan';
+} elseif ($value == 0) {
+    $value = 'Selesai';
+}
+// if()
+?>
 
                                                         <div class="form-group">
                                                             <label for="status">Status</label>
@@ -643,7 +714,7 @@ window.onload = function() {
                             let bencana = data[i]
                             result +=
                                 `<tr>
-                <td>${i+1}</td>
+                                    <td>${i+1}</td>
                                     <td>${bencana.namaBencana }</td>
                                     <td>${bencana.waktu}</td>
                                     <td>${bencana.lokasi}</td>
@@ -683,6 +754,8 @@ window.onload = function() {
     </script>
 
 </section>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 
 
 @endsection()

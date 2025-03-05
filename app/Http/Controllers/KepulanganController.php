@@ -205,6 +205,35 @@ class KepulanganController extends Controller
     ]);
     }
 
+    // $data = Provinces::where('name', 'LIKE', '%'.request('q').'%')->paginate(10);
+
+
+    public function getData(Request $request)
+    {
+        // Ambil data dari database berdasarkan pencarian
+        $data=[];
+        if($search=$request->nama){
+            $data = Pengungsi::where('nama', 'LIKE', "%$search%")->paginate(10);
+        }
+
+        return response()->json($data);
+
+        // $search = $request->input('search');
+        // $users = Pengungsi::where('nama', 'LIKE', "%{$search}%")
+        //     ->select('id', 'nama')
+        //     ->get();
+
+        // // Format data untuk Select2
+        // $results = $users->map(function ($user) {
+        //     return [
+        //         'id' => $user->id,
+        //         'text' => $user->nama,
+        //     ];
+        // });
+
+        // return response()->json(['results' => $results]);
+    }
+
 
     public function indexPengungsi(Request $request)
     {

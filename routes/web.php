@@ -11,6 +11,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\CadangController;
 use App\Http\Controllers\RansumController;
 use App\Http\Controllers\KepulanganController;
+use App\Http\Controllers\DropdownController;
 
 
 use App\Http\Controllers\LoginController;
@@ -115,6 +116,9 @@ Route::get("/searc/listPengungsi", [PengungsiController::class, 'searchPengungsi
 Route::get("/search/memberPusdalop", [MemberController::class, 'searchPusdalop'])->name('searchPusdalop');
 Route::get("/search/memberTRC", [MemberController::class, 'searchTRC'])->name('searchTRC');
 // Route::get('bencana/cari',[BencanaController::class, 'search'])->name('searchBencana');
+
+Route::get('/carinama', [KepulanganController::class, 'getData'])->name('dropdown.data');
+// Route::get('selectName', [IndonesiaController::class, 'provinsi'])->name('provinsi.index');
 
 
 
