@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+// use Image;
+use Intervention\Image\Facades\Image as Image;
 
 class KepulanganController extends Controller
 {
@@ -664,6 +666,9 @@ class KepulanganController extends Controller
             //     'namaBelakang' => ['required', 'max:50'],
             //     'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
             // ]);
+            $request->validate([
+                'picRumah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Bisa upload sampai 5MB
+            ]);
             $selectedIds = $request->carinama;
             // $addRumah = new KondisiRumah;
             foreach ($selectedIds as $id) {
@@ -675,8 +680,21 @@ class KepulanganController extends Controller
                     $file = $request->file('picRumah');
                     $extension = $file->getClientOriginalExtension();
                     $filename = time().'.'.$extension; // Nama unik untuk file
+
+                     // Cek ukuran file sebelum diproses
+                    if ($file->getSize() > 2048000) { // Jika lebih dari 2MB
+                        $image = Image::make($file)->resize(1024, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })->encode('jpg', 75); // Kualitas 75% untuk kompresi
+                        $image->save(public_path('storage/images/') . $filename);
+                        // $file->storeAs('public/images', $filename);
+                    } else {
+                        // Simpan gambar tanpa kompresi jika sudah di bawah 2MB
+                        $image->save(public_path('storage/images/') . $filename);
+                    }
+
                     // $file->move('images/', $filename);
-                    $file->storeAs('public/images', $filename);
+                    // $file->storeAs('public/images', $filename);
                     $addRumah->picRumah = $filename;
                 }
                 $addRumah->status = $request->status;
