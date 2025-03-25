@@ -8,10 +8,11 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                @foreach ($getNama as $nm)
+                @foreach ($getNmPosko as $nm)
                 @foreach ($getJmlPosko as $jml)
                 @foreach ($getNmTrc as $nmTrc)
-                <h3>Pos Pengungsi {{ $nm->nama }} {{$jml->jmlPosko}} ({{ $nmTrc->fullName  }})</h1>
+                <!-- <h3>Pos Pengungsi {{ $nm->namaPosko }} {{$jml->jmlPosko}} ({{ $nmTrc->fullName  }})</h1> -->
+                <h3>Pos Pengungsi {{ $nm->namaPosko }} ({{ $nmTrc->fullName  }})</h1>
                 @endforeach
                 @endforeach
                 @endforeach

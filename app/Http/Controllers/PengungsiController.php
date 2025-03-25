@@ -128,7 +128,7 @@ class PengungsiController extends Controller
 
         $getKpl = KepalaKeluarga::all();
 
-        $getNmPosko = Posko::select('nama')->where('id', $request->id)->get();
+        $getNmPosko = Posko::select('namaPosko')->where('id', $request->id)->get();
 
         $getNmBencana = Bencana::select('nama')->where('id', $request->bencana_id)->get();
 
@@ -159,6 +159,7 @@ class PengungsiController extends Controller
                 'int.user_id',
                 'int.created_at',
                 'int.updated_at',
+                'int.kondisiRumah_id'
             )
             ->get();
 
@@ -308,6 +309,7 @@ class PengungsiController extends Controller
             'dataKpl' => $dataKpl,
             // 'getNama' => $getNmPosko,
             'getNama' => $getNmBencana,
+            'getNmPosko' => $getNmPosko,
             'getNmTrc' => $getNmTrc,
             'getJmlPosko' => $getJmlPosko,
             'getDifabel' => $getDifabel,

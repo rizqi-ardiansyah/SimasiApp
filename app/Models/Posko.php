@@ -12,6 +12,7 @@ class Posko extends Model
 
     protected $fillable = [
         'nama',
+        'namaPosko',
         'detail',
         'kapasitas'
     ];

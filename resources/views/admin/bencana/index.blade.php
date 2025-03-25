@@ -202,8 +202,8 @@ window.onload = function() {
                                     <th>Lokasi</th>
                                     <th>Posko</th>
                                     <th>Pengungsi</th>
-                                    <th>Kondisi Rumah</th>
-                                    <th>Kondisi Sekitar</th>
+                                    <!-- <th>Kondisi Rumah</th>
+                                    <th>Kondisi Sekitar</th> -->
                                     <th>Waktu Update</th>
                                     <th>Status</th>
                                     @role('pusdalop')
@@ -230,14 +230,14 @@ window.onload = function() {
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->ttlPengungsi }} orang</br>
-                                    <td>
+                                    <!-- <td>
                                         {{ $bencana->null }} rumah rusak
                                         <a href="{{url('/rumahRusak')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat rumah rusak"><i class="fas fa-eye"></i> Detail</a>
                                     </td>
                                     <td>
                                         {{ $bencana->null }} area rusak
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Detail</a>
-                                    </td>
+                                    </td> -->
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)

@@ -12,6 +12,7 @@ use App\Http\Controllers\CadangController;
 use App\Http\Controllers\RansumController;
 use App\Http\Controllers\KepulanganController;
 use App\Http\Controllers\DropdownController;
+use App\Http\Controllers\KondisiRumahController;
 
 
 use App\Http\Controllers\LoginController;
@@ -77,7 +78,10 @@ Route::match(['get', 'post'], 'posko/edit/{id}', [PoskoController::class, 'edit'
 Route::post('posko/delete/{id}', [PoskoController::class, 'delete']);
 Route::get('/listPosko/{id}', [PoskoController::class, 'index']);
 
-Route::get('/rumahRusak/{id}', [KepulanganController::class, 'rumahRusak']);
+Route::post('rumahRusak/create', [KepulanganController::class, 'createRumah'])->name('rumahRusak.create');
+Route::get('/rumahRusak/{id}/{bencana_id}/{trc_id}', [KepulanganController::class, 'rumahRusak']);
+Route::match(['get', 'post'], 'rumahRusak/edit/{id}', [KepulanganController::class, 'edit']);
+Route::get('/poskoKepulangan/{id}', [KepulanganController::class, 'poskoKepulangan']);
 
 Route::get('/listPengungsi/{id}/{bencana_id}/{trc_id}', [PengungsiController::class, 'index']);
 Route::post('pengungsi/create', [PengungsiController::class, 'createPengungsi'])->name('pengungsi.create');

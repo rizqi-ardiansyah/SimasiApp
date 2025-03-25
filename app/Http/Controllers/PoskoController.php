@@ -53,6 +53,7 @@ class PoskoController extends Controller
             'b.nama as namaBencana',
             'b.jmlPosko as jmlPosko',
             DB::raw('count(int.png_id) as ttlPengungsi'),
+            'posko.namaPosko as namaSamaran'
         )
             ->join('integrasi as int','int.posko_id','=','posko.id')
             ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
@@ -60,7 +61,7 @@ class PoskoController extends Controller
             ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
             ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'posko.id'
                 , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
-                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail','b.jmlPosko')
+                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail','b.jmlPosko','posko.namaPosko')
             ->where('int.bencana_id', $id)
             ->orderBy('u.id', 'desc')
             ->paginate(5);
@@ -281,6 +282,7 @@ class PoskoController extends Controller
             // ]);
             Posko::create([
                 'nama' => $request->nama,
+                'namaPosko' => $request->namaSamaran,
                 'detail' => $request->detail_lokasi,
                 'kapasitas' => $request->kapasitas
             ]);
@@ -359,7 +361,7 @@ class PoskoController extends Controller
         $posko = Posko::where('id', $id)->first();
 
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            // $posko->nama = $request->nama;
+            $posko->namaPosko = $request->namaSamaran;
             // $posko->provinsi = $request->provinsi;
             // $posko->kota = $request->kota;
             // $posko->kecamatan = $request->kecamatan;

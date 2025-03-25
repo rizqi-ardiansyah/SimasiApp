@@ -91,7 +91,7 @@
                                             <div class="form-group">
                                                 <label for="exampleInputNama">Nama Posko</label>
                                                 <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
-                                                <input type="text" class="form-control" id="exampleInputnama" name="namas" value="{{$namaBencana}} {{$jmlPosko}}" placeholder="Masukan nama posko" readonly>
+                                                <input type="text" class="form-control" id="exampleInputnama" name="namaSamaran" value="{{$namaBencana}} {{$jmlPosko}}" placeholder="Masukan nama posko" readonly>
                                             </div>
 
                                             @foreach ($getLokasi as $lokasi)
@@ -185,7 +185,8 @@
                                 <tr>
                                     <td>{{ $data->firstItem() + $key  }}</td>
                                     <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
-                                    <td>{{$namaBencana}} {{ $data->firstItem() + $key  }}</td>
+                                    <!-- <td>{{$namaBencana}} {{ $data->firstItem() + $key  }}</td> -->
+                                    <td>{{ $posko->namaSamaran }}</td>
                                     <td>{{ $posko->lokasi}}</td>
                                     <!-- <td>{{ $posko->detail}}</td> -->
                                     <td>{{ $posko->firstname}}</td>
@@ -291,7 +292,7 @@
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="exampleInputNama">Nama Posko</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" name="namas" value="{{$namaBencana}} {{$jmlPosko-1}}" placeholder="Masukan nama posko" readonly>
+                                                            <input type="text" class="form-control" id="exampleInputnama" name="namaSamaran" value="{{$namaBencana}} {{$jmlPosko-1}}" placeholder="Masukan nama posko" readonly>
                                                             <input type="text" class="form-control" id="exampleInputnama" name="nama" placeholder="Masukan nama posko" value="{{$detail->namaPosko}}" hidden readonly>
                                                         </div>
 
