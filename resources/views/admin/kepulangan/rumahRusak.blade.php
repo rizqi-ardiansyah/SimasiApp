@@ -412,12 +412,14 @@
                              
                                                 <div class="form-group">
                                                     <label for="exampleInputPosko">Tanggal</label>
-                                                    <input type="date" class="form-control" id="exampleInputnama" placeholder="Masukan tanggal" name="tanggal" required>
+                                                    <input type="date" class="form-control" id="exampleInputnama" placeholder="Masukan tanggal" name="tanggal" 
+                                                    value="{{$detail->tanggal}}" required>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="exampleInputPengungsi">Waktu</label>
-                                                    <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan waktu" name="waktu" required>
+                                                    <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan waktu" name="waktu" 
+                                                    value="{{$detail->waktu}}" required>
                                                 </div>
 
                                                 <style>
@@ -441,9 +443,9 @@
                                                     
                                                 <div class="form-group">
                                                     <label for="exampleInputNama">Pilih pemilik</label>
-                                                    <select class="form-controll js-example-basic-single" name="carinama" multiple="multiple" style="width: 100%;"
+                                                    <select class="form-controll js-example-basic-single" name="carinama[]" multiple="multiple" style="width: 100%;"
                                                     onchange="showifEmpty(this)">
-                                                    <option value="" disabled>Pilih nama pengungsi</option>
+                                                    <option value="{{$detail->namaPengungsi}}" selected>{{$detail->namaPengungsi}}({{ $detail->lokKel }})</option>
                                                             @foreach($pengungsi as $p)
                                                             <option value="{{ $p->idPengungsi }}">{{ $p->nama }}({{ $p->lokKel }})</option>
                                                             @php $cachePosko = $p->namaPosko; @endphp
@@ -492,89 +494,42 @@
                                                     <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="Jawa Timur" required>
                                                 </div> -->
                                                 <div class="form-group">
-                                                    <label for="exampleInputProvinsi">Posko Pengungsi</label>
-                                                    <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$cachePosko}}" disabled>
+                                                    <label for="exampleInputPosko">Posko Pengungsi</label>
+                                                    <input type="text" class="form-control" id="exampleInputPosko" placeholder="Masukan provinsi" 
+                                                    name="namaSamaran" value="{{$namaPosko}}" disabled>
                                                 </div>
 
                                                 <div class="form-group">
-                                                    <label for="exampleInputGambar">Upload Gambar Rumah</label>
-                                                    <input type="file" class="form-control-file" id="exampleInputGambar" name="picRumah" required>
+                                                    <label for="exampleInputGambar">Upload Gambar Rumah Jika Ada Perubahan</label>
+                                                    <input type="file" class="form-control-file" id="exampleInputGambar" name="picRumah" value="{{$detail->picRumah}}">
                                                 </div>
                                             
                                                 <div class="form-group">
                                                     <label for="status">Status</label>
                                                     <select class="form-control" id="status" name="status" required>
-                                                        <option selected value="" hidden>Pilih status</option>
-                                                        <option value="0">Aman</option>
+                                                    <?php
+                                                                    $getKondisi = $detail->status;
+                                                                    if ($getKondisi == 0) {
+                                                                        $statKon = "Aman";
+                                                                    } else if ($getKondisi == 1) {
+                                                                        $statKon = "Rusak ringan";
+                                                                    } else if ($getKondisi == 1) {
+                                                                        $statKon = "Rusak sedang";
+                                                                    } else if ($getKondisi == 3) {
+                                                                        $statKon = "Rusak berat";
+                                                                    }
+                                                                    ?>
+                                                                    <option selected value="{{$detail->status}}" hidden><?php echo $statKon; ?></option>
+                                                                    <option value="0">Aman</option>
                                                         <option value="1">Rusak ringan</option>
                                                         <option value="2">Rusak sedang</option>
                                                         <option value="3">Rusak berat</option>
+
+
                                                     </select>
                                                     </div>
 
-                                                        <div class="form-group">
-                                                            <label for="exampleInputNama">Nama Bencana</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" name="namaBencana" placeholder="Masukan nama bencana" value="{{$detail->namaBencana}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="exampleInputPosko">Tanggal</label>
-                                                            <input type="date" class="form-control" id="exampleInputnama" placeholder="Masukan tanggal" name="tanggal" value="{{$detail->tgl}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="exampleInputPengungsi">Waktu</label>
-                                                            <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan waktu" name="waktu" value="{{$detail->time}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="exampleInputProvinsi">Provinsi</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$detail->provinsi}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="exampleInputKota">Kota</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kota" value="{{$detail->kota}}" required>
-                                                        </div>
-
-
-                                                        <div class="form-group">
-                                                            <label for="kecamatan">Kecamatan</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kecamatan" value="{{$detail->kecamatan}}" required>
-                                                        </div>
-
-                                                        <div class="form-group">
-                                                            <label for="kelurahan">Kelurahan</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kelurahan" value="{{$detail->kelurahan}}" required>
-
-                                                        </div>
-
-                                                        <?php
-                                                            $value = $detail->status;
-                                                            if ($value == 1) {
-                                                                $value = 'Siaga';
-                                                            } elseif ($value == 2) {
-                                                                $value = 'Tanggap Darurat';
-                                                            } elseif ($value == 3) {
-                                                                $value = 'Pemulihan';
-                                                            } elseif ($value == 0) {
-                                                                $value = 'Selesai';
-                                                            }
-                                                            // if()
-                                                            ?>
-
-                                                        <div class="form-group">
-                                                            <label for="status">Status</label>
-                                                            <select class="form-control" id="status" name="status" required>
-                                                                <option selected value="{{$detail->status}}" hidden>
-                                                                    <?php echo $value; ?>
-                                                                </option>
-                                                                <option value="1">Siaga</option>
-                                                                <option value="2">Tanggap Darurat</option>
-                                                                <option value="3">Pemulihan</option>
-                                                                <option value="0">Selesai</option>
-                                                            </select>
-                                                        </div>
+                                                      
 
                                                     </div>
 

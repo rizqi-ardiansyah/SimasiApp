@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 // use Image;
 use Intervention\Image\Facades\Image as Image;
 
@@ -190,7 +191,7 @@ class KepulanganController extends Controller
              Daerah ',kpl.detail,' ','')
         as lokasi"),'kpl.anggota','kpl.detail','integrasi.png_id','integrasi.kondisiRumah_id','p.nama as namaPengungsi',
         DB::raw("concat(kr.tanggal,' ',kr.waktu) as ketWaktu"), DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
-        Daerah ',kpl.detail,' ') as lokKel"),'kr.picRumah','kr.status','kr.updated_at','kr.id as idKr')
+        Daerah ',kpl.detail,' ') as lokKel"),'kr.picRumah','kr.status','kr.updated_at','kr.id as idKr','kr.tanggal','kr.waktu')
             ->join('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
             ->join('pengungsi as p','p.id','=','integrasi.png_id')
             ->join('bencana as b','b.id','=','integrasi.bencana_id')
@@ -670,7 +671,6 @@ class KepulanganController extends Controller
                 'picRumah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Bisa upload sampai 5MB
             ]);
             $selectedIds = $request->carinama;
-            // $addRumah = new KondisiRumah;
             foreach ($selectedIds as $id) {
                 $addRumah = new KondisiRumah;
                 $addRumah->tanggal = $request->tanggal;
@@ -711,34 +711,84 @@ class KepulanganController extends Controller
     
             }
 
-
-            // $addRumah = new KondisiRumah;
-            // $addRumah->tanggal = $request->tanggal;
-            // $addRumah->waktu = $request->waktu;
-            // $addRumah->idPengungsi = $request->carinama;
-            // if ($request->hasFile('picRumah')) {
-            //     $file = $request->file('picRumah');
-            //     $extension = $file->getClientOriginalExtension();
-            //     $filename = time().'.'.$extension; // Nama unik untuk file
-            //     $file->move('images/', $filename);
-            //     $addRumah->picRumah = $filename;
-            // }
-            // $addRumah->status = $request->status;
-            // $addRumah->save();
-
-            // $getIdPengungsi = KondisiRumah::select('idPengungsi')->orderBy('id', 'desc')->value('idPengungsi');
-            // $getIdKondisiRumah = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
-
-            // Integrasi::where('png_id', $getIdPengungsi)
-            // ->update([
-            //  'kondisiRumah_id'=> $getIdKondisiRumah,
-            //  'updated_at' => Carbon::now(),
-            //  ]);
-
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
         }
         return back();
+    }
+
+        /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function editRumahRusak(Request $request, $id)
+    {
+        $editRumah = KondisiRumah::where('id', $id)->first();
+        $request->validate([
+            // Akan melakukan validasi kecuali punyanya sendiri
+            'nama' => ['string', Rule::unique('posko')->ignore($id)],
+        ]);
+        
+        // $posko = Posko::where('id', $id)->first();
+
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            // $request->validate([
+            //     'namaDepan' => ['required', 'max:50'],
+            //     'namaBelakang' => ['required', 'max:50'],
+            //     'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
+            // ]);
+            // $request->validate([
+            //     'picRumah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Bisa upload sampai 5MB
+            // ]);
+            $selectedIds = $request->carinama;
+            foreach ($selectedIds as $id) {
+                // $addRumah = new KondisiRumah;
+                $editRumah->tanggal = $request->tanggal;
+                $editRumah->waktu = $request->waktu;
+                $editRumah->idPengungsi = $id;
+                if ($request->hasFile('picRumah')) {
+                    $file = $request->file('picRumah');
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = time().'.'.$extension; // Nama unik untuk file
+
+                     // Cek ukuran file sebelum diproses
+                    if ($file->getSize() > 2048000) { // Jika lebih dari 2MB
+                        $image = Image::make($file)->resize(1024, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })->encode('jpg', 75); // Kualitas 75% untuk kompresi
+                        $image->save(public_path('storage/images/') . $filename);
+                        // $file->storeAs('public/images', $filename);
+                    } else {
+                        // Simpan gambar tanpa kompresi jika sudah di bawah 2MB
+                        $file->move('storage/images/', $filename);
+                        // $file->storeAs('storage/images/', $filename);
+                        // $file->save(public_path('storage/images/') . $filename);
+                    }
+
+                    // $file->move('images/', $filename);
+                    // $file->storeAs('public/images', $filename);
+                    $editRumah->picRumah = $filename;
+                }
+                $editRumah->status = $request->status;
+                $editRumah->save();
+
+                $getIdPengungsi = KondisiRumah::select('idPengungsi')->orderBy('id', 'desc')->value('idPengungsi');
+                $getIdKondisiRumah = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
+    
+                Integrasi::where('png_id', $getIdPengungsi)
+                ->update([
+                 'kondisiRumah_id'=> $getIdKondisiRumah,
+                 'updated_at' => Carbon::now(),
+                 ]);
+    
+            }
+
+            Alert::success('Success', 'Data berhasil diubah');
+            return back();
+        }
+        return redirect()->back();
     }
 
     /**
@@ -759,17 +809,6 @@ class KepulanganController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Kepulangan $kepulangan)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Kepulangan  $kepulangan
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Kepulangan $kepulangan)
     {
         //
     }
