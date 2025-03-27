@@ -831,8 +831,39 @@ class KepulanganController extends Controller
      * @param  \App\Models\Kepulangan  $kepulangan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Kepulangan $kepulangan)
+    public function delete(Request $request, $id)
     {
-        //
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            // $delete = Posko::destroy($id);yy
+            Integrasi::where('kondisiRumah_id', $id)
+            ->update([
+                'kondisiRumah_id'=> DB::raw('NULL')
+             ]);
+
+            // $getIdBencana = Integrasi::select('bencana_id')->where('posko_id', $id)->value('bencana_id');
+            $getIdKondisiRumah = KondisiRumah::where('id', $id)->value('id');
+            // $getPosko = Posko::where('id', $id)->value('id');
+            // $getBencana = Bencana::where('id', $getIdBencana)->value('id');
+            
+            $delIntegrasi = KondisiRumah::destroy($getIdKondisiRumah);
+            // $delBencana = Bencana::destroy($getBencana);
+            // $delPosko = Posko::destroy($getPosko);
+
+            // check data deleted or not
+            if ($delIntegrasi == 1) {
+                $success = true;
+                $message = "Data berhasil dihapus";
+            } else {
+                $success = true;
+                $message = "Data gagal dihapus";
+            }
+
+            //  return response
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+        }
+        return back();
     }
 }

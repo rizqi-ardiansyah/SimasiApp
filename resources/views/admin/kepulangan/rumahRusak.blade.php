@@ -311,7 +311,7 @@
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idBencana}})">
+                                                <a href="#" class="dropdown-item " title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idKr}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
@@ -445,7 +445,7 @@
                                                     <label for="exampleInputNama">Pilih pemilik</label>
                                                     <select class="form-controll js-example-basic-single" name="carinama[]" multiple="multiple" style="width: 100%;"
                                                     onchange="showifEmpty(this)">
-                                                    <option value="{{$detail->namaPengungsi}}" selected>{{$detail->namaPengungsi}}({{ $detail->lokKel }})</option>
+                                                    <option value="{{$detail->idPengungsi}}" selected>{{$detail->namaPengungsi}}({{ $detail->lokKel }})</option>
                                                             @foreach($pengungsi as $p)
                                                             <option value="{{ $p->idPengungsi }}">{{ $p->nama }}({{ $p->lokKel }})</option>
                                                             @php $cachePosko = $p->namaPosko; @endphp
@@ -581,7 +581,7 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: "{{url('bencana/delete')}}/" + id,
+                        url: "{{url('rumahRusak/delete')}}/" + id,
                         data: {
                             _token: CSRF_TOKEN
                         },
