@@ -37,9 +37,12 @@ class KepulanganController extends Controller
             'bencana.jmlPosko',
             DB::raw('count(int.png_id) as ttlPengungsi'),
             DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
-             ' ',bencana.kelurahan) as alamat")
+             ' ',bencana.kelurahan) as alamat"),
+            DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL THEN 1 END) as jumlahRumahRusak")
         )
             ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
+            // ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
+
             ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
             ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
             ->orderBy('bencana.tanggal', 'desc')
@@ -83,8 +86,57 @@ class KepulanganController extends Controller
 
         $ttlPeng = $getTtlPengungsi->count();
 
+        $pengungsi = Pengungsi::select(
+            DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
+            Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+            Daerah ',kpl.detail,' ')
+        as lokasi"),
+            DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+            Daerah ',kpl.detail,' ')
+        as lokKel"),'kpl.detail',
+            'pengungsi.nama',
+            'pengungsi.id as idPengungsi',
+            'int.kpl_id',
+            'statKel',
+            'telpon',
+            'gender',
+            'umur',
+            'statPos',
+            'int.posko_id as idPospeng',
+            'statKon',
+            'pengungsi.created_at as tglMasuk',
+            'p.id as idPosko',
+            'p.nama as namaPosko',
+            'kpl.id as idKepala',
+            'kpl.nama as namaKepala',
+            'kpl.provinsi as provinsi',
+            'kpl.kota as kota',
+            'kpl.kecamatan as kecamatan',
+            'kpl.kelurahan as kelurahan',
+            'kpl.detail as detail',
+        )
+            ->join('integrasi as int','int.png_id','=','pengungsi.id')
+            ->join('posko as p', 'p.id','=','int.posko_id')
+            ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+            // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
+            // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
+            // ->where('int.posko_id', $request->id)
+            ->orderBy('int.kpl_id', 'desc')
+            ->distinct()
+            // model paginate agar banyak paginate bisa muncul dalam 1 page
+            ->get();
+
+        $getPosko = Posko::select('*','int.bencana_id as idBencana','int.posko_id as idPosko')
+        ->join('integrasi as int','int.posko_id','=','posko.id')
+        ->join('bencana as b','b.id','=','int.bencana_id')
+        ->distinct()
+        ->where('b.status','=',3)
+        ->get();
+
         // return view('admin.bencana.index', ['data'=>$bencana]);
         return view('admin.kepulangan.index', [
+            'pengungsi' => $pengungsi,
+            'posko' => $getPosko,
             'data2' => $bencana2,
             'data' => $bencana,
             'ttlPengungsi' => $ttlPeng,
@@ -99,37 +151,38 @@ class KepulanganController extends Controller
         //Memberikan nilai pada idBencana
         session()->put('idBencana', $id);
 
-        $posko = Posko::select(
-            DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,', Kec. ',
-            b.kecamatan,', Ds. ',b.kelurahan, ' ',posko.detail)
-            as lokasi"),
-            'posko.id as idPosko',
-            'posko.detail',
-            'int.user_id as idTrc',
-            'posko.nama as namaPosko',
-            'kapasitas',
-            'int.bencana_id',
-            'b.id as idBencana',
-            DB::raw("concat(u.firstname,' ',u.lastname) as fullName"), 'u.id as idAdmin','u.firstname',
-            'posko.created_at',
-            'posko.updated_at',
-            'b.nama as namaBencana',
-            'b.jmlPosko as jmlPosko',
-            DB::raw('count(int.png_id) as ttlPengungsi'),
-            'posko.namaPosko as namaSamaran'
-            // 'kr.namaPosko as namaSamaran'
-        )
-            ->join('integrasi as int','int.posko_id','=','posko.id')
-            ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
-            ->join('bencana as b', 'int.bencana_id', '=', 'b.id')
-            // ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
-            ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
-            ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'posko.id'
-                , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
-                'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail','b.jmlPosko','posko.namaPosko')
-            ->where('int.bencana_id', $id)
-            ->orderBy('u.id', 'desc')
-            ->paginate(5);
+            $posko = Posko::select(
+                DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,', Kec. ',
+                b.kecamatan,', Ds. ',b.kelurahan, ' ',posko.detail)
+                as lokasi"),
+                'posko.id as idPosko',
+                'posko.detail',
+                'int.user_id as idTrc',
+                'posko.nama as namaPosko',
+                'kapasitas',
+                'int.bencana_id',
+                'b.id as idBencana',
+                DB::raw("concat(u.firstname,' ',u.lastname) as fullName"), 'u.id as idAdmin','u.firstname',
+                'posko.created_at',
+                'posko.updated_at',
+                'b.nama as namaBencana',
+                'b.jmlPosko as jmlPosko',
+                DB::raw('count(int.png_id) as ttlPengungsi'),
+                'posko.namaPosko as namaSamaran',
+                DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL THEN 1 END) as jumlahRumahRusak"),
+                // 'kr.namaPosko as namaSamaran'
+            )
+                ->join('integrasi as int','int.posko_id','=','posko.id')
+                ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
+                ->join('bencana as b', 'int.bencana_id', '=', 'b.id')
+                // ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
+                ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
+                ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'posko.id'
+                    , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
+                    'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail','b.jmlPosko','posko.namaPosko')
+                ->where('int.bencana_id', $id)
+                ->orderBy('u.id', 'desc')
+                ->paginate(5);
 
         $trc = User::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
         'users.id as idAdmin', 'lastname')
@@ -660,6 +713,70 @@ class KepulanganController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function createRumah(Request $request)
+    {
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            // $request->validate([
+            //     'namaDepan' => ['required', 'max:50'],
+            //     'namaBelakang' => ['required', 'max:50'],
+            //     'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
+            // ]);
+            $request->validate([
+                'picRumah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Bisa upload sampai 5MB
+            ]);
+            $selectedIds = $request->carinama;
+            foreach ($selectedIds as $id) {
+                $addRumah = new KondisiRumah;
+                $addRumah->tanggal = $request->tanggal;
+                $addRumah->waktu = $request->waktu;
+                $addRumah->idPengungsi = $id;
+                    if ($request->hasFile('picRumah')) {
+                        $file = $request->file('picRumah');
+                        $extension = $file->getClientOriginalExtension();
+                        $filename = time().'.'.$extension; // Nama unik untuk file
+
+                        // Cek ukuran file sebelum diproses
+                        if ($file->getSize() > 2048000) { // Jika lebih dari 2MB
+                            $image = Image::make($file)->resize(1024, null, function ($constraint) {
+                                $constraint->aspectRatio();
+                            })->encode('jpg', 75); // Kualitas 75% untuk kompresi
+                            $image->save(public_path('storage/images/') . $filename);
+                            // $file->storeAs('public/images', $filename);
+                        } else {
+                            // Simpan gambar tanpa kompresi jika sudah di bawah 2MB
+                            $file->move(public_path('storage/images'), $filename);
+                            // $image->save(public_path('storage/images/') . $filename);
+                        }
+
+                        // $file->move('images/', $filename);
+                        // $file->storeAs('public/images', $filename);
+                        $addRumah->picRumah = $filename;
+                    }
+                $addRumah->status = $request->status;
+                $addRumah->save();
+
+                $getIdPengungsi = KondisiRumah::select('idPengungsi')->orderBy('id', 'desc')->value('idPengungsi');
+                $getIdKondisiRumah = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
+    
+                Integrasi::where('png_id', $getIdPengungsi)
+                ->update([
+                 'kondisiRumah_id'=> $getIdKondisiRumah,
+                 'updated_at' => Carbon::now(),
+                 ]);
+    
+            }
+
+            Alert::success('Success', 'Data berhasil ditambahkan');
+            return back();
+        }
+        return back();
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createRumahinBencana(Request $request)
     {
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $request->validate([

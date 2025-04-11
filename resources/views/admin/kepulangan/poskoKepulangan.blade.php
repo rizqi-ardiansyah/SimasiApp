@@ -203,32 +203,13 @@
                                     <!-- <td>{{ $posko->created_at}}</td>
                                     <td>{{ $posko->updated_at}}</td> -->
                                     <td>
-                                        {{ $posko->null }} rumah rusak
+                                        {{ $posko->jumlahRumahRusak }} kondisi
                                         <a href="{{url('/rumahRusak')}}/<?php echo $posko->idPosko; ?>/<?php echo $posko->bencana_id; ?>/<?php echo $posko->idTrc; ?>"class="btn btn-primary btn-xs" title="Lihat rumah rusak"><i class="fas fa-eye"></i> Detail</a>
                                     </td>
                                     <td>
                                         {{ $posko->null }} area rusak
                                         <a href="{{url('/listPosko')}}/<?php echo $posko->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Detail</a>
                                     </td>
-                                    <!-- <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                                                <i class="fas fa-bars"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                                <a href="#" class="dropdown-item " title="Edit Posko" data-toggle="modal" data-target="#modal-edit-{{$posko->idPosko}}">
-                                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                                                    </svg>
-                                                    Edit
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Posko" onclick="deleteConfirmation({{$posko->idPosko}})">
-                                                    <i class="fas fa-trash mr-1"></i> Hapus
-                                                </a> -->
-                                                <!-- /.modal-dialog -->
-                                            <!-- </div>
-                                    </td> -->
                                 </tr>
                                 @endforeach
                                 @endrole

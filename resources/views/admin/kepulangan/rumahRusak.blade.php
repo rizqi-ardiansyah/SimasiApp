@@ -122,7 +122,7 @@
                                                 });
                                             </script>
 
-                                              <!-- script form status keluarga -->
+                                              <!-- script form jika tidak ada -->
                                               <script type="text/javascript">
                                                 function showifEmpty(selects) {
                                                     console.log(selects);
