@@ -38,7 +38,8 @@ class KepulanganController extends Controller
             DB::raw('count(int.png_id) as ttlPengungsi'),
             DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
              ' ',bencana.kelurahan) as alamat"),
-            DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL THEN 1 END) as jumlahRumahRusak")
+            DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL THEN 1 END) as jumlahRumahRusak"),
+            DB::raw('MIN(int.user_id) as trc_id') 
         )
             ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
             // ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
@@ -245,7 +246,7 @@ class KepulanganController extends Controller
         as lokasi"),'kpl.anggota','kpl.detail','integrasi.png_id','integrasi.kondisiRumah_id','p.nama as namaPengungsi',
         DB::raw("concat(kr.tanggal,' ',kr.waktu) as ketWaktu"), DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
         Daerah ',kpl.detail,' ') as lokKel"),'kr.picRumah','kr.status','kr.updated_at','kr.id as idKr','kr.tanggal','kr.waktu')
-            ->join('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
+            ->leftJoin('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
             ->join('pengungsi as p','p.id','=','integrasi.png_id')
             ->join('bencana as b','b.id','=','integrasi.bencana_id')
             ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
@@ -728,7 +729,38 @@ class KepulanganController extends Controller
                 $addRumah = new KondisiRumah;
                 $addRumah->tanggal = $request->tanggal;
                 $addRumah->waktu = $request->waktu;
-                $addRumah->idPengungsi = $id;
+                // $addRumah->idPengungsi = $id;
+
+                if ($id == 0) {
+                    // Jika user memilih "Tidak ada", maka isi nama dan alamat manual
+                    $addPengungsi = new Pengungsi;
+                    $addPengungsi->nama = $request->namaPemilikBaru;
+                    $addPengungsi->alamat = $request->alamatPemilikBaru;
+                    $addPengungsi->telpon = null;
+                    $addPengungsi->statKel = null;
+                    $addPengungsi->gender = null;
+                    $addPengungsi->umur = null;
+                    $addPengungsi->statPos = null;
+                    $addPengungsi->statKon = null;
+                    $addPengungsi->save();
+
+                    $getIdPengungsiBaru = Pengungsi::select('id')->orderBy('id', 'desc')->value('id');
+                    $addRumah->idPengungsi = $getIdPengungsiBaru;
+
+                    $addIntegrasi = new Integrasi;
+                    $addIntegrasi->kpl_id  = null;
+                    $addIntegrasi->png_id  = $getIdPengungsiBaru;
+                    $addIntegrasi->posko_id  = $request->posko_id;
+                    $addIntegrasi->bencana_id  = $request->bencana_id;
+                    $addIntegrasi->user_id  = $request->trc_id;
+                    $addIntegrasi->save();
+                    // $addRumah->nama = $request->namaPemilikBaru;
+                    // $addRumah->alamat = $request->alamatPemilikBaru;
+                    // $addRumah->idPengungsi = null; // atau biarkan null jika tidak berkaitan dengan tabel pengungsi
+                } else {
+                    $addRumah->idPengungsi = $id;
+                }
+
                     if ($request->hasFile('picRumah')) {
                         $file = $request->file('picRumah');
                         $extension = $file->getClientOriginalExtension();
@@ -754,6 +786,7 @@ class KepulanganController extends Controller
                 $addRumah->status = $request->status;
                 $addRumah->save();
 
+                
                 $getIdPengungsi = KondisiRumah::select('idPengungsi')->orderBy('id', 'desc')->value('idPengungsi');
                 $getIdKondisiRumah = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
     
@@ -764,6 +797,21 @@ class KepulanganController extends Controller
                  ]);
     
             }
+
+            // if($selectedIds == 0){
+            //     $addPengungsi = new Pengungsi;
+            //     $addPengungsi->nama = $request->namaPemilikBaru;
+            //     $addPengungsi->alamat = $request->alamatPemilikBaru;
+            //     $addPengungsi->telpon = null;
+            //     $addPengungsi->statKel = null;
+            //     $addPengungsi->gender = null;
+            //     $addPengungsi->umur = null;
+            //     $addPengungsi->statPos = null;
+            //     $addPengungsi->statKon = null;
+            //     $addPengungsi->save();                
+
+            //     $getIdPengungsi = Pengungsi::select('id')->orderBy('id', 'desc')->value('id');
+            // }
 
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();

@@ -438,6 +438,9 @@ window.onload = function() {
                                                 <form action="{{ route('rumahRusak.create') }}" method="post" enctype="multipart/form-data">
                                                     @csrf
                                                     <div class="card-body">
+                                                        <!-- <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required> -->
+                                                        <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{$detail->idBencana}}" hidden required>
+                                                        <input type="text" class="form-control" id="trc_id" name="trc_id" value="{{$detail->trc_id}}" hidden required>
 
                                                         <div class="form-group">
                                                             <label for="exampleInputPosko">Tanggal</label>
@@ -452,7 +455,7 @@ window.onload = function() {
                                                         <div class="form-group">
                                                         <label for="exampleInputPosko">Posko</label>
                                                        <!-- Dropdown Posko -->
-                                                    <select id="poskoSelect-{{$detail->idBencana}}" name="namaPosko" class="form-control">
+                                                        <select id="poskoSelect-{{$detail->idBencana}}" name="posko_id" class="form-control">
                                                         <option value="" disabled selected>Pilih Posko</option>
                                                         @php $namaPoskoUnik = []; @endphp
                                                         @foreach ($posko as $poskos)

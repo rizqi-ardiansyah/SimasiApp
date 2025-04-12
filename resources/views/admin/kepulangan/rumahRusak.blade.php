@@ -71,6 +71,9 @@
                                     <form action="{{ route('rumahRusak.create') }}" method="post"  enctype="multipart/form-data">
                                         @csrf
                                         <div class="card-body">
+                                            <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
+                                            <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->bencana_id}}" hidden required>
+                                            <input type="text" class="form-control" id="trc_id" name="trc_id" value="{{request()->trc_id}}" hidden required>
 
                                             <div class="form-group">
                                                 <label for="exampleInputPosko">Tanggal</label>

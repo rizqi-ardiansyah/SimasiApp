@@ -24,4 +24,10 @@ class Bencana extends Model
         'jmlPengungsi',
         'status',
     ];
+
+    public function integrasi()
+{
+    return $this->hasMany(\App\Models\Integrasi::class, 'bencana_id');
+}
+
 }

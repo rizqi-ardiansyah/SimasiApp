@@ -186,9 +186,7 @@
                                                     <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
                                                 </div>
                                             </div>
-
-                       
-
+                                            
                                             <div class="form-group">
                                                 <label for="gender">Jenis Kelamin</label>
                                                 <select class="form-control" id="gender" name="gender" required>

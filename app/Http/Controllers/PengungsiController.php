@@ -772,14 +772,14 @@ class PengungsiController extends Controller
                     'detail' => $request->detail,
                 ]);
                     Pengungsi::create([
-                        'nama' => $request->nama,
-                        'telpon' => $request->telpon,
-                        'statKel' => $request->statKel,
-                        'gender' => $request->gender,
-                        'umur' => $request->umur,
-                        'statPos' => $request->statPos,
-                        // 'posko_id' => $request->posko_id,
-                        'statKon' => $request->statKon,
+                            'nama' => $request->nama,
+                            'telpon' => $request->telpon,
+                            'statKel' => $request->statKel,
+                            'gender' => $request->gender,
+                            'umur' => $request->umur,
+                            'statPos' => $request->statPos,
+                            // 'posko_id' => $request->posko_id,
+                            'statKon' => $request->statKon,
                     ]);
                     Integrasi::create([
                         'bencana_id' => $request->bencana_id,
