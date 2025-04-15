@@ -84,6 +84,9 @@ Route::match(['get', 'post'], 'rumahRusak/edit/{id}', [KepulanganController::cla
 Route::post('rumahRusak/delete/{id}', [KepulanganController::class, 'delete']);
 Route::get('/poskoKepulangan/{id}', [KepulanganController::class, 'poskoKepulangan']);
 
+Route::get('/kondisiSekitar/{bencana_id}', [KepulanganController::class, 'kondisiSekitar']);
+Route::post('kondisiSekitar/create', [KepulanganController::class, 'createKondisi'])->name('kondisiSekitar.create');
+
 Route::get('/listPengungsi/{id}/{bencana_id}/{trc_id}', [PengungsiController::class, 'index']);
 Route::post('pengungsi/create', [PengungsiController::class, 'createPengungsi'])->name('pengungsi.create');
 Route::match(['get', 'post'], 'pengungsi/edit/{id}', [PengungsiController::class, 'edit']);

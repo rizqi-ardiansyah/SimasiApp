@@ -17,6 +17,8 @@ class Integrasi extends Model
         'posko_id',
         'bencana_id',
         'user_id',
+        'kondisiRumah_id',
+        'kondisiSekitar_id',
         'created_at',
         'updated_at'
     ];

@@ -207,8 +207,8 @@
                                         <a href="{{url('/rumahRusak')}}/<?php echo $posko->idPosko; ?>/<?php echo $posko->bencana_id; ?>/<?php echo $posko->idTrc; ?>"class="btn btn-primary btn-xs" title="Lihat rumah rusak"><i class="fas fa-eye"></i> Detail</a>
                                     </td>
                                     <td>
-                                        {{ $posko->null }} area rusak
-                                        <a href="{{url('/listPosko')}}/<?php echo $posko->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Detail</a>
+                                        {{ $posko->null }} kondisi
+                                        <a href="{{url('/kondisiSekitar')}}/<?php echo $posko->idPosko; ?>/<?php echo $posko->bencana_id; ?>/<?php echo $posko->idTrc; ?>" class="btn btn-primary btn-xs" title="Lihat kondisi sekitar"><i class="fas fa-eye"></i> Detail</a>
                                     </td>
                                 </tr>
                                 @endforeach

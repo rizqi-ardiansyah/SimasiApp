@@ -171,9 +171,8 @@ window.onload = function() {
                                         <a href="#" class="btn btn-primary btn-xs" title="Tmbah kondisi" data-toggle="modal" data-target="#modal-tambah-{{$bencana->idBencana}}" style="font-size: 14px;"><i class="fas fa-plus"></i> Tambah</a>
                                     </td>
                                     <td>
-                                        {{ $bencana->null }} area rusak
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Detail</a>
-                                    </td>
+                                        {{ $bencana->null }} kondisi
+                                        <a href="{{url('/kondisiSekitar')}}/<?php echo $bencana->idBencana;?>" class="btn btn-primary btn-xs" title="Lihat kondisi sekitar"><i class="fas fa-eye"></i> Detail</a>                                    </td>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)
@@ -348,15 +347,15 @@ window.onload = function() {
 
 
 
-    function showDivs(selects, id) {
-        const formAlamat = document.getElementById("formAlamatt-" + id);
+                                                function showDivs(selects, id) {
+                                                    const formAlamat = document.getElementById("formAlamatt-" + id);
 
-        if (selects.value == 0) {
-            formAlamat.style.display = "none";
-        } else if (selects.value == 1 || selects.value == 2) {
-            formAlamat.style.display = "block";
-        }
-    }
+                                                    if (selects.value == 0) {
+                                                        formAlamat.style.display = "none";
+                                                    } else if (selects.value == 1 || selects.value == 2) {
+                                                        formAlamat.style.display = "block";
+                                                    }
+                                                }
                                             </script>
                                             <!-- end -->
 

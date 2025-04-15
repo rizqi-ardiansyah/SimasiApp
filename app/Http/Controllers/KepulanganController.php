@@ -10,6 +10,7 @@ use App\Models\KepalaKeluarga;
 use App\Models\Integrasi;
 use App\Models\User;
 use App\Models\KondisiRumah;
+use App\Models\KondisiSekitar;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -326,16 +327,6 @@ class KepulanganController extends Controller
             'bencana.kecamatan', 'bencana.kelurahan', 'bencana.jmlPosko', 'bencana.jmlPengungsi')
         ->paginate(5);
 
-    $getTtlPengungsi = Posko::select('*')
-    // ->join('bencana as b', 'posko.bencana_id', '=', 'b.id')
-        ->join('integrasi as int', 'int.posko_id', '=', 'posko.id')
-        ->join('bencana as b', 'b.id', '=', 'int.bencana_id')
-    // ->join('pengungsi as p', 'posko.id', '=', 'p.posko_id')
-        ->where('int.bencana_id', '=', 3)
-        ->get();
-
-    $ttlPeng = $getTtlPengungsi->count();
-
     $pengungsi = Pengungsi::select(
         DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
         Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
@@ -385,11 +376,151 @@ class KepulanganController extends Controller
         'namaPosko' => $posko->namaPosko,
         'data2' => $bencana,
         'data' => $bencana,
-        'ttlPengungsi' => $ttlPeng,
     ]);
     }
 
-    // $data = Provinces::where('name', 'LIKE', '%'.request('q').'%')->paginate(10);
+    public function kondisiSekitar(Request $request, $id)
+    {
+        $kondisiSekitar = Integrasi::select('integrasi.kpl_id','kpl.nama',
+        DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,',
+            Kec. ',b.kecamatan,', Ds. ',b.kelurahan,',
+             Daerah ',kpl.detail,' ','')
+        as lokasi"),'kpl.anggota','kpl.detail','integrasi.png_id','integrasi.kondisiSekitar_id','p.nama as namaPengungsi',
+        DB::raw("concat(kr.tanggal,' ',kr.waktu) as ketWaktu"), DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+        Daerah ',kpl.detail,' ') as lokKel"),'kr.picLokasi','kr.status','kr.updated_at','kr.id as idKr','kr.tanggal','kr.waktu')
+            ->leftJoin('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
+            ->join('pengungsi as p','p.id','=','integrasi.png_id')
+            ->join('bencana as b','b.id','=','integrasi.bencana_id')
+            ->join('kondisi_sekitar as kr','kr.id','=','integrasi.kondisiSekitar_id')
+            ->where('integrasi.bencana_id', '=', $request->bencana_id)
+            // ->where('p.statkel','=',0)
+            // ->distinct()
+            ->groupBy(
+                'integrasi.id',
+                'integrasi.kpl_id',
+                'integrasi.png_id',
+                'integrasi.posko_id',
+                'integrasi.bencana_id',
+                'integrasi.user_id',
+                'kpl.id',
+                'kpl.anggota',
+                'kpl.nama',
+                'b.provinsi',
+                'b.kota',
+                'b.kecamatan',
+                'b.kelurahan',
+                'kpl.detail',
+                'kpl.created_at',
+                'kpl.updated_at',
+                'kpl.detail',
+                'integrasi.kondisiSekitar_id',
+                'p.nama','kr.tanggal','kr.waktu','kpl.provinsi','kpl.kota','kpl.kecamatan','kpl.kelurahan','kpl.detail',
+                'kr.picLokasi','kr.status','kr.updated_at','kr.id'
+            )
+            
+            ->paginate(5);
+
+
+        $bencana = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
+        'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
+        'bencana.nama as namaBencana', 'status',
+        'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
+        'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+        // DB::raw('count(int.png_id) as ttlPengungsi'),
+        //  DB::raw('count(int.posko_id) as ttlPosko'),
+        'bencana.jmlPosko',
+        DB::raw('count(int.png_id) as ttlPengungsi'),
+        DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
+         ' ',bencana.kelurahan) as alamat"), 
+    )
+        ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
+        ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
+        ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
+        ->orderBy('bencana.tanggal', 'desc')
+        ->distinct()
+        ->where('bencana.id', $request->bencana_id)
+    // ->where('p.bencana_id', '=', 'b.id')
+    // ->where('peng.posko_id','=','p.id')
+        ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
+            'bencana.nama', 'status', 'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+            'bencana.updated_at', 'bencana.jmlPengungsi', 'bencana.jmlPosko')
+        ->paginate(5);
+
+    // $getIdBencana = Bencana::where('id',$bencana)->value('id');
+
+    $bencana2 = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
+        'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
+        'bencana.nama as namaBencana', 'status',
+        'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'int.user_id as trc',
+        DB::raw('count(int.bencana_id) as ttlPosko'), DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',
+        bencana.kecamatan,',',' ',bencana.kelurahan) as alamat"), 'bencana.jmlPosko', 'bencana.jmlPengungsi'
+
+        //  DB::raw('count(p.id) as ttlPengungsi')
+    )
+    // ->join('posko AS p', 'bencana.id', '=', 'p.bencana_id')
+        ->join('integrasi AS int', 'bencana.id', '=', 'int.bencana_id')
+    // ->join('pengungsi as peng','peng.posko_id','=','p.id')
+        ->orderBy('bencana.tanggal', 'desc')
+        ->distinct()
+    // ->where('p.bencana_id', '=', 'b.id')
+        ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
+            'bencana.nama', 'status', 'bencana.updated_at', 'int.user_id', 'bencana.provinsi', 'bencana.kota',
+            'bencana.kecamatan', 'bencana.kelurahan', 'bencana.jmlPosko', 'bencana.jmlPengungsi')
+        ->paginate(5);
+
+    $pengungsi = Pengungsi::select(
+        DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
+        Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+        Daerah ',kpl.detail,' ')
+    as lokasi"),
+        DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+        Daerah ',kpl.detail,' ')
+    as lokKel"),'kpl.detail',
+        'pengungsi.nama',
+        'pengungsi.id as idPengungsi',
+        'int.kpl_id',
+        'statKel',
+        'telpon',
+        'gender',
+        'umur',
+        'statPos',
+        'int.posko_id as idPospeng',
+        'statKon',
+        'pengungsi.created_at as tglMasuk',
+        'p.id as idPosko',
+        'p.nama as namaPosko',
+        'kpl.id as idKepala',
+        'kpl.nama as namaKepala',
+        'kpl.provinsi as provinsi',
+        'kpl.kota as kota',
+        'kpl.kecamatan as kecamatan',
+        'kpl.kelurahan as kelurahan',
+        'kpl.detail as detail',
+    )
+        ->join('integrasi as int','int.png_id','=','pengungsi.id')
+        ->join('posko as p', 'p.id','=','int.posko_id')
+        ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+        // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
+        // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
+        ->where('int.bencana_id', $request->bencana_id)
+        ->orderBy('int.kpl_id', 'desc')
+        ->distinct()
+        // model paginate agar banyak paginate bisa muncul dalam 1 page
+        ->paginate(10, ['*'], 'p');
+
+    $posko = DB::table('posko')->find($id);
+
+    $namaBencana = Bencana::where('id', $request->id)->value('nama');
+
+    // return view('admin.bencana.index', ['data'=>$bencana]);
+    return view('admin.kepulangan.kondisiSekitar', [
+        'kondisiSekitar' => $kondisiSekitar,
+        'pengungsi' => $pengungsi,
+        'namaPosko' => $posko->namaPosko,
+        'data' => $bencana,
+        'namaBencana' => $namaBencana,
+    ]);
+    }
 
 
     public function getData(Request $request)
@@ -788,6 +919,7 @@ class KepulanganController extends Controller
 
                 
                 $getIdPengungsi = KondisiRumah::select('idPengungsi')->orderBy('id', 'desc')->value('idPengungsi');
+                // $getIdPengungsi = $id;
                 $getIdKondisiRumah = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
     
                 Integrasi::where('png_id', $getIdPengungsi)
@@ -797,97 +929,12 @@ class KepulanganController extends Controller
                  ]);
     
             }
-
-            // if($selectedIds == 0){
-            //     $addPengungsi = new Pengungsi;
-            //     $addPengungsi->nama = $request->namaPemilikBaru;
-            //     $addPengungsi->alamat = $request->alamatPemilikBaru;
-            //     $addPengungsi->telpon = null;
-            //     $addPengungsi->statKel = null;
-            //     $addPengungsi->gender = null;
-            //     $addPengungsi->umur = null;
-            //     $addPengungsi->statPos = null;
-            //     $addPengungsi->statKon = null;
-            //     $addPengungsi->save();                
-
-            //     $getIdPengungsi = Pengungsi::select('id')->orderBy('id', 'desc')->value('id');
-            // }
-
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
         }
         return back();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function createRumahinBencana(Request $request)
-    {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            // $request->validate([
-            //     'namaDepan' => ['required', 'max:50'],
-            //     'namaBelakang' => ['required', 'max:50'],
-            //     'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
-            // ]);
-            $request->validate([
-                'picRumah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Bisa upload sampai 5MB
-            ]);
-            $selectedIds = $request->carinama;
-            foreach ($selectedIds as $id) {
-                $addRumah = new KondisiRumah;
-                $addRumah->tanggal = $request->tanggal;
-                $addRumah->waktu = $request->waktu;
-                $addRumah->idPengungsi = $id;
-                if ($request->hasFile('picRumah')) {
-                    $file = $request->file('picRumah');
-                    $extension = $file->getClientOriginalExtension();
-                    $filename = time().'.'.$extension; // Nama unik untuk file
-
-                     // Cek ukuran file sebelum diproses
-                    if ($file->getSize() > 2048000) { // Jika lebih dari 2MB
-                        $image = Image::make($file)->resize(1024, null, function ($constraint) {
-                            $constraint->aspectRatio();
-                        })->encode('jpg', 75); // Kualitas 75% untuk kompresi
-                        $image->save(public_path('storage/images/') . $filename);
-                        // $file->storeAs('public/images', $filename);
-                    } else {
-                        // Simpan gambar tanpa kompresi jika sudah di bawah 2MB
-                        $image->save(public_path('storage/images/') . $filename);
-                    }
-
-                    // $file->move('images/', $filename);
-                    // $file->storeAs('public/images', $filename);
-                    $addRumah->picRumah = $filename;
-                }
-                $addRumah->status = $request->status;
-                $addRumah->save();
-
-                $getIdPengungsi = KondisiRumah::select('idPengungsi')->orderBy('id', 'desc')->value('idPengungsi');
-                $getIdKondisiRumah = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
-    
-                Integrasi::where('png_id', $getIdPengungsi)
-                ->update([
-                 'kondisiRumah_id'=> $getIdKondisiRumah,
-                 'updated_at' => Carbon::now(),
-                 ]);
-    
-            }
-
-            Alert::success('Success', 'Data berhasil ditambahkan');
-            return back();
-        }
-        return back();
-    }
-
-        /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function editRumahRusak(Request $request, $id)
     {
         $editRumah = KondisiRumah::where('id', $id)->first();
@@ -954,6 +1001,124 @@ class KepulanganController extends Controller
             return back();
         }
         return redirect()->back();
+    }
+
+    public function createKondisi(Request $request)
+    {
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            // $request->validate([
+            //     'namaDepan' => ['required', 'max:50'],
+            //     'namaBelakang' => ['required', 'max:50'],
+            //     'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
+            // ]);
+            $request->validate([
+                'picLokasi' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Bisa upload sampai 5MB
+            ]);
+            $selectedIds = $request->cariAlamat;
+            foreach ($selectedIds as $id) {
+                $addKondisi = new KondisiSekitar;
+                $addKondisi->tanggal = $request->tanggal;
+                $addKondisi->waktu = $request->waktu;
+                $addKondisi->alamat = null;
+                // $addKondisi->idKepala = $request->idKepala;
+                // $addRumah->idPengungsi = $id;
+
+                if ($id == 0) {
+                    // Jika user memilih "Tidak ada", maka isi nama dan alamat manual
+                    // $addKondisi = new ;
+                    $addKondisi->alamat = $request->alamatBaru;
+                    $addKondisi->idKepala = null;
+                    // $addPengungsi->alamat = $request->alamatPemilikBaru;
+                    // $addKondisisi->picLokasi = null;
+
+                    // $addKondisi->keterangan = null;
+                    // $addPengungsi->gender = null;
+                    // $addPengungsi->umur = null;
+                    // $addPengungsi->statPos = null;
+                    // $addPengungsi->statKon = null;
+                    // $addPengungsi->save();
+
+                    // $getIdPengungsiBaru = Pengungsi::select('id')->orderBy('id', 'desc')->value('id');
+                    // $addRumah->idPengungsi = $getIdPengungsiBaru;
+
+                    $addIntegrasi = new Integrasi;
+                    $addIntegrasi->kpl_id  = null;
+                    $addIntegrasi->png_id  = null;
+                    $addIntegrasi->posko_id  = null;
+                    $addIntegrasi->bencana_id  = $request->bencana_id;
+                    $addIntegrasi->user_id  = null;
+                    $addIntegrasi->kondisiRumah_id  = null;
+                    $addIntegrasi->kondisiSekitar_id  = null;
+                    $addIntegrasi->save();
+                    // $addRumah->nama = $request->namaPemilikBaru;
+                    // $addRumah->alamat = $request->alamatPemilikBaru;
+                    // $addRumah->idPengungsi = null; // atau biarkan null jika tidak berkaitan dengan tabel pengungsi
+                } else {
+                    $addKondisi->idKepala = $id;
+                }
+
+                    if ($request->hasFile('picLokasi')) {
+                        $file = $request->file('picLokasi');
+                        $extension = $file->getClientOriginalExtension();
+                        $filename = time().'.'.$extension; // Nama unik untuk file
+
+                        // Cek ukuran file sebelum diproses
+                        if ($file->getSize() > 2048000) { // Jika lebih dari 2MB
+                            $image = Image::make($file)->resize(1024, null, function ($constraint) {
+                                $constraint->aspectRatio();
+                            })->encode('jpg', 75); // Kualitas 75% untuk kompresi
+                            $image->save(public_path('storage/images/') . $filename);
+                            // $file->storeAs('public/images', $filename);
+                        } else {
+                            // Simpan gambar tanpa kompresi jika sudah di bawah 2MB
+                            $file->move(public_path('storage/images'), $filename);
+                            // $image->save(public_path('storage/images/') . $filename);
+                        }
+
+                        // $file->move('images/', $filename);
+                        // $file->storeAs('public/images', $filename);
+                        $addKondisi->picLokasi = $filename;
+                    }
+                $addKondisi->status = $request->status;
+                $addKondisi->keterangan = $request->keterangan;
+                $addKondisi->save();
+
+                
+                // $getIdIntgerasi = KondisiSekitar::select('idKepala')->orderBy('id', 'desc')->value('idKepala');
+                // $getIdKpl = $id;
+                // $getIdKondisiSekitar = kondisiSekitar::select('id')->orderBy('id', 'desc')->value('id');
+    
+                // Integrasi::where('kpl_id', $id)
+                // ->update([
+                //  'kondisiSekitar_id'=> $getIdKondisiSekitar,
+                //  'updated_at' => Carbon::now(),
+                //  ]);
+
+                $lastKondisiSekitar = KondisiSekitar::orderBy('id', 'desc')->first();
+
+                if ($lastKondisiSekitar->idKepala != null) {
+                    // Jika kpl_id tidak null → update berdasarkan kpl_id
+                    Integrasi::where('kpl_id', $lastKondisiSekitar->idKepala)
+                        ->update([
+                            'kondisiSekitar_id' => $lastKondisiSekitar->id,
+                            'updated_at' => Carbon::now(),
+                        ]);
+                } else {
+                    // Jika kpl_id null → insert baris baru ke tabel Integrasi
+                    Integrasi::create([
+                        'kondisiSekitar_id' => $lastKondisiSekitar->id,
+                        'bencana_id' =>  $request->bencana_id,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                        // tambahkan field lain yang wajib diisi (jika ada)
+                    ]);
+                }
+    
+            }
+            Alert::success('Success', 'Data berhasil ditambahkan');
+            return back();
+        }
+        return back();
     }
 
     /**

@@ -7,14 +7,14 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Kondisi Rumah Pengungsi</h1>
+                <h1>Kondisi Sekitar Bencana</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
                     <li class="breadcrumb-item"><a href="#">Bencana</a></li>
                     <li class="breadcrumb-item"><a href="#">Posko</a></li>
-                    <li class="breadcrumb-item active">Daftar Rumah Rusak</a></li>
+                    <li class="breadcrumb-item active">Kondisi Sekitar Bencana</a></li>
                 </ol>
             </div>
         </div>
@@ -27,7 +27,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header justify-content-between">
-                        <h3 class="card-title">Daftar rumah rusak pada posko <b>{{ $namaPosko }}</b></h3>
+                        <h3 class="card-title">Kondisi sekitar bencana <b>{{ $namaBencana }}</b></h3>
                         <div class="card-tools">
                             @role('pusdalop')
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
@@ -68,12 +68,12 @@
                                 </div>
                                 <div class="modal-body">
                                     <!-- form start -->
-                                    <form action="{{ route('rumahRusak.create') }}" method="post"  enctype="multipart/form-data">
+                                    <form action="{{ route('kondisiSekitar.create') }}" method="post"  enctype="multipart/form-data">
                                         @csrf
                                         <div class="card-body">
-                                            <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
+                                            <!-- <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required> -->
                                             <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->bencana_id}}" hidden required>
-                                            <input type="text" class="form-control" id="trc_id" name="trc_id" value="{{request()->trc_id}}" hidden required>
+                                            <!-- <input type="text" class="form-control" id="trc_id" name="trc_id" value="{{request()->trc_id}}" hidden required> -->
 
                                             <div class="form-group">
                                                 <label for="exampleInputPosko">Tanggal</label>
@@ -105,15 +105,16 @@
                                             </style>
                                                 
                                             <div class="form-group">
-                                                <label for="exampleInputNama">Pilih pemilik</label>
-                                                <select class="form-controll js-example-basic-single" name="carinama[]" multiple="multiple" style="width: 100%;"
+                                                <label for="inputAlamat">Pilih alamat</label>
+                                                <select class="form-controll js-example-basic-single" name="cariAlamat[]" multiple="multiple" style="width: 100%;"
                                                 onchange="showifEmpty(this)">
-                                                <option value="" disabled>Pilih nama pengungsi</option>
-                                                        @foreach($pengungsi as $p)
-                                                        <option value="{{ $p->idPengungsi }}">{{ $p->nama }}({{ $p->lokKel }})</option>
-                                                        @php $cachePosko = $p->namaPosko; @endphp
-                                                        @endforeach
-                                                        <option value=0>Tidak ada</option>
+                                                <option value="" disabled>Pilih alamat</option>
+                                                @foreach($pengungsi->unique('lokKel') as $p)
+                                                    @if(!empty($p->lokKel))
+                                                    <option value="{{ $p->kpl_id }}">{{ $p->lokKel }}</option>
+                                                    @endif
+                                                @endforeach
+                                                <option value=0>Tidak ada</option>
                                                 </select>
                                             </div>
 
@@ -130,26 +131,26 @@
                                                 function showifEmpty(selects) {
                                                     console.log(selects);
                                                     if (selects.value != 0 || selects.value == "") {
-                                                        document.getElementById("formNama").style.display = "none";
+                                                        // document.getElementById("formNama").style.display = "none";
                                                         document.getElementById("formAlamat").style.display = "none";
                                                         // idForm_1.style.display = "block";
                                                         // idForm_2.style.display = "none";
                                                     } else if (selects.value == 0) {
                                                         document.getElementById("formAlamat").style.display = "block";
-                                                        document.getElementById("formNama").style.display = "block";
+                                                        // document.getElementById("formNama").style.display = "block";
                                                     }
                                                 }
                                             </script>
                                             <!-- end -->
 
-                                            <div class="form-group" id="formNama">
+                                            <!-- <div class="form-group" id="formNama">
                                                 <label for="nama">Masukkan Nama Pemilik</label>
                                                 <input type="text" class="form-control" id="nama" name="namaPemilikBaru" placeholder="Masukan nama pengungsi">
-                                            </div>
+                                            </div> -->
 
                                             <div class="form-group" id ="formAlamat">
                                                 <label for="alamat">Detail Alamat</label>
-                                                <input type="text" class="form-control" id="alamat" name="alamatPemilikBaru" placeholder="Masukan detail alamat pengungsi">
+                                                <input type="text" class="form-control" id="alamat" name="alamatBaru" placeholder="Masukan detail alamat pengungsi">
                                             </div>
                                                                                       
                                             <!-- <div class="form-group">
@@ -157,14 +158,14 @@
                                                 <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="Jawa Timur" required>
                                             </div> -->
 
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="exampleInputPosko">Posko Pengungsi</label>
                                                 <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan nama posko" name="namaPosko" value="{{$namaPosko}}" disabled>
-                                            </div>
+                                            </div> -->
 
                                             <div class="form-group">
-                                                <label for="exampleInputGambar">Upload Gambar Rumah</label>
-                                                <input type="file" class="form-control-file" id="exampleInputGambar" name="picRumah" required>
+                                                <label for="exampleInputGambar">Upload Kondisi Sekitar</label>
+                                                <input type="file" class="form-control-file" id="exampleInputGambar" name="picLokasi" required>
                                             </div>
 
                                             <div class="form-group" id ="keterangan">
@@ -212,9 +213,8 @@
                                 <tr>
                                     <!-- <th>No</th> -->
                                     <th>Tanggal Pemeriksaan</th>
-                                    <th>Nama Pemilik</th>
-                                    <th>Alamat Rumah</th>
-                                    <th>Gambar Rumah</th>
+                                    <th>Alamat</th>
+                                    <th>Gambar</th>
                                     <th>Status Kondisi</th>
                                     <th>Waktu Update</th>
                                     <th>Aksi</th>
@@ -226,8 +226,8 @@
                             <tbody id="result">
 
                                 @role('pusdalop')
-                                @foreach ($kondisiRumah as $key => $bencana)
-                                @if(empty($bencana->kondisiRumah_id))
+                                @foreach ($kondisiSekitar as $key => $bencana)
+                                @if(empty($bencana->kondisiSekitar_id))
                                     <p>Data kosong</p>
                                     // whatever you need to do here
                                 @else
@@ -239,13 +239,13 @@
                                     <td>{{ $bencana->lokKel }}</td>
 
                                     <td>
-                                        <img src="{{ asset('storage/images/' . $bencana->picRumah) }}" 
+                                        <img src="{{ asset('storage/images/' . $bencana->picLokasi) }}" 
                                             alt="Foto Pengungsi" 
                                             width="100" 
                                             class="img-thumbnail"
                                             data-toggle="modal" 
                                             data-target="#imageModal"
-                                            onclick="showImage('{{ asset('storage/images/' . $bencana->picRumah) }}')">
+                                            onclick="showImage('{{ asset('storage/images/' . $bencana->picLokasi) }}')">
                                     </td>
 
                                     <!-- Modal untuk menampilkan gambar -->
@@ -397,7 +397,7 @@
                                 @endforeach
                                 @endrole
 
-                                @foreach ($kondisiRumah as $detail)
+                                @foreach ($kondisiSekitar as $detail)
                                 <div class="modal fade" id="modal-edit-{{$detail->idKr}}">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
@@ -554,7 +554,7 @@
                     </tbody>
                     </table>
                     <br />
-                    {{ $kondisiRumah->links() }}
+                    {{ $kondisiSekitar->links() }}
                     <br />
                 </div>
 
