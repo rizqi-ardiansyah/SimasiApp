@@ -86,6 +86,8 @@ Route::get('/poskoKepulangan/{id}', [KepulanganController::class, 'poskoKepulang
 
 Route::get('/kondisiSekitar/{bencana_id}', [KepulanganController::class, 'kondisiSekitar']);
 Route::post('kondisiSekitar/create', [KepulanganController::class, 'createKondisi'])->name('kondisiSekitar.create');
+Route::match(['get', 'post'], 'kondisiSekitar/edit/{id}', [KepulanganController::class, 'editKondisiSekitar']);
+Route::post('kondisiSekitar/delete/{id}', [KepulanganController::class, 'deleteKondisiSekitar']);
 
 Route::get('/listPengungsi/{id}/{bencana_id}/{trc_id}', [PengungsiController::class, 'index']);
 Route::post('pengungsi/create', [PengungsiController::class, 'createPengungsi'])->name('pengungsi.create');

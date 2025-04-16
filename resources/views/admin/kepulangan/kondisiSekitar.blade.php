@@ -32,7 +32,8 @@
                             @role('pusdalop')
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="search" class="form-control float-right" placeholder="Search">
+                                    <input type="text" name="search" class="form-control float-right"
+                                        placeholder="Search">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -44,7 +45,8 @@
                             @role('trc')
                             <form id="searchForTrc">
                                 <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="searchForTrc" class="form-control float-right" placeholder="Search">
+                                    <input type="text" name="searchForTrc" class="form-control float-right"
+                                        placeholder="Search">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -68,78 +70,86 @@
                                 </div>
                                 <div class="modal-body">
                                     <!-- form start -->
-                                    <form action="{{ route('kondisiSekitar.create') }}" method="post"  enctype="multipart/form-data">
+                                    <form action="{{ route('kondisiSekitar.create') }}" method="post"
+                                        enctype="multipart/form-data">
                                         @csrf
                                         <div class="card-body">
                                             <!-- <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required> -->
-                                            <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->bencana_id}}" hidden required>
+                                            <input type="text" class="form-control" id="bencana_id" name="bencana_id"
+                                                value="{{request()->bencana_id}}" hidden required>
                                             <!-- <input type="text" class="form-control" id="trc_id" name="trc_id" value="{{request()->trc_id}}" hidden required> -->
 
                                             <div class="form-group">
                                                 <label for="exampleInputPosko">Tanggal</label>
-                                                <input type="date" class="form-control" id="exampleInputnama" placeholder="Masukan tanggal" name="tanggal" required>
+                                                <input type="date" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan tanggal" name="tanggal" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputPengungsi">Waktu</label>
-                                                <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan waktu" name="waktu" required>
+                                                <input type="time" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan waktu" name="waktu" required>
                                             </div>
 
                                             <style>
-                                                    .select2-selection--single {
-                                                    height: 100% !important;
-                                                    }
-                                                    /* Input field */
-                                                    .select2-selection__rendered{
-                                                    word-wrap: break-word !important;
-                                                    text-overflow: inherit !important;
-                                                    white-space: normal !important;
-                                                    }
+                                            .select2-selection--single {
+                                                height: 100% !important;
+                                            }
 
-                                                    .select2-selection__rendered {
-                                                        color: black;
-                                                        height: 100% !important;
-                                                    }
+                                            /* Input field */
+                                            .select2-selection__rendered {
+                                                word-wrap: break-word !important;
+                                                text-overflow: inherit !important;
+                                                white-space: normal !important;
+                                            }
 
-                                                        .select2-search input { color: black }
+                                            .select2-selection__rendered {
+                                                color: black;
+                                                height: 100% !important;
+                                            }
+
+                                            .select2-search input {
+                                                color: black
+                                            }
                                             </style>
-                                                
+
                                             <div class="form-group">
                                                 <label for="inputAlamat">Pilih alamat</label>
-                                                <select class="form-controll js-example-basic-single" name="cariAlamat[]" multiple="multiple" style="width: 100%;"
-                                                onchange="showifEmpty(this)">
-                                                <option value="" disabled>Pilih alamat</option>
-                                                @foreach($pengungsi->unique('lokKel') as $p)
+                                                <select class="form-controll js-example-basic-single"
+                                                    name="cariAlamat[]" multiple="multiple" style="width: 100%;"
+                                                    onchange="showifEmpty(this)">
+                                                    <option value="" disabled>Pilih alamat</option>
+                                                    @foreach($pengungsi->unique('lokKel') as $p)
                                                     @if(!empty($p->lokKel))
                                                     <option value="{{ $p->kpl_id }}">{{ $p->lokKel }}</option>
                                                     @endif
-                                                @endforeach
-                                                <option value=0>Tidak ada</option>
+                                                    @endforeach
+                                                    <option value=0>Tidak ada</option>
                                                 </select>
                                             </div>
 
                                             <script>
-                                                $(document).ready(function() {
-                                                    $('.js-example-basic-single').select2({
-                                                        theme: "classic",
-                                                 });
+                                            $(document).ready(function() {
+                                                $('.js-example-basic-single').select2({
+                                                    theme: "classic",
                                                 });
+                                            });
                                             </script>
 
-                                              <!-- script form jika tidak ada -->
-                                              <script type="text/javascript">
-                                                function showifEmpty(selects) {
-                                                    console.log(selects);
-                                                    if (selects.value != 0 || selects.value == "") {
-                                                        // document.getElementById("formNama").style.display = "none";
-                                                        document.getElementById("formAlamat").style.display = "none";
-                                                        // idForm_1.style.display = "block";
-                                                        // idForm_2.style.display = "none";
-                                                    } else if (selects.value == 0) {
-                                                        document.getElementById("formAlamat").style.display = "block";
-                                                        // document.getElementById("formNama").style.display = "block";
-                                                    }
+                                            <!-- script form jika tidak ada -->
+                                            <script type="text/javascript">
+                                            function showifEmpty(selects) {
+                                                console.log(selects);
+                                                if (selects.value != 0 || selects.value == "") {
+                                                    // document.getElementById("formNama").style.display = "none";
+                                                    document.getElementById("formAlamat").style.display = "none";
+                                                    // idForm_1.style.display = "block";
+                                                    // idForm_2.style.display = "none";
+                                                } else if (selects.value == 0) {
+                                                    document.getElementById("formAlamat").style.display = "block";
+                                                    // document.getElementById("formNama").style.display = "block";
                                                 }
+                                            }
                                             </script>
                                             <!-- end -->
 
@@ -148,11 +158,12 @@
                                                 <input type="text" class="form-control" id="nama" name="namaPemilikBaru" placeholder="Masukan nama pengungsi">
                                             </div> -->
 
-                                            <div class="form-group" id ="formAlamat">
+                                            <div class="form-group" id="formAlamat">
                                                 <label for="alamat">Detail Alamat</label>
-                                                <input type="text" class="form-control" id="alamat" name="alamatBaru" placeholder="Masukan detail alamat pengungsi">
+                                                <input type="text" class="form-control" id="alamat" name="alamatBaru"
+                                                    placeholder="Masukan detail alamat pengungsi">
                                             </div>
-                                                                                      
+
                                             <!-- <div class="form-group">
                                                 <label for="exampleInputProvinsi">Tambahkan alamat Detail</label>
                                                 <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="Jawa Timur" required>
@@ -165,14 +176,16 @@
 
                                             <div class="form-group">
                                                 <label for="exampleInputGambar">Upload Kondisi Sekitar</label>
-                                                <input type="file" class="form-control-file" id="exampleInputGambar" name="picLokasi" required>
+                                                <input type="file" class="form-control-file" id="exampleInputGambar"
+                                                    name="picLokasi" required>
                                             </div>
 
-                                            <div class="form-group" id ="keterangan">
+                                            <div class="form-group" id="keterangan">
                                                 <label for="keterangan">Keterangan</label>
-                                                <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Tambahkan keterangan">
+                                                <input type="text" class="form-control" id="keterangan"
+                                                    name="keterangan" placeholder="Tambahkan keterangan">
                                             </div>
-                                           
+
                                             <div class="form-group">
                                                 <label for="status">Status</label>
                                                 <select class="form-control" id="status" name="status" required>
@@ -203,7 +216,8 @@
 
                     <div class="card-body table-responsive">
                         @role('pusdalop')
-                        <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah" style="font-size: 14px;">
+                        <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah"
+                            style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Data
                         </a>
                         @endrole
@@ -226,104 +240,112 @@
                             </thead>
                             <tbody id="result">
 
-                            @role('pusdalop')
-                            @php
-    $shown = [];
-@endphp
+                                @role('pusdalop')
+                                @php
+                                $shown = [];
+                                @endphp
 
-@foreach ($kondisiSekitar as $key => $bencana)
-    @if (!is_null($bencana->kondisiSekitar_id))
-        @php
-            $uniqueKey = $bencana->kondisiSekitar_id;
-        @endphp
+                                @foreach ($kondisiSekitar as $key => $bencana)
+                                @if (!is_null($bencana->kondisiSekitar_id))
+                                @php
+                                $uniqueKey = $bencana->kondisiSekitar_id;
+                                @endphp
 
-        @if (!in_array($uniqueKey, $shown))
-            @php $shown[] = $uniqueKey; @endphp
+                                @if (!in_array($uniqueKey, $shown))
+                                @php $shown[] = $uniqueKey; @endphp
 
-            <tr>
-                <td>{{ $bencana->ketWaktu }}</td>
-                <td>{{ $bencana->lokKel }}</td>
+                                <tr>
+                                    <td>{{ $bencana->ketWaktu }}</td>
+                                    <td>
+                                        @if ($bencana->lokKel)
+                                            {{ $bencana->lokKel }}
+                                        @else
+                                            {{ $bencana->alamatBaru ?? '-' }}
+                                        @endif
+                                    </td>
 
-                <td>
-                    <img src="{{ asset('storage/images/' . $bencana->picLokasi) }}" 
-                         alt="Foto Lokasi" 
-                         width="100" 
-                         class="img-thumbnail"
-                         data-toggle="modal" 
-                         data-target="#imageModal"
-                         onclick="showImage('{{ asset('storage/images/' . $bencana->picLokasi) }}')">
-                </td>
+                                    <td>
+                                        <img src="{{ asset('storage/images/' . $bencana->picLokasi) }}"
+                                            alt="Foto Lokasi" width="100" class="img-thumbnail" data-toggle="modal"
+                                            data-target="#imageModal"
+                                            onclick="showImage('{{ asset('storage/images/' . $bencana->picLokasi) }}')">
+                                    </td>
 
-                <!-- Modal -->
-                <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Preview Gambar</h5>
-                            </div>
-                            <div class="modal-body text-center">
-                                <img id="modalImage" src="" class="img-fluid" alt="Preview Image">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="imageModal" tabindex="-1"
+                                        aria-labelledby="imageModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Preview Gambar</h5>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <img id="modalImage" src="" class="img-fluid" alt="Preview Image">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                <script>
-                    function showImage(src) {
-                        document.getElementById("modalImage").src = src;
-                    }
-                </script>
+                                    <script>
+                                    function showImage(src) {
+                                        document.getElementById("modalImage").src = src;
+                                    }
+                                    </script>
 
-                <td>
-                    @php
-                        $statusLabel = 'Tidak diketahui';
-                        $statusClass = 'badge-secondary';
+                                    <td>
+                                        @php
+                                        $statusLabel = 'Tidak diketahui';
+                                        $statusClass = 'badge-secondary';
 
-                        if ($bencana->status == 0) {
-                            $statusLabel = 'Aman';
-                            $statusClass = 'badge-success';
-                        } elseif ($bencana->status == 1) {
-                            $statusLabel = 'Rusak ringan';
-                            $statusClass = 'badge-info';
-                        } elseif ($bencana->status == 2) {
-                            $statusLabel = 'Rusak sedang';
-                            $statusClass = 'badge-info';
-                        } elseif ($bencana->status == 3) {
-                            $statusLabel = 'Rusak berat';
-                            $statusClass = 'badge-danger';
-                        }
-                    @endphp
+                                        if ($bencana->status == 0) {
+                                        $statusLabel = 'Aman';
+                                        $statusClass = 'badge-success';
+                                        } elseif ($bencana->status == 1) {
+                                        $statusLabel = 'Rusak ringan';
+                                        $statusClass = 'badge-info';
+                                        } elseif ($bencana->status == 2) {
+                                        $statusLabel = 'Rusak sedang';
+                                        $statusClass = 'badge-info';
+                                        } elseif ($bencana->status == 3) {
+                                        $statusLabel = 'Rusak berat';
+                                        $statusClass = 'badge-danger';
+                                        }
+                                        @endphp
 
-                    <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
-                </td>
+                                        <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                                    </td>
 
-                <td>{{ $bencana->keterangan }}</td>
-                <td>{{ $bencana->updated_at }}</td>
+                                    <td>{{ $bencana->keterangan }}</td>
+                                    <td>{{ $bencana->updated_at }}</td>
 
-                <td>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                            <a href="#" class="dropdown-item" title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-{{$bencana->idKr}}">
-                                <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                                </svg>
-                                Edit
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item" title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idKr}})">
-                                <i class="fas fa-trash mr-1"></i> Hapus
-                            </a>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        @endif
-    @endif
-@endforeach
-@endrole
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                                                data-toggle="dropdown" data-offset="-52">
+                                                <i class="fas fa-bars"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                                <a href="#" class="dropdown-item" title="Edit Kondisi"
+                                                    data-toggle="modal" data-target="#modal-edit-{{$bencana->idKr}}">
+                                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                                        <path fill="currentColor"
+                                                            d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                                                    </svg>
+                                                    Edit
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item" title="Hapus Bencana"
+                                                    onclick="deleteConfirmation({{$bencana->idKr}})">
+                                                    <i class="fas fa-trash mr-1"></i> Hapus
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endif
+                                @endif
+                                @endforeach
+                                @endrole
 
 
                                 @role('trc')
@@ -338,7 +360,9 @@
                                     <td>{{ $bencana->alamat }}</td>
                                     <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->jmlPosko }} tempat</br>
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
+                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>"
+                                            class="btn btn-primary btn-xs" title="Lihat posko"><i
+                                                class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->jmlPengungsi }} orang</br>
                                     <td>{{ $bencana->waktuUpdate }}</td>
@@ -373,7 +397,9 @@
                                     <!-- <td>{{ $bencana->lokasi }}</td> -->
                                     <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->ttlPosko }} tempat</br>
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
+                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>"
+                                            class="btn btn-primary btn-xs" title="Lihat posko"><i
+                                                class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
@@ -399,38 +425,43 @@
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title">Ubah Kondisi Rumah</h4>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <h4 class="modal-title">Ubah Kondisi Sekitar</h4>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
                                                 <!-- form start -->
-                                                <form action="{{ url('/rumahRusak/edit/'.$detail->idKr) }}" method="post" enctype="multipart/form-data">
+                                                <form action="{{ url('/kondisiSekitar/edit/'.$detail->idKr) }}"
+                                                    method="post" enctype="multipart/form-data">
                                                     @csrf
                                                     <div class="card-body">
-                             
-                                                <div class="form-group">
-                                                    <label for="exampleInputPosko">Tanggal</label>
-                                                    <input type="date" class="form-control" id="exampleInputnama" placeholder="Masukan tanggal" name="tanggal" 
-                                                    value="{{$detail->tanggal}}" required>
-                                                </div>
 
-                                                <div class="form-group">
-                                                    <label for="exampleInputPengungsi">Waktu</label>
-                                                    <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan waktu" name="waktu" 
-                                                    value="{{$detail->waktu}}" required>
-                                                </div>
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPosko">Tanggal</label>
+                                                            <input type="date" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan tanggal"
+                                                                name="tanggal" value="{{$detail->tanggal}}" required>
+                                                        </div>
 
-                                                <style>
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPengungsi">Waktu</label>
+                                                            <input type="time" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan waktu"
+                                                                name="waktu" value="{{$detail->waktu}}" required>
+                                                        </div>
+
+                                                        <style>
                                                         .select2-selection--single {
-                                                        height: 100% !important;
+                                                            height: 100% !important;
                                                         }
+
                                                         /* Input field */
-                                                        .select2-selection__rendered{
-                                                        word-wrap: break-word !important;
-                                                        text-overflow: inherit !important;
-                                                        white-space: normal !important;
+                                                        .select2-selection__rendered {
+                                                            word-wrap: break-word !important;
+                                                            text-overflow: inherit !important;
+                                                            white-space: normal !important;
                                                         }
 
                                                         .select2-selection__rendered {
@@ -438,76 +469,81 @@
                                                             height: 100% !important;
                                                         }
 
-                                                            .select2-search input { color: black }
-                                                </style>
-                                                    
-                                                <div class="form-group">
-                                                    <label for="exampleInputNama">Pilih pemilik</label>
-                                                    <select class="form-controll js-example-basic-single" name="carinama[]" multiple="multiple" style="width: 100%;"
-                                                    onchange="showifEmpty(this)">
-                                                    <option value="{{$detail->idPengungsi}}" selected>{{$detail->namaPengungsi}}({{ $detail->lokKel }})</option>
-                                                            @foreach($pengungsi as $p)
-                                                            <option value="{{ $p->idPengungsi }}">{{ $p->nama }}({{ $p->lokKel }})</option>
-                                                            @php $cachePosko = $p->namaPosko; @endphp
-                                                            @endforeach
-                                                            <option value=0>Tidak ada</option>
-                                                    </select>
-                                                </div>
-
-                                                <script>
-                                                    $(document).ready(function() {
-                                                        $('.js-example-basic-single').select2({
-                                                            theme: "classic",
-                                                    });
-                                                    });
-                                                </script>
-
-                                                <!-- script form status keluarga -->
-                                                <script type="text/javascript">
-                                                    function showifEmpty(selects) {
-                                                        console.log(selects);
-                                                        if (selects.value != 0 || selects.value == "") {
-                                                            document.getElementById("formNama").style.display = "none";
-                                                            document.getElementById("formAlamat").style.display = "none";
-                                                            // idForm_1.style.display = "block";
-                                                            // idForm_2.style.display = "none";
-                                                        } else if (selects.value == 0) {
-                                                            document.getElementById("formAlamat").style.display = "block";
-                                                            document.getElementById("formNama").style.display = "block";
+                                                        .select2-search input {
+                                                            color: black
                                                         }
-                                                    }
-                                                </script>
-                                                <!-- end -->
+                                                        </style>
 
-                                                <!-- <div class="form-group" id="formNama">
-                                                    <label for="nama">Masukkan Nama Pemilik</label>
-                                                    <input type="text" class="form-control" id="nama" name="namaPemilik" placeholder="Masukan nama pengungsi">
-                                                </div>
+                                                        <div class="form-group">
+                                                            <label for="inputAlamat">Pilih alamat</label>
+                                                            <select class="form-controll js-example-basic-single"
+                                                                name="cariAlamat[]" multiple="multiple"
+                                                                style="width: 100%;" onchange="showifEmpties(this)">
+                                                                <option value="{{$detail->idKepala}}" selected>
+                                                                    {{$detail->lokKel}}</option>
+                                                                <option value="" disabled>Pilih alamat</option>
+                                                                @foreach($pengungsi->unique('lokKel') as $p)
+                                                                @if(!empty($p->lokKel))
+                                                                <option value="{{ $p->kpl_id }}">{{ $p->lokKel }}
+                                                                </option>
+                                                                @endif
+                                                                @endforeach
+                                                                <option value=0>Tidak ada</option>
+                                                            </select>
+                                                        </div>
 
-                                                <div class="form-group" id ="formAlamat">
-                                                    <label for="alamat">Detail Alamat</label>
-                                                    <input type="text" class="form-control" id="alamat" name="alamatPemilik" placeholder="Masukan detail alamat pengungsi">
-                                                </div> -->
-                                                                                        
-                                                <!-- <div class="form-group">
-                                                    <label for="exampleInputProvinsi">Alamat Detail</label>
-                                                    <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="Jawa Timur" required>
-                                                </div> -->
-                                                <div class="form-group">
-                                                    <label for="exampleInputPosko">Posko Pengungsi</label>
-                                                    <input type="text" class="form-control" id="exampleInputPosko" placeholder="Masukan provinsi" 
-                                                    name="namaSamaran" value="{{$namaPosko}}" disabled>
-                                                </div>
+                                                        <script>
+                                                        $(document).ready(function() {
+                                                            $('.js-example-basic-single').select2({
+                                                                theme: "classic",
+                                                            });
+                                                        });
+                                                        </script>
 
-                                                <div class="form-group">
-                                                    <label for="exampleInputGambar">Upload Gambar Rumah Jika Ada Perubahan</label>
-                                                    <input type="file" class="form-control-file" id="exampleInputGambar" name="picRumah" value="{{$detail->picRumah}}">
-                                                </div>
-                                            
-                                                <div class="form-group">
-                                                    <label for="status">Status</label>
-                                                    <select class="form-control" id="status" name="status" required>
-                                                    <?php
+                                                        <!-- script form jika tidak ada -->
+                                                        <script type="text/javascript">
+                                                        function showifEmpties(selects) {
+                                                            console.log(selects);
+                                                            if (selects.value != 0 || selects.value == "") {
+                                                                // document.getElementById("formNama").style.display = "none";
+                                                                document.getElementById("formAlamat2").style.display =
+                                                                    "none";
+                                                                // idForm_1.style.display = "block";
+                                                                // idForm_2.style.display = "none";
+                                                            } else if (selects.value == 0) {
+                                                                document.getElementById("formAlamat2").style.display =
+                                                                    "block";
+                                                                // document.getElementById("formNama").style.display = "block";
+                                                            }
+                                                        }
+                                                        </script>
+                                                        <!-- end -->
+
+                                                        <!-- <div class="form-group" id="formNama">
+                                                <label for="nama">Masukkan Nama Pemilik</label>
+                                                <input type="text" class="form-control" id="nama" name="namaPemilikBaru" placeholder="Masukan nama pengungsi">
+                                            </div> -->
+
+                                                        <div class="form-group" id="formAlamat2">
+                                                            <label for="alamat">Detail Alamat (Isi kalau tidak ada di list)</label>
+                                                            <input type="text" class="form-control" id="alamat"
+                                                                name="alamatBaru" value="{{ $bencana->lokKel ? '' : ($bencana->alamatBaru ?? '') }}"
+                                                                placeholder="Masukan detail alamat pengungsi">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="exampleInputGambar">Upload Gambar Rumah Jika Ada
+                                                                Perubahan</label>
+                                                            <input type="file" class="form-control-file"
+                                                                id="exampleInputGambar" name="picRumah"
+                                                                value="{{$detail->picRumah}}">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label for="status">Status</label>
+                                                            <select class="form-control" id="status" name="status"
+                                                                required>
+                                                                <?php
                                                                     $getKondisi = $detail->status;
                                                                     if ($getKondisi == 0) {
                                                                         $statKon = "Aman";
@@ -519,17 +555,26 @@
                                                                         $statKon = "Rusak berat";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$detail->status}}" hidden><?php echo $statKon; ?></option>
-                                                                    <option value="0">Aman</option>
-                                                        <option value="1">Rusak ringan</option>
-                                                        <option value="2">Rusak sedang</option>
-                                                        <option value="3">Rusak berat</option>
+                                                                    <option selected value="{{$detail->status}}" hidden>
+                                                                    <?php echo $statKon; ?></option>
+                                                                <option value="0">Aman</option>
+                                                                <option value="1">Rusak ringan</option>
+                                                                <option value="2">Rusak sedang</option>
+                                                                <option value="3">Rusak berat</option>
 
 
-                                                    </select>
-                                                    </div>
+                                                            </select>
+                                                        </div>
 
-                                                      
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPengungsi">Keterangan</label>
+                                                            <input type="text" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan keterangan"
+                                                                name="keterangan" value="{{$detail->keterangan}}" required>
+                                                        </div>
+
+
+
 
                                                     </div>
 
@@ -545,7 +590,8 @@
                                 </div>
                     </div>
                     <div>
-                        <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->user()->id}}" hidden required>
+                        <input type="text" class="form-control" id="bencana_id" name="bencana_id"
+                            value="{{request()->user()->id}}" hidden required>
                     </div>
                     @endforeach
                     </tbody>
@@ -557,56 +603,56 @@
 
 
 
-        <!-- /.card-body -->
-    </div>
-    </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
     </div>
     </div>
 
     <script type="text/javascript">
-        function deleteConfirmation(id) {
-            swal.fire({
-                title: "Hapus?",
-                icon: 'question',
-                text: "Apakah Anda yakin?",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Iya, hapus!",
-                cancelButtonText: "Batal!",
-                reverseButtons: !0
-            }).then(function(e) {
+    function deleteConfirmation(id) {
+        swal.fire({
+            title: "Hapus?",
+            icon: 'question',
+            text: "Apakah Anda yakin?",
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "Iya, hapus!",
+            cancelButtonText: "Batal!",
+            reverseButtons: !0
+        }).then(function(e) {
 
-                if (e.value === true) {
-                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            if (e.value === true) {
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-                    $.ajax({
-                        type: 'POST',
-                        url: "{{url('rumahRusak/delete')}}/" + id,
-                        data: {
-                            _token: CSRF_TOKEN
-                        },
-                        dataType: 'JSON',
-                        success: function(results) {
-                            if (results.success === true) {
-                                swal.fire("Berhasil!", results.message, "success");
-                                // refresh page after 2 seconds
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 2000);
-                            } else {
-                                swal.fire("Gagal!", results.message, "error");
-                            }
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('kondisiSekitar/delete')}}/" + id,
+                    data: {
+                        _token: CSRF_TOKEN
+                    },
+                    dataType: 'JSON',
+                    success: function(results) {
+                        if (results.success === true) {
+                            swal.fire("Berhasil!", results.message, "success");
+                            // refresh page after 2 seconds
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            swal.fire("Gagal!", results.message, "error");
                         }
-                    });
+                    }
+                });
 
-                } else {
-                    e.dismiss;
-                }
+            } else {
+                e.dismiss;
+            }
 
-            }, function(dismiss) {
-                return false;
-            })
-        }
+        }, function(dismiss) {
+            return false;
+        })
+    }
     </script>
 
 

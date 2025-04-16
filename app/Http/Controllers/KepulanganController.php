@@ -389,7 +389,7 @@ class KepulanganController extends Controller
         as lokasi"),'kpl.anggota','kpl.detail','integrasi.png_id','integrasi.kondisiSekitar_id','p.nama as namaPengungsi',
         DB::raw("concat(kr.tanggal,' ',kr.waktu) as ketWaktu"), DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
         Daerah ',kpl.detail,' ') as lokKel"),'kr.picLokasi','kr.status','kr.updated_at','kr.id as idKr','kr.tanggal','kr.waktu',
-        'kr.idKepala','kr.keterangan')
+        'kr.idKepala','kr.keterangan','kr.alamat as alamatBaru')
             ->leftJoin('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
             ->leftJoin('pengungsi as p','p.id','=','integrasi.png_id')
             ->join('bencana as b','b.id','=','integrasi.bencana_id')
@@ -419,7 +419,7 @@ class KepulanganController extends Controller
                 'kpl.detail',
                 'integrasi.kondisiSekitar_id',
                 'p.nama','kr.tanggal','kr.waktu','kpl.provinsi','kpl.kota','kpl.kecamatan','kpl.kelurahan','kpl.detail',
-                'kr.picLokasi','kr.status','kr.updated_at','kr.id','kr.idKepala','kr.keterangan'
+                'kr.picLokasi','kr.status','kr.updated_at','kr.id','kr.idKepala','kr.keterangan','kr.alamat'
             )
             
             ->paginate(5);
@@ -951,14 +951,6 @@ class KepulanganController extends Controller
         // $posko = Posko::where('id', $id)->first();
 
         if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            // $request->validate([
-            //     'namaDepan' => ['required', 'max:50'],
-            //     'namaBelakang' => ['required', 'max:50'],
-            //     'email' => ['required', 'string', 'email', 'max:50', 'unique:users'],
-            // ]);
-            // $request->validate([
-            //     'picRumah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // Bisa upload sampai 5MB
-            // ]);
             $selectedIds = $request->carinama;
             foreach ($selectedIds as $id) {
                 // $addRumah = new KondisiRumah;
@@ -1033,18 +1025,6 @@ class KepulanganController extends Controller
                     // $addKondisi = new ;
                     $addKondisi->alamat = $request->alamatBaru;
                     $addKondisi->idKepala = null;
-                    // $addPengungsi->alamat = $request->alamatPemilikBaru;
-                    // $addKondisisi->picLokasi = null;
-
-                    // $addKondisi->keterangan = null;
-                    // $addPengungsi->gender = null;
-                    // $addPengungsi->umur = null;
-                    // $addPengungsi->statPos = null;
-                    // $addPengungsi->statKon = null;
-                    // $addPengungsi->save();
-
-                    // $getIdPengungsiBaru = Pengungsi::select('id')->orderBy('id', 'desc')->value('id');
-                    // $addRumah->idPengungsi = $getIdPengungsiBaru;
 
                     $addIntegrasi = new Integrasi;
                     $addIntegrasi->kpl_id  = null;
@@ -1088,17 +1068,6 @@ class KepulanganController extends Controller
                 $addKondisi->keterangan = $request->keterangan;
                 $addKondisi->save();
 
-                
-                // $getIdIntgerasi = KondisiSekitar::select('idKepala')->orderBy('id', 'desc')->value('idKepala');
-                // $getIdKpl = $id;
-                // $getIdKondisiSekitar = kondisiSekitar::select('id')->orderBy('id', 'desc')->value('id');
-    
-                // Integrasi::where('kpl_id', $id)
-                // ->update([
-                //  'kondisiSekitar_id'=> $getIdKondisiSekitar,
-                //  'updated_at' => Carbon::now(),
-                //  ]);
-
                 $lastKondisiSekitar = KondisiSekitar::orderBy('id', 'desc')->first();
 
                 if ($lastKondisiSekitar->idKepala != null) {
@@ -1125,6 +1094,82 @@ class KepulanganController extends Controller
         }
         return back();
     }
+
+    public function editKondisiSekitar(Request $request, $id)
+    {
+        $editKondisi = kondisiSekitar::where('id', $id)->first();
+        // $request->validate([
+        //     // Akan melakukan validasi kecuali punyanya sendiri
+        //     'nama' => ['string', Rule::unique('posko')->ignore($id)],
+        // ]);
+        
+        // $posko = Posko::where('id', $id)->first();
+
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            $selectedIds = $request->cariAlamat;
+            foreach ($selectedIds as $id) {
+                // $addRumah = new KondisiRumah;
+                $editKondisi->tanggal = $request->tanggal;
+                $editKondisi->waktu = $request->waktu;
+                if ($id == 0) {
+                    // Jika user memilih "Tidak ada", maka isi nama dan alamat manual
+                    // $addKondisi = new ;
+                    $editKondisi->alamat = $request->alamatBaru;
+                } else {
+                    $editKondisi->idKepala = $id;
+                }
+
+                if ($request->hasFile('picLokasi')) {
+                    $file = $request->file('picLokasi');
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = time().'.'.$extension; // Nama unik untuk file
+
+                     // Cek ukuran file sebelum diproses
+                    if ($file->getSize() > 2048000) { // Jika lebih dari 2MB
+                        $image = Image::make($file)->resize(1024, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })->encode('jpg', 75); // Kualitas 75% untuk kompresi
+                        $image->save(public_path('storage/images/') . $filename);
+                        // $file->storeAs('public/images', $filename);
+                    } else {
+                        // Simpan gambar tanpa kompresi jika sudah di bawah 2MB
+                        $file->move('storage/images/', $filename);
+                        // $file->storeAs('storage/images/', $filename);
+                        // $file->save(public_path('storage/images/') . $filename);
+                    }
+
+                    // $file->move('images/', $filename);
+                    // $file->storeAs('public/images', $filename);
+                    $editKondisi->picLokasi = $filename;
+                }
+                $editKondisi->status = $request->status;
+                $editKondisi->keterangan = $request->keterangan;
+                $editKondisi->save();
+
+                // $getIdKpl = KondisiRumah::select('idKepala')->orderBy('id', 'desc')->value('idKepala');
+                if($id != 0){
+                $getIdKpl = KondisiRumah::where('idKepala', $id)
+                // ->orderBy('id', 'desc')
+                ->value('idKepala');
+                // $getIdKondisiSekitar = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
+    
+                Integrasi::where('kondisiSekitar_id', $id)
+                ->update([
+                 'kondisiRumah_id'=> $id,
+                 'kpl_id' => $getIdKpl,
+                 'updated_at' => Carbon::now(),
+                 ]);
+                }
+    
+            }
+
+            Alert::success('Success', 'Data berhasil diubah');
+            return back();
+        }
+        return redirect()->back();
+    }
+
+    
 
     /**
      * Store a newly created resource in storage.
@@ -1186,6 +1231,50 @@ class KepulanganController extends Controller
 
             // check data deleted or not
             if ($delIntegrasi == 1) {
+                $success = true;
+                $message = "Data berhasil dihapus";
+            } else {
+                $success = true;
+                $message = "Data gagal dihapus";
+            }
+
+            //  return response
+            return response()->json([
+                'success' => $success,
+                'message' => $message,
+            ]);
+        }
+        return back();
+    }
+
+    public function deleteKondisiSekitar(Request $request, $id)
+    {
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            // $delete = Posko::destroy($id);yy
+
+            // Hapus baris jika kpl_id NULL
+            Integrasi::where('kondisiSekitar_id', $id)
+            ->whereNull('kpl_id')
+            ->delete();
+
+            // Update menjadi NULL jika kpl_id tidak NULL
+            Integrasi::where('kondisiSekitar_id', $id)
+            ->whereNotNull('kpl_id')
+            ->update([
+                'kondisiSekitar_id' => null
+            ]);
+
+            // $getIdBencana = Integrasi::select('bencana_id')->where('posko_id', $id)->value('bencana_id');
+            $getIdKondisiSekitar = KondisiSekitar::where('id', $id)->value('id');
+            // $getPosko = Posko::where('id', $id)->value('id');
+            // $getBencana = Bencana::where('id', $getIdBencana)->value('id');
+            
+            $delKondisi = KondisiSekitar::destroy($getIdKondisiSekitar);
+            // $delBencana = Bencana::destroy($getBencana);
+            // $delPosko = Posko::destroy($getPosko);
+
+            // check data deleted or not
+            if ($delKondisi == 1) {
                 $success = true;
                 $message = "Data berhasil dihapus";
             } else {
