@@ -216,6 +216,7 @@
                                     <th>Alamat</th>
                                     <th>Gambar</th>
                                     <th>Status Kondisi</th>
+                                    <th>Keterangan</th>
                                     <th>Waktu Update</th>
                                     <th>Aksi</th>
                                     <!-- @role('pusdalop')
@@ -225,109 +226,105 @@
                             </thead>
                             <tbody id="result">
 
-                                @role('pusdalop')
-                                @foreach ($kondisiSekitar as $key => $bencana)
-                                @if(empty($bencana->kondisiSekitar_id))
-                                    <p>Data kosong</p>
-                                    // whatever you need to do here
-                                @else
+                            @role('pusdalop')
+                            @php
+    $shown = [];
+@endphp
 
-                                <tr>
-                                    <!-- <td>{{ $data->firstItem() + $key }}</td>ss -->
-                                    <td>{{ $bencana->ketWaktu }}</td>
-                                    <td>{{ $bencana->namaPengungsi }}</td>
-                                    <td>{{ $bencana->lokKel }}</td>
+@foreach ($kondisiSekitar as $key => $bencana)
+    @if (!is_null($bencana->kondisiSekitar_id))
+        @php
+            $uniqueKey = $bencana->kondisiSekitar_id;
+        @endphp
 
-                                    <td>
-                                        <img src="{{ asset('storage/images/' . $bencana->picLokasi) }}" 
-                                            alt="Foto Pengungsi" 
-                                            width="100" 
-                                            class="img-thumbnail"
-                                            data-toggle="modal" 
-                                            data-target="#imageModal"
-                                            onclick="showImage('{{ asset('storage/images/' . $bencana->picLokasi) }}')">
-                                    </td>
+        @if (!in_array($uniqueKey, $shown))
+            @php $shown[] = $uniqueKey; @endphp
 
-                                    <!-- Modal untuk menampilkan gambar -->
+            <tr>
+                <td>{{ $bencana->ketWaktu }}</td>
+                <td>{{ $bencana->lokKel }}</td>
 
-                                    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="imageModalLabel">Preview Gambar</h5>
-                                            <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <img id="modalImage" src="" class="img-fluid" alt="Preview Image">
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
+                <td>
+                    <img src="{{ asset('storage/images/' . $bencana->picLokasi) }}" 
+                         alt="Foto Lokasi" 
+                         width="100" 
+                         class="img-thumbnail"
+                         data-toggle="modal" 
+                         data-target="#imageModal"
+                         onclick="showImage('{{ asset('storage/images/' . $bencana->picLokasi) }}')">
+                </td>
 
-                                    <script>
-                                        function showImage(src) {
-                                            document.getElementById("modalImage").src = src;
-                                        }
-                                    </script>
+                <!-- Modal -->
+                <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Preview Gambar</h5>
+                            </div>
+                            <div class="modal-body text-center">
+                                <img id="modalImage" src="" class="img-fluid" alt="Preview Image">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+                <script>
+                    function showImage(src) {
+                        document.getElementById("modalImage").src = src;
+                    }
+                </script>
 
-                                    <!-- <td>{{ $bencana->posko }}</td> -->
-                                    <!-- <td>{{ $bencana->status }}</td> -->
-                                    <td>
-                                        @if($bencana->status == 0)
-                                        @php
-                                        $value = 'Aman'
-                                        @endphp
-                                        <span class="badge badge-success"><?php echo $value; ?></span>
-                                        @elseif($bencana->status == 1)
-                                        @php
-                                        $value = 'Rusak ringan'
-                                        @endphp
-                                        <span class="badge badge-info"><?php echo $value; ?></span>
-                                        @elseif($bencana->status == 2)
-                                        @php
-                                        $value = 'Rusak sedang'
-                                        @endphp
-                                        <span class="badge badge-info"><?php echo $value; ?></span>
-                                        @elseif($bencana->status == 3)
-                                        @php
-                                        $value = 'Rusak berat'
-                                        @endphp
-                                        <span class="badge badge-danger"><?php echo $value; ?></span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $bencana->updated_at }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                                                <i class="fas fa-bars"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                                                    <i class="fas fa-eye mr-1"></i> Detail
-                                                </a>
-                                                <div class="dropdown-divider"></div> -->
-                                                <a href="#" class="dropdown-item " title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-{{$bencana->idKr}}">
-                                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                                                    </svg>
-                                                    Edit
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idKr}})">
-                                                    <i class="fas fa-trash mr-1"></i> Hapus
-                                                </a>
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <!-- <a href="#" class="btn btn-danger btn-sm" title="Hapus Pengungsi">
-                                            Hapus
-                                        </a> -->
-                                    </td>
-                                </tr>
-                                @endif
-                                @endforeach
-                                @endrole
+                <td>
+                    @php
+                        $statusLabel = 'Tidak diketahui';
+                        $statusClass = 'badge-secondary';
+
+                        if ($bencana->status == 0) {
+                            $statusLabel = 'Aman';
+                            $statusClass = 'badge-success';
+                        } elseif ($bencana->status == 1) {
+                            $statusLabel = 'Rusak ringan';
+                            $statusClass = 'badge-info';
+                        } elseif ($bencana->status == 2) {
+                            $statusLabel = 'Rusak sedang';
+                            $statusClass = 'badge-info';
+                        } elseif ($bencana->status == 3) {
+                            $statusLabel = 'Rusak berat';
+                            $statusClass = 'badge-danger';
+                        }
+                    @endphp
+
+                    <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                </td>
+
+                <td>{{ $bencana->keterangan }}</td>
+                <td>{{ $bencana->updated_at }}</td>
+
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                            <a href="#" class="dropdown-item" title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-{{$bencana->idKr}}">
+                                <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                                </svg>
+                                Edit
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idKr}})">
+                                <i class="fas fa-trash mr-1"></i> Hapus
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        @endif
+    @endif
+@endforeach
+@endrole
+
 
                                 @role('trc')
                                 <?php $i = 0; ?>

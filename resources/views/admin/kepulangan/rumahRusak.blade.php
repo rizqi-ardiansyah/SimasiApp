@@ -216,6 +216,7 @@
                                     <th>Alamat Rumah</th>
                                     <th>Gambar Rumah</th>
                                     <th>Status Kondisi</th>
+                                    <th>Keterangan</th>
                                     <th>Waktu Update</th>
                                     <th>Aksi</th>
                                     <!-- @role('pusdalop')
@@ -296,6 +297,7 @@
                                         <span class="badge badge-danger"><?php echo $value; ?></span>
                                         @endif
                                     </td>
+                                    <td>{{ $bencana->keterangan }}</td>
                                     <td>{{ $bencana->updated_at }}</td>
                                     <td>
                                         <div class="btn-group">
@@ -530,7 +532,12 @@
 
 
                                                     </select>
-                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="exampleInputPengungsi">Keterangan</label>
+                                                    <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan keterangan" name="keterangan" 
+                                                    value="{{$detail->keterangan}}" required>
+                                                </div>
 
                                                       
 

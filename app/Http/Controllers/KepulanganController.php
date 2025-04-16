@@ -246,7 +246,8 @@ class KepulanganController extends Controller
              Daerah ',kpl.detail,' ','')
         as lokasi"),'kpl.anggota','kpl.detail','integrasi.png_id','integrasi.kondisiRumah_id','p.nama as namaPengungsi',
         DB::raw("concat(kr.tanggal,' ',kr.waktu) as ketWaktu"), DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
-        Daerah ',kpl.detail,' ') as lokKel"),'kr.picRumah','kr.status','kr.updated_at','kr.id as idKr','kr.tanggal','kr.waktu')
+        Daerah ',kpl.detail,' ') as lokKel"),'kr.picRumah','kr.status','kr.updated_at','kr.id as idKr','kr.tanggal','kr.waktu',
+        'kr.keterangan')
             ->leftJoin('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
             ->join('pengungsi as p','p.id','=','integrasi.png_id')
             ->join('bencana as b','b.id','=','integrasi.bencana_id')
@@ -274,7 +275,7 @@ class KepulanganController extends Controller
                 'kpl.detail',
                 'integrasi.kondisiRumah_id',
                 'p.nama','kr.tanggal','kr.waktu','kpl.provinsi','kpl.kota','kpl.kecamatan','kpl.kelurahan','kpl.detail',
-                'kr.picRumah','kr.status','kr.updated_at','kr.id'
+                'kr.picRumah','kr.status','kr.updated_at','kr.id','kr.keterangan'
             )
             
             ->paginate(5);
@@ -387,14 +388,17 @@ class KepulanganController extends Controller
              Daerah ',kpl.detail,' ','')
         as lokasi"),'kpl.anggota','kpl.detail','integrasi.png_id','integrasi.kondisiSekitar_id','p.nama as namaPengungsi',
         DB::raw("concat(kr.tanggal,' ',kr.waktu) as ketWaktu"), DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
-        Daerah ',kpl.detail,' ') as lokKel"),'kr.picLokasi','kr.status','kr.updated_at','kr.id as idKr','kr.tanggal','kr.waktu')
+        Daerah ',kpl.detail,' ') as lokKel"),'kr.picLokasi','kr.status','kr.updated_at','kr.id as idKr','kr.tanggal','kr.waktu',
+        'kr.idKepala','kr.keterangan')
             ->leftJoin('kepala_keluarga as kpl','kpl.id','=','integrasi.kpl_id')
-            ->join('pengungsi as p','p.id','=','integrasi.png_id')
+            ->leftJoin('pengungsi as p','p.id','=','integrasi.png_id')
             ->join('bencana as b','b.id','=','integrasi.bencana_id')
             ->join('kondisi_sekitar as kr','kr.id','=','integrasi.kondisiSekitar_id')
             ->where('integrasi.bencana_id', '=', $request->bencana_id)
+            ->whereNotNull('integrasi.bencana_id')
+            ->whereNotNull('integrasi.kondisiSekitar_id')
             // ->where('p.statkel','=',0)
-            // ->distinct()
+            ->distinct()
             ->groupBy(
                 'integrasi.id',
                 'integrasi.kpl_id',
@@ -415,7 +419,7 @@ class KepulanganController extends Controller
                 'kpl.detail',
                 'integrasi.kondisiSekitar_id',
                 'p.nama','kr.tanggal','kr.waktu','kpl.provinsi','kpl.kota','kpl.kecamatan','kpl.kelurahan','kpl.detail',
-                'kr.picLokasi','kr.status','kr.updated_at','kr.id'
+                'kr.picLokasi','kr.status','kr.updated_at','kr.id','kr.idKepala','kr.keterangan'
             )
             
             ->paginate(5);
@@ -915,6 +919,7 @@ class KepulanganController extends Controller
                         $addRumah->picRumah = $filename;
                     }
                 $addRumah->status = $request->status;
+                $addRumah->keterangan = $request->keterangan;
                 $addRumah->save();
 
                 
