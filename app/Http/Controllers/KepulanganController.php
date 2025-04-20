@@ -40,7 +40,8 @@ class KepulanganController extends Controller
             DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
              ' ',bencana.kelurahan) as alamat"),
             DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL THEN 1 END) as jumlahRumahRusak"),
-            DB::raw('MIN(int.user_id) as trc_id') 
+            DB::raw('MIN(int.user_id) as trc_id'),
+            DB::raw("COUNT(CASE WHEN int.kondisiSekitar_id IS NOT NULL THEN 1 END) as jumlahKondisiSekitar"), 
         )
             ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
             // ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
@@ -515,6 +516,7 @@ class KepulanganController extends Controller
     $posko = DB::table('posko')->find($id);
 
     $namaBencana = Bencana::where('id', $request->id)->value('nama');
+    
 
     // return view('admin.bencana.index', ['data'=>$bencana]);
     return view('admin.kepulangan.kondisiSekitar', [

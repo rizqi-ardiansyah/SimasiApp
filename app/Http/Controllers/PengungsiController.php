@@ -7,6 +7,9 @@ use App\Models\Pengungsi;
 use App\Models\Posko;
 use App\Models\Bencana;
 use App\Models\Integrasi;
+use App\Models\KondisiPsikologis;
+use App\Models\KondisiRumah;
+use App\Models\KondisiSekitar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -72,10 +75,13 @@ class PengungsiController extends Controller
             'kpl.kota as kota',
             'kpl.kecamatan as kecamatan',
             'kpl.kelurahan as kelurahan',
-            'kpl.detail as detail',
+            'kpl.detail as detail','kp.status as hasilPsiko',
+            'kp.jawaban1', 'kp.jawaban2', 'kp.jawaban3', 
+            'kp.jawaban4', 'kp.jawaban5', 'kp.jawaban6'
         )
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('posko as p', 'p.id','=','int.posko_id')
+            ->leftJoin('kondisi_psikologis as kp', 'kp.id','=','int.psikologis_id')
             ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
             // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
@@ -159,7 +165,9 @@ class PengungsiController extends Controller
                 'int.user_id',
                 'int.created_at',
                 'int.updated_at',
-                'int.kondisiRumah_id'
+                'int.kondisiRumah_id',
+                'int.kondisiSekitar_id',
+                'int.psikologis_id'
             )
             ->get();
 
@@ -300,6 +308,8 @@ class PengungsiController extends Controller
         ->where('int.bencana_id', $request->bencana_id)
         ->get();
 
+        $psikologis = KondisiPsikologis::where('idPengungsi', $request->idPengungsi)->first();
+
         return view('admin.pengungsi.index', [
             'idBencana' => $this->idBencana,
             'anggotaKpl' => $anggotaKpl,
@@ -327,9 +337,113 @@ class PengungsiController extends Controller
             'getMasuk' => $getMasuk,
             'getKeluar' => $getKeluar,
             'getSehat' => $getTtlSehat,
-            'getLokasi' => $getLokasi
+            'getLokasi' => $getLokasi,
+            'psikologis' => $psikologis
         ]);
         // return view('admin.pengungsi.index',['data' => $pengungsi],['kpl'=>$getKpl],['datas' => $pengungsi]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function kepulangan(Request $request)
+    {
+        //
+
+        $this->idBencana = $request->bencana_id;
+        $this->idPosko = $request->id;
+        $this->idTrc = $request->trc_id;  
+        
+        session()->put('idPosko', $this->idPosko); 
+        session()->put('idBencana', $this->idBencana); 
+        session()->put('idTrc', $this->idTrc); 
+
+        session()->put('idPosko', $request->id);
+
+        $getNmPosko = Posko::select('nama')->where('id', $request->id)->get();
+    
+            $getNmBencana = Bencana::select('nama')->where('id', $request->bencana_id)->get();
+    
+            $getJmlPosko = Bencana::select('jmlPosko')->where('id', $request->bencana_id)->get();
+
+            $getNmTrc = Posko::select(
+                DB::raw("concat(u.firstname) as fullName")
+            )
+                // ->join('posko as p','pengungsi.posko_id','=','p.id')
+                ->join('integrasi as int','int.posko_id','=','posko.id')
+                ->join('users as u', 'u.id', '=', 'int.user_id')
+                ->where('posko.id', $request->id)
+                ->distinct()
+                ->get();
+
+        $kepulangan = Pengungsi::select(
+            DB::raw("concat('Prov. ', kpl.provinsi, ', Kota ', kpl.kota, ', Kec. ', kpl.kecamatan, ', Ds. ', kpl.kelurahan, ', Daerah ', kpl.detail) as lokasi"),
+            DB::raw("concat('Kec. ', kpl.kecamatan, ', Ds. ', kpl.kelurahan, ', Daerah ', kpl.detail) as lokKel"),
+            'pengungsi.nama',
+            'pengungsi.id as idPengungsi',
+            'pengungsi.alamat as alamatPengungsi',
+            'pengungsi.umur',
+            'pengungsi.gender',
+            'pengungsi.telpon',
+            'pengungsi.created_at as tglMasuk',
+            
+            'int.kpl_id',
+            'int.posko_id as idPospeng',
+            'int.bencana_id',
+            'int.kondisiRumah_id',
+            'int.kondisiSekitar_id',
+            'int.psikologis_id',
+        
+            'p.id as idPosko',
+            'p.namaPosko',
+        
+            'kpl.id as idKepala',
+            'kpl.nama as namaKepala',
+            'kpl.provinsi',
+            'kpl.kota',
+            'kpl.kecamatan',
+            'kpl.kelurahan',
+            'kpl.detail',
+
+            'kr.picRumah',
+            'kr.keterangan as ketRum',
+            'ks.picLokasi',
+            'ks.keterangan as ketLok',
+        
+            'pengungsi.statKon as statusFisik',
+            'kr.status as statusRumah',
+            'kr.id as idKonRum',
+            'ks.status as statusSekitar',
+            'kp.status as statusPsikologis',
+            'kp.jawaban1', 'kp.jawaban2', 'kp.jawaban3', 
+            'kp.jawaban4', 'kp.jawaban5', 'kp.jawaban6',
+            'b.nama as namaBencana',
+            'b.tanggal as tanggalBencana',
+            'b.status as statusBencana'
+        )
+        ->join('integrasi as int', 'int.png_id', '=', 'pengungsi.id')
+        ->join('posko as p', 'p.id', '=', 'int.posko_id')
+        ->leftJoin('kepala_keluarga as kpl', 'kpl.id', '=', 'int.kpl_id')
+        ->leftJoin('kondisi_rumah as kr', 'kr.id', '=', 'int.kondisiRumah_id')
+        ->leftJoin('kondisi_sekitar as ks', 'ks.id', '=', 'int.kondisiSekitar_id')
+        ->leftJoin('kondisi_psikologis as kp', 'kp.id', '=', 'int.psikologis_id')
+        ->leftJoin('bencana as b', 'b.id', '=', 'int.bencana_id')
+        ->where('int.posko_id', $request->id)
+        ->orderBy('int.kpl_id', 'desc')
+        ->distinct()
+        ->paginate(10, ['*'], 'p');
+
+        return view('admin.pengungsi.kepulangan', [
+            'kepulangan' => $kepulangan,
+            'getNmPosko' => $getNmPosko,
+            'getNmTrc' => $getNmTrc,
+            'getJmlPosko' => $getJmlPosko
+        ]);
+
     }
 
     public function searchPengungsi(Request $request)
@@ -849,6 +963,61 @@ class PengungsiController extends Controller
         // return back();
     }
 
+     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createPsikologis(Request $request)
+    {
+        // $getDataKpl =
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            // $request->validate([
+            //     // 'namaBelakang' => ['required', 'max:50'],
+            //     // 'nama' => ['string', 'unique:posko'],
+            //     // 'trc_id' => ['string', 'unique:posko'],
+
+            // ]);
+
+            // $statKel = $request->statKel;
+            // $this->idBencana = $request->bencana_id;
+            // $this->idPosko = $request->id;
+            // $this->idTrc = $request->trc_id;  
+
+            // Hitung total skor
+            $skor = $request->jawaban1 + $request->jawaban2 + $request->jawaban3 + 
+            $request->jawaban4 + $request->jawaban5 + $request->jawaban6;
+
+            // Tentukan status berdasarkan skor
+            $status = $skor < 13 ? 1 : 0;
+
+            KondisiPsikologis::create([
+                'idPengungsi' => $request->idPengungsi,
+                'jawaban1' => $request->jawaban1,
+                'jawaban2' => $request->jawaban2,
+                'jawaban3' => $request->jawaban3,
+                'jawaban4' => $request->jawaban4,
+                'jawaban5' => $request->jawaban5,
+                'jawaban6' => $request->jawaban6,
+                'skor' => $skor,
+                'status' => $status                
+            ]);
+
+            $getIdPsiko = KondisiPsikologis::select('id')->orderBy('id','desc')->value('id');
+            
+            Integrasi::where('png_id', $request->idPengungsi)
+                ->update([
+                    'psikologis_id'=> $getIdPsiko, 
+                    'updated_at' => Carbon::now(),
+                 ]);
+
+            // return Redirect::to('admin/ingresos');
+            Alert::success('Success', 'Data berhasil ditambahkan');
+            return back();
+        // }
+        // return back();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -899,15 +1068,7 @@ class PengungsiController extends Controller
         $getIdIntegrasi = Integrasi::select('id')->where('png_id', $id);
         $idPengungsi = Pengungsi::select('id')->where('id', $id)->value('id');
         $idKepalaKeluarga = KepalaKeluarga::select('id')->where('id', $request->kpl)->value('id');
-        // $kepalaKeluarga = KepalaKeluarga::where('id', $request->kpl);
-
-        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
-            // $request->validate([
-            //     // 'namaBelakang' => ['required', 'max:50'],
-            //     // 'nama' => ['string', 'unique:posko'],
-            //     // 'trc_id' => ['string', 'unique:posko'],
-
-            // ]);
+        
 
             $statKel = $request->statKel;
 
@@ -951,6 +1112,207 @@ class PengungsiController extends Controller
             Alert::success('Success', 'Data berhasil diubah');
             return back();
     }
+
+    public function editKonRum(Request $request, $id)
+    {
+        $editRumah = KondisiRumah::where('id', $id)->first();
+        $request->validate([
+            // Akan melakukan validasi kecuali punyanya sendiri
+            'nama' => ['string', Rule::unique('posko')->ignore($id)],
+        ]);
+        
+        // $posko = Posko::where('id', $id)->first();
+
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            $selectedIds = $request->carinama;
+            foreach ($selectedIds as $id) {
+                // $addRumah = new KondisiRumah;
+                $editRumah->tanggal = $request->tanggal;
+                $editRumah->waktu = $request->waktu;
+                $editRumah->idPengungsi = $id;
+                if ($request->hasFile('picRumah')) {
+                    $file = $request->file('picRumah');
+                    $extension = $file->getClientOriginalExtension();
+                    $filename = time().'.'.$extension; // Nama unik untuk file
+
+                     // Cek ukuran file sebelum diproses
+                    if ($file->getSize() > 2048000) { // Jika lebih dari 2MB
+                        $image = Image::make($file)->resize(1024, null, function ($constraint) {
+                            $constraint->aspectRatio();
+                        })->encode('jpg', 75); // Kualitas 75% untuk kompresi
+                        $image->save(public_path('storage/images/') . $filename);
+                        // $file->storeAs('public/images', $filename);
+                    } else {
+                        // Simpan gambar tanpa kompresi jika sudah di bawah 2MB
+                        $file->move('storage/images/', $filename);
+                        // $file->storeAs('storage/images/', $filename);
+                        // $file->save(public_path('storage/images/') . $filename);
+                    }
+
+                    // $file->move('images/', $filename);
+                    // $file->storeAs('public/images', $filename);
+                    $editRumah->picRumah = $filename;
+                }
+                $editRumah->status = $request->status;
+                $editRumah->save();
+
+                $getIdPengungsi = KondisiRumah::select('idPengungsi')->orderBy('id', 'desc')->value('idPengungsi');
+                $getIdKondisiRumah = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
+    
+                Integrasi::where('png_id', $getIdPengungsi)
+                ->update([
+                 'kondisiRumah_id'=> $getIdKondisiRumah,
+                 'updated_at' => Carbon::now(),
+                 ]);
+    
+            }
+
+            Alert::success('Success', 'Data berhasil diubah');
+            return back();
+        }
+        return redirect()->back();
+    }
+
+    public function editKonfis(Request $request, $id)
+    {
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+
+            Pengungsi::where('id', $id)
+                    ->update([
+                    'statKon'=> $request->statKon,
+                    'updated_at' => Carbon::now(),
+                    ]);
+
+            Alert::success('Success', 'Data berhasil diubah');
+            return back();
+        }
+        return redirect()->back();
+    }
+
+    public function updateKonRum(Request $request)
+    {
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            $request->validate([
+                'picRumah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+                'idPengungsi' => 'required|integer',
+            ]);
+
+            $id = $request->idPengungsi;
+
+            $integrasi = Integrasi::where('png_id', $id)->first();
+
+            // Cek apakah sudah ada kondisi rumah yang terkait
+            $existingRumah = $integrasi && $integrasi->kondisiRumah_id
+                ? KondisiRumah::find($integrasi->kondisiRumah_id)
+                : null;
+
+            // Gunakan model yang sudah ada atau buat baru
+            $rumah = $existingRumah ?? new KondisiRumah;
+            $rumah->idPengungsi = $id;
+            // $rumah->tanggal = $request->tanggal;
+            // $rumah->waktu = $request->waktu;
+
+            // Proses upload gambar jika ada
+            if ($request->hasFile('picRumah')) {
+                $file = $request->file('picRumah');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+
+                if ($file->getSize() > 2048000) {
+                    $image = Image::make($file)->resize(1024, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->encode('jpg', 75);
+                    $image->save(public_path('storage/images/') . $filename);
+                } else {
+                    $file->move(public_path('storage/images'), $filename);
+                }
+
+                $rumah->picRumah = $filename;
+            }
+            
+            $rumah->status = $request->status;
+            $rumah->keterangan = $request->keterangan;
+
+            $rumah->save();
+
+            // Update data integrasi
+            $integrasi->update([
+                'kondisiRumah_id' => $rumah->id,
+                'updated_at' => Carbon::now(),
+            ]);
+
+            Alert::success('Success', 'Data kondisi rumah berhasil disimpan');
+            return back();
+        }
+
+        return redirect()->back();
+    }
+
+    public function updateSekKonRum(Request $request)
+    {
+        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+            $request->validate([
+                'picRumah' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+                'idPengungsi' => 'required|integer',
+            ]);
+
+            $id = $request->idPengungsi;
+
+            $integrasi = Integrasi::where('png_id', $id)->first();
+
+            // Cek apakah sudah ada kondisi rumah yang terkait
+            $existingKondisi = $integrasi && $integrasi->kondisiSekitar_id
+                ? KondisiSekitar::find($integrasi->kondisiSekitar_id)
+                : null;
+
+            // Gunakan model yang sudah ada atau buat baru
+            $konSek = $existingKondisi ?? new KondisiSekitar;
+            $konSek->idKepala = $request->idKepala;
+
+            if (!$existingKondisi) {
+                // Isi tanggal dan waktu hanya untuk entri baru
+                $konSek->tanggal = Carbon::now()->toDateString(); // format: Y-m-d
+                $konSek->waktu = Carbon::now()->toTimeString();   // format: H:i:s
+            }
+            // $rumah->tanggal = $request->tanggal;
+            // $rumah->waktu = $request->waktu;
+
+            // Proses upload gambar jika ada
+            if ($request->hasFile('picLokasi')) {
+                $file = $request->file('picLokasi');
+                $extension = $file->getClientOriginalExtension();
+                $filename = time() . '.' . $extension;
+
+                if ($file->getSize() > 2048000) {
+                    $image = Image::make($file)->resize(1024, null, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->encode('jpg', 75);
+                    $image->save(public_path('storage/images/') . $filename);
+                } else {
+                    $file->move(public_path('storage/images'), $filename);
+                }
+
+                $konSek->picLokasi = $filename;
+            }
+            
+            $konSek->status = $request->status;
+            $konSek->keterangan = $request->keterangan;
+
+            $konSek->save();
+
+            // Update data integrasi
+            $integrasi->update([
+                'kondisiSekitar_id' => $konSek->id,
+                'updated_at' => Carbon::now(),
+            ]);
+
+            Alert::success('Success', 'Data kondisi sekitar rumah berhasil disimpan');
+            return back();
+        }
+
+        return redirect()->back();
+    }
+
 
     /**
      * Update the specified resource in storage.

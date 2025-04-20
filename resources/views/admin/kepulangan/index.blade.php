@@ -162,39 +162,40 @@ window.onload = function() {
                                     <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->jmlPosko }} tempat</br>
                                     <!-- url('/poskoKepulangan' -->
-                                        <a href="{{url('/poskoKepulangan')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
+                                        <a href="{{url('/poskoKepulangan')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko" style="font-size: 14px;"><i class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->ttlPengungsi }} orang</br>
                                     <td>
                                         {{ $bencana->jumlahRumahRusak }} kondisi
                                         <!-- <a href="{{url('/rumahRusak')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat rumah rusak"><i class="fas fa-eye"></i> Detail</a> -->
-                                        <a href="#" class="btn btn-primary btn-xs" title="Tmbah kondisi" data-toggle="modal" data-target="#modal-tambah-{{$bencana->idBencana}}" style="font-size: 14px;"><i class="fas fa-plus"></i> Tambah</a>
+                                        <a href="#" class="btn btn-primary btn-xs" title="Tambah kondisi" data-toggle="modal" data-target="#modal-tambah-{{$bencana->idBencana}}" style="font-size: 14px; margin-bottom: 5px;"><i class="fas fa-plus"></i> Tambah</a>
+                                        <a href="{{url('/poskoKepulangan')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"style="font-size: 14px;"><i class="fas fa-eye"></i> Detail </a>
                                     </td>
                                     <td>
-                                        {{ $bencana->null }} kondisi
-                                        <a href="{{url('/kondisiSekitar')}}/<?php echo $bencana->idBencana;?>" class="btn btn-primary btn-xs" title="Lihat kondisi sekitar"><i class="fas fa-eye"></i> Detail</a>                                    </td>
+                                        {{ $bencana->jumlahKondisiSekitar }} kondisi
+                                        <a href="{{url('/kondisiSekitar')}}/<?php echo $bencana->idBencana;?>" class="btn btn-primary btn-xs" title="Lihat kondisi sekitar" style="font-size: 14px;"><i class="fas fa-eye"></i> Detail</a>                                    </td>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)
                                         @php
                                         $value = 'Siaga'
                                         @endphp
-                                        <span class="badge badge-danger"><?php echo $value; ?></span>
+                                        <span class="badge badge-danger" style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 2)
                                         @php
                                         $value = 'Tanggap Darurat'
                                         @endphp
-                                        <span class="badge badge-danger"><?php echo $value; ?></span>
+                                        <span class="badge badge-danger" style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 3)
                                         @php
                                         $value = 'Pemulihan'
                                         @endphp
-                                        <span class="badge badge-success"><?php echo $value; ?></span>
+                                        <span class="badge badge-success" style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 0)
                                         @php
                                         $value = 'Selesai'
                                         @endphp
-                                        <span class="badge badge-info">Selesai</span>
+                                        <span class="badge badge-info" style="font-size: 14px;">Selesai</span>
                                         @endif
                                     </td>
                                     <!-- <td>

@@ -93,9 +93,15 @@ Route::get('/listPengungsi/{id}/{bencana_id}/{trc_id}', [PengungsiController::cl
 Route::post('pengungsi/create', [PengungsiController::class, 'createPengungsi'])->name('pengungsi.create');
 Route::match(['get', 'post'], 'pengungsi/edit/{id}', [PengungsiController::class, 'edit']);
 Route::post('pengungsi/delete/{id}', [PengungsiController::class, 'delete']);
-// Route::get('listPengungsi/{idPosko}/{idBencana}/{idTrc}', [PengungsiController::class, 'store']);
+
+Route::post('kondisiPsikologis/create', [PengungsiController::class, 'createPsikologis'])->name('kondisiPsikologis.create');
 
 Route::get('/ransum/{id}/{bencana_id}/{trc_id}', [RansumController::class, 'index']);
+
+Route::get('/kepulangan/{id}/{bencana_id}/{trc_id}', [PengungsiController::class, 'kepulangan']);
+Route::match(['get', 'post'], 'kepulangan/edit/{id}', [PengungsiController::class, 'editKonfis']);
+Route::match(['get', 'post'], 'editKonRum/edit/{id}', [PengungsiController::class, 'updateKonRum']);
+Route::match(['get', 'post'], 'editSekKonRum/edit/{id}', [PengungsiController::class, 'updateSekKonRum']);
 
 Route::get("/search/bencana", [BencanaController::class, 'search'])->name('searchBencana');
 Route::get("/search/bencanaTrc/{id}", [BencanaController::class, 'searchForTrc'])->name('searchForTrc');

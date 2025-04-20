@@ -13,9 +13,9 @@
                 @foreach ($getNmTrc as $nmTrc)
                 <!-- <h3>Pos Pengungsi {{ $nm->namaPosko }} {{$jml->jmlPosko}} ({{ $nmTrc->fullName  }})</h1> -->
                 <h3>Pos Pengungsi {{ $nm->namaPosko }} ({{ $nmTrc->fullName  }})</h1>
-                @endforeach
-                @endforeach
-                @endforeach
+                    @endforeach
+                    @endforeach
+                    @endforeach
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -38,22 +38,23 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">List Pengungsi
-                        (@foreach ($getLokasi as $lokasi)
-                        {{$lokasi->lokasi}}
-                        @break
-                        @endforeach)
+                            (@foreach ($getLokasi as $lokasi)
+                            {{$lokasi->lokasi}}
+                            @break
+                            @endforeach)
                         </h3><br>
                         @if ($errors->any())
                         <div class="alert alert-danger" role="alert">
                             @foreach ($errors->all() as $error)
-                                {{ $error }}
+                            {{ $error }}
                             @endforeach
                         </div>
                         @endif
                         <div class="card-tools">
-                        <form id="search" action="{{ route('searchPengungsi') }}" method="GET">
+                            <form id="search" action="{{ route('searchPengungsi') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="search" class="form-control float-right" placeholder="Search">
+                                    <input type="text" name="search" class="form-control float-right"
+                                        placeholder="Search">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -81,24 +82,30 @@
                                             <!-- <div class="form-group"> -->
                                             <!-- {{request()->id}}
                                             {{request()->trc_id}} -->
-                                            <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
-                                            <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->bencana_id}}" hidden required>
-                                            <input type="text" class="form-control" id="trc_id" name="trc_id" value="{{request()->trc_id}}" hidden required>
+                                            <input type="text" class="form-control" id="posko_id" name="posko_id"
+                                                value="{{request()->id}}" hidden required>
+                                            <input type="text" class="form-control" id="bencana_id" name="bencana_id"
+                                                value="{{request()->bencana_id}}" hidden required>
+                                            <input type="text" class="form-control" id="trc_id" name="trc_id"
+                                                value="{{request()->trc_id}}" hidden required>
                                             <!-- </div> -->
 
                                             <div class="form-group">
                                                 <label for="nama">Nama Pengungsi</label>
-                                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan nama pengungsi">
+                                                <input type="text" class="form-control" id="nama" name="nama"
+                                                    placeholder="Masukan nama pengungsi">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="telpon">Nomor HP</label>
-                                                <input type="number" class="form-control" id="telpon" name="telpon" placeholder="Masukan nomor telepon" required>
+                                                <input type="number" class="form-control" id="telpon" name="telpon"
+                                                    placeholder="Masukan nomor telepon" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="sKeluarga">Status Keluarga</label>
-                                                <select class="form-control" id="statKel" name="statKel" onchange="showDivs(this)">
+                                                <select class="form-control" id="statKel" name="statKel"
+                                                    onchange="showDivs(this)">
                                                     <option value=0>Kepala Keluarga</option>
                                                     <option value=1>Ibu</option>
                                                     <option value=2>Anak</option>
@@ -107,33 +114,34 @@
                                             </div>
                                             <!-- script form status keluarga -->
                                             <script type="text/javascript">
-                                                // var idForm_1 = document.getElementById('form_1');
-                                                // var idForm_2 = document.getElementById('form_2');
+                                            // var idForm_1 = document.getElementById('form_1');
+                                            // var idForm_2 = document.getElementById('form_2');
 
-                                                function showDivs(selects) {
-                                                    console.log(selects);
-                                                    if (selects.value == 0) {
-                                                        document.getElementById("form_1").style.display = "none";
-                                                        document.getElementById("form_2").style.display = "block";
-                                                        document.getElementById("formAlamat").style.display = "none";
-                                                        // idForm_1.style.display = "block";
-                                                        // idForm_2.style.display = "none";
-                                                    } else if (selects.value == 1 || selects.value == 2) {
-                                                        document.getElementById("formAlamat").style.display = "none";
-                                                        document.getElementById("form_1").style.display = "block";
-                                                        document.getElementById("form_2").style.display = "none";
-                                                    }
+                                            function showDivs(selects) {
+                                                console.log(selects);
+                                                if (selects.value == 0) {
+                                                    document.getElementById("form_1").style.display = "none";
+                                                    document.getElementById("form_2").style.display = "block";
+                                                    document.getElementById("formAlamat").style.display = "none";
+                                                    // idForm_1.style.display = "block";
+                                                    // idForm_2.style.display = "none";
+                                                } else if (selects.value == 1 || selects.value == 2) {
+                                                    document.getElementById("formAlamat").style.display = "none";
+                                                    document.getElementById("form_1").style.display = "block";
+                                                    document.getElementById("form_2").style.display = "none";
                                                 }
+                                            }
                                             </script>
                                             <!-- end -->
 
                                             <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
                                             <div class="form-group" id="form_1">
                                                 <label for="kpl">Kepala Keluarga</label>
-                                                <select class="form-control" id="kpl" name="kpl" onchange="showDiv(this)" required>
+                                                <select class="form-control" id="kpl" name="kpl"
+                                                    onchange="showDiv(this)" required>
                                                     @foreach ($kpl as $kplk)
                                                     <option value="{{$kplk->id}}">
-                                                        {{$kplk->nama}} 
+                                                        {{$kplk->nama}}
                                                         ({{ $kplk->detail }})
                                                     </option>
                                                     @endforeach
@@ -141,27 +149,28 @@
                                                 </select>
                                             </div>
 
-                                            <div class="form-group" id ="formAlamat">
+                                            <div class="form-group" id="formAlamat">
                                                 <label for="alamat">Detail Alamat</label>
-                                                <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Masukan detail alamat pengungsi">
+                                                <input type="text" class="form-control" id="alamat" name="alamat"
+                                                    placeholder="Masukan detail alamat pengungsi">
                                             </div>
 
                                             <script type="text/javascript">
-                                                // var idForm_1 = document.getElementById('form_1');
-                                                // var idForm_2 = document.getElementById('form_2');
+                                            // var idForm_1 = document.getElementById('form_1');
+                                            // var idForm_2 = document.getElementById('form_2');
 
-                                                function showDiv(selectKepala) {
-                                                    console.log(selectKepala);
-                                                    if (selectKepala.value != 0) {
-                                                        document.getElementById("formAlamat").style.display = "none";
-                                                        // document.getElementById("form_2").style.display = "block";
-                                                        // idForm_1.style.display = "block";
-                                                        // idForm_2.style.display = "none";
-                                                    } else if (selectKepala.value == 0) {
-                                                        document.getElementById("formAlamat").style.display = "block";
-                                                        // document.getElementById("form_2").style.display = "none";
-                                                    }
+                                            function showDiv(selectKepala) {
+                                                console.log(selectKepala);
+                                                if (selectKepala.value != 0) {
+                                                    document.getElementById("formAlamat").style.display = "none";
+                                                    // document.getElementById("form_2").style.display = "block";
+                                                    // idForm_1.style.display = "block";
+                                                    // idForm_2.style.display = "none";
+                                                } else if (selectKepala.value == 0) {
+                                                    document.getElementById("formAlamat").style.display = "block";
+                                                    // document.getElementById("form_2").style.display = "none";
                                                 }
+                                            }
                                             </script>
 
                                             <!-- end -->
@@ -171,22 +180,33 @@
                                                 @foreach ($getLokasi as $lokasi)
                                                 <div class="form-group">
                                                     <label for="exampleInputProvinsi">Lokasi bencana</label>
-                                                    <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="lokasi" value="{{$lokasi->lokasi}}" readonly>
+                                                    <input type="text" class="form-control" id="exampleInputnama"
+                                                        placeholder="Masukan provinsi" name="lokasi"
+                                                        value="{{$lokasi->lokasi}}" readonly>
                                                 </div>
                                                 @break
                                                 @endforeach
 
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="kelurahan" value="{{$lokasi->kelurahan}}" hidden>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="kecamatan" value="{{$lokasi->kecamatan}}" hidden>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="kota" value="{{$lokasi->kota}}" hidden>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$lokasi->provinsi}}" hidden>
+                                                <input type="text" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan provinsi" name="kelurahan"
+                                                    value="{{$lokasi->kelurahan}}" hidden>
+                                                <input type="text" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan provinsi" name="kecamatan"
+                                                    value="{{$lokasi->kecamatan}}" hidden>
+                                                <input type="text" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan provinsi" name="kota" value="{{$lokasi->kota}}"
+                                                    hidden>
+                                                <input type="text" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan provinsi" name="provinsi"
+                                                    value="{{$lokasi->provinsi}}" hidden>
 
                                                 <div class="form-group">
                                                     <label for="detail">Detail alamat</label>
-                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
+                                                    <input type="text" class="form-control" id="detail"
+                                                        placeholder="Masukan detail" name="detail">
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="form-group">
                                                 <label for="gender">Jenis Kelamin</label>
                                                 <select class="form-control" id="gender" name="gender" required>
@@ -197,7 +217,8 @@
 
                                             <div class="form-group">
                                                 <label for="umur">Umur</label>
-                                                <input type="text" class="form-control" id="umur" name="umur" placeholder="Masukan umur" required>
+                                                <input type="text" class="form-control" id="umur" name="umur"
+                                                    placeholder="Masukan umur" required>
                                             </div>
 
                                             <div class="form-group">
@@ -239,18 +260,25 @@
 
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
-                        <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
+                        <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default"
+                            style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Pengungsi
                         </a>
-                        <a href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#upload" style="font-size: 14px;">
+                        <a href="#" class="btn btn-info mb-2" data-toggle="modal" data-target="#upload"
+                            style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Unggah Data
                         </a>
-                        <a href="{{url('/ransum')}}/{{ request()->id }}/{{ request()->bencana_id }}/{{ request()->trc_id }}" class="btn btn-info mb-2" target="__blank" style="font-size: 14px;">
-                        
+                        <a href="{{url('/ransum')}}/{{ request()->id }}/{{ request()->bencana_id }}/{{ request()->trc_id }}"
+                            class="btn btn-info mb-2" target="__blank" style="font-size: 14px;">
+
                             <i class="fas fa-info mr-1"></i> Cek Ransum
                         </a>
-                        
-                            <!-- Tambah bencana -->
+                        <a href="{{url('/kepulangan')}}/{{ request()->id }}/{{ request()->bencana_id }}/{{ request()->trc_id }}"
+                            class="btn btn-success mb-2" style="font-size: 14px;">
+                            <i class="fas fa-info mr-1"></i> Cek Kepulangan
+                        </a>
+
+                        <!-- Tambah bencana -->
                         <div class="modal fade" id="upload">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -262,7 +290,8 @@
                                     </div>
                                     <div class="modal-body">
                                         <!-- form start -->
-                                        <form enctype="multipart/form-data" action="{{ route('pengungsi.store') }}" method="post">
+                                        <form enctype="multipart/form-data" action="{{ route('pengungsi.store') }}"
+                                            method="post">
                                             @csrf
                                             <div class="card-body">
 
@@ -293,7 +322,8 @@
                                     <th>Alamat</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Umur</th>
-                                    <th>Kondisi</th>
+                                    <th>Kondisi Fisik</th>
+                                    <th>Kondisi Psikologi</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -319,8 +349,8 @@
                                     </td>
                                     <td>{{ $pengungsi->namaKepala}}</td>
                                     <td>{{ $pengungsi->telpon }}</td>
-                                    <td> 
-                                    <?php
+                                    <td>
+                                        <?php
                                         $alamatKepala = $pengungsi->detail;
                                         // alamat pengungsi yang ikut kepala keluarga
                                         $alamatPengungsi = $pengungsi->alamatPengungsi;
@@ -366,6 +396,15 @@
                                         ?>
                                     </td>
                                     <td>
+                                        @if ($pengungsi->hasilPsiko === 0)
+                                        Belum Baik
+                                        @elseif ($pengungsi->hasilPsiko === 1)
+                                        Baik
+                                        @else
+                                        -
+                                        @endif
+                                    </td>
+                                    <td>
                                         <?php
                                         $statPos = $pengungsi->statPos;
                                         if ($statPos == 0) {
@@ -379,7 +418,8 @@
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                                                data-toggle="dropdown" data-offset="-52">
                                                 <i class="fas fa-bars"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-lg" role="menu">
@@ -387,14 +427,25 @@
                                                     <i class="fas fa-eye mr-1"></i> Detail
                                                 </a>
                                                 <div class="dropdown-divider"></div> -->
-                                                <a href="#" class="dropdown-item " title="Edit Pengungsi" data-toggle="modal" data-target="#modal-edit-{{$pengungsi->idPengungsi}}">
+                                                <a href="#" class="dropdown-item " title="Edit Pengungsi"
+                                                    data-toggle="modal"
+                                                    data-target="#modal-edit-{{$pengungsi->idPengungsi}}">
                                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                                                        <path fill="currentColor"
+                                                            d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
                                                     </svg>
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Pengungsi" onclick="deleteConfirmation({{$pengungsi->idPengungsi}})">
+                                                <a href="#" class="dropdown-item " title="Cek Psikologi"
+                                                    data-toggle="modal"
+                                                    data-target="#modal-psiko-{{$pengungsi->idPengungsi}}">
+                                                    <i class="fas fa-brain"></i>
+                                                    Cek Psikologi
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item " title="Hapus Pengungsi"
+                                                    onclick="deleteConfirmation({{$pengungsi->idPengungsi}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
@@ -410,37 +461,47 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h4 class="modal-title">Edit Pengungsi</h4>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
 
-                                                <?php
+                                                    <?php
                                                     if($pengungsi->statKel == 0){
                                                         ?>
-                                                        <form id="form_4" action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}" method="POST">
+                                                    <form id="form_4"
+                                                        action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}"
+                                                        method="POST">
                                                         @csrf
                                                         <div class="card-body">
                                                             <!-- <div class="form-group"> -->
-                                                            <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
+                                                            <input type="text" class="form-control" id="posko_id"
+                                                                name="posko_id" value="{{request()->id}}" hidden
+                                                                required>
                                                             <!-- </div> -->
 
                                                             <div class="form-group">
                                                                 <label for="nama">Nama Pengungsi</label>
-                                                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan nama pengungsi" value="{{$pengungsi->nama}}">
+                                                                <input type="text" class="form-control" id="nama"
+                                                                    name="nama" placeholder="Masukan nama pengungsi"
+                                                                    value="{{$pengungsi->nama}}">
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="telpon">Nomor HP</label>
-                                                                <input type="text" class="form-control" id="telpon" name="telpon" placeholder="Masukan nomor telepon" value="{{$pengungsi->telpon}}" required>
+                                                                <input type="text" class="form-control" id="telpon"
+                                                                    name="telpon" placeholder="Masukan nomor telepon"
+                                                                    value="{{$pengungsi->telpon}}" required>
                                                             </div>
 
-                                                            <input type="text" class="form-control" id="kpl" name="kpl" value="{{$pengungsi->idKepala}}" hidden>
+                                                            <input type="text" class="form-control" id="kpl" name="kpl"
+                                                                value="{{$pengungsi->idKepala}}" hidden>
 
                                                             <div class="form-group">
                                                                 <label for="sKeluarga">Status Keluarga</label>
-                                                                    <?php
+                                                                <?php
                                                                     $getStatKel = $pengungsi->statKel;
                                                                     if ($getStatKel == 0) {
                                                                         $status = "Kepala Keluarga";
@@ -453,12 +514,14 @@
                                                                     }
 
                                                                     ?>
-                                                                <input type="text" class="form-control" id="statKel" name="statKel" value="{{$getStatKel}}" hidden>
-                                                                <input type="text" class="form-control" id="statKel" name="statKels" value="{{$status}}" readonly>
-                                                                
+                                                                <input type="text" class="form-control" id="statKel"
+                                                                    name="statKel" value="{{$getStatKel}}" hidden>
+                                                                <input type="text" class="form-control" id="statKel"
+                                                                    name="statKels" value="{{$status}}" readonly>
+
                                                             </div>
 
-                                                        
+
                                                             <!-- script form status keluarga -->
                                                             <!-- <script type="text/javascript">
 
@@ -481,7 +544,7 @@
                                                             <!-- end -->
 
                                                             <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
-                                                        
+
 
                                                             <!-- jika belum perlu menambahkan alamat -->
                                                             <!-- <div class="wrapper-kk" class="hidden" id="form_4">
@@ -511,17 +574,21 @@
                                                                 </div>
                                                             </div> -->
 
-                                                               <!-- jika belum perlu menambahkan alamat -->
-                                            <div class="wrapper-kk" class="hidden" id="form_4">
-                                                @foreach ($getLokasi as $lokasi)
-                                                <div class="form-group">
-                                                    <label for="exampleInputProvinsi">Lokasi bencana</label>
-                                                    <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="lokasi" value="{{$lokasi->lokasi}}" readonly>
-                                                </div>
-                                                @break
-                                                @endforeach
+                                                            <!-- jika belum perlu menambahkan alamat -->
+                                                            <div class="wrapper-kk" class="hidden" id="form_4">
+                                                                @foreach ($getLokasi as $lokasi)
+                                                                <div class="form-group">
+                                                                    <label for="exampleInputProvinsi">Lokasi
+                                                                        bencana</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="exampleInputnama"
+                                                                        placeholder="Masukan provinsi" name="lokasi"
+                                                                        value="{{$lokasi->lokasi}}" readonly>
+                                                                </div>
+                                                                @break
+                                                                @endforeach
 
-                                                <!-- <div class="form-group">
+                                                                <!-- <div class="form-group">
                                                     <label for="provinsi">Provinsi</label>
                                                     <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi">
                                                 </div>
@@ -541,15 +608,18 @@
                                                     <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan">
                                                 </div> -->
 
-                                                <div class="form-group">
-                                                    <label for="detail">Detail</label>
-                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail" value="{{$pengungsi->detail}}">
-                                                </div>
-                                            </div>
+                                                                <div class="form-group">
+                                                                    <label for="detail">Detail</label>
+                                                                    <input type="text" class="form-control" id="detail"
+                                                                        placeholder="Masukan detail" name="detail"
+                                                                        value="{{$pengungsi->detail}}">
+                                                                </div>
+                                                            </div>
 
                                                             <div class="form-group">
                                                                 <label for="gender">Jenis Kelamin</label>
-                                                                <select class="form-control" id="gender" name="gender" required>
+                                                                <select class="form-control" id="gender" name="gender"
+                                                                    required>
                                                                     <?php
                                                                     $getGender = $pengungsi->gender;
                                                                     if ($getGender == 0) {
@@ -558,7 +628,8 @@
                                                                         $statGen = "Laki-laki";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$pengungsi->gender}}" hidden><?php echo $statGen; ?></option>
+                                                                    <option selected value="{{$pengungsi->gender}}"
+                                                                        hidden><?php echo $statGen; ?></option>
                                                                     <option value=1>Laki - Laki</option>
                                                                     <option value=0>Perempuan</option>
                                                                 </select>
@@ -566,12 +637,15 @@
 
                                                             <div class="form-group">
                                                                 <label for="umur">Umur</label>
-                                                                <input type="text" class="form-control" id="umur" name="umur" placeholder="Masukan umur" value="{{$pengungsi->umur}}" required>
+                                                                <input type="text" class="form-control" id="umur"
+                                                                    name="umur" placeholder="Masukan umur"
+                                                                    value="{{$pengungsi->umur}}" required>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="statKon">Kondisi</label>
-                                                                <select class="form-control" id="statKon" name="statKon" required>
+                                                                <select class="form-control" id="statKon" name="statKon"
+                                                                    required>
                                                                     <?php
                                                                     $getKon = $pengungsi->statKon;
                                                                     if ($getKon == 0) {
@@ -588,7 +662,8 @@
                                                                         $statKon = "Difabel";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$pengungsi->statKon}}" hidden><?php echo $statKon; ?></option>
+                                                                    <option selected value="{{$pengungsi->statKon}}"
+                                                                        hidden><?php echo $statKon; ?></option>
                                                                     <option value=0>Sehat</option>
                                                                     <option value=1>Luka Ringan</option>
                                                                     <option value=2>Luka Sedang</option>
@@ -600,7 +675,8 @@
 
                                                             <div class="form-group">
                                                                 <label for="statPos">Status</label>
-                                                                <select class="form-control" id="statPos" name="statPos" required>
+                                                                <select class="form-control" id="statPos" name="statPos"
+                                                                    required>
                                                                     <?php
                                                                     $getPos = $pengungsi->statPos;
                                                                     if ($getPos == 0) {
@@ -611,7 +687,8 @@
                                                                         $statPos = "Pencarian";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$pengungsi->statPos}}" hidden><?php echo $statPos; ?></option>
+                                                                    <option selected value="{{$pengungsi->statPos}}"
+                                                                        hidden><?php echo $statPos; ?></option>
                                                                     <option value=1>Di Posko</option>
                                                                     <option value=0>Keluar</option>
                                                                     <option value=2>Pencarian</option>
@@ -623,34 +700,44 @@
                                                         <!-- /.card-body -->
 
                                                         <div class="card-footer">
-                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">Submit</button>
                                                         </div>
                                                     </form>
                                                     <?php
                                                     }
                                                     else{
-                                                ?> 
+                                                ?>
                                                     <!-- form start -->
-                                                    <form id="form_3" action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}" method="POST">
+                                                    <form id="form_3"
+                                                        action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}"
+                                                        method="POST">
                                                         @csrf
                                                         <div class="card-body">
                                                             <!-- <div class="form-group"> -->
-                                                            <input type="text" class="form-control" id="posko_id" name="posko_id" value="{{request()->id}}" hidden required>
+                                                            <input type="text" class="form-control" id="posko_id"
+                                                                name="posko_id" value="{{request()->id}}" hidden
+                                                                required>
                                                             <!-- </div> -->
 
                                                             <div class="form-group">
                                                                 <label for="nama">Nama Pengungsi</label>
-                                                                <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan nama pengungsi" value="{{$pengungsi->nama}}">
+                                                                <input type="text" class="form-control" id="nama"
+                                                                    name="nama" placeholder="Masukan nama pengungsi"
+                                                                    value="{{$pengungsi->nama}}">
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="telpon">Nomor HP</label>
-                                                                <input type="text" class="form-control" id="telpon" name="telpon" placeholder="Masukan nomor telepon" value="{{$pengungsi->telpon}}" required>
+                                                                <input type="text" class="form-control" id="telpon"
+                                                                    name="telpon" placeholder="Masukan nomor telepon"
+                                                                    value="{{$pengungsi->telpon}}" required>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="sKeluarga">Status Keluarga</label>
-                                                                <select class="form-control" id="statKel" name="statKel">
+                                                                <select class="form-control" id="statKel"
+                                                                    name="statKel">
                                                                     <?php
                                                                     $getStatKel = $pengungsi->statKel;
                                                                     if ($getStatKel == 0) {
@@ -665,14 +752,15 @@
 
                                                                     ?>
                                                                     <!-- <option selected value="{{ $pengungsi->statKel }}" hidden></option> -->
-                                                                    <option selected value="{{ $pengungsi->statKel }}" hidden><?php echo $status; ?></option>
+                                                                    <option selected value="{{ $pengungsi->statKel }}"
+                                                                        hidden><?php echo $status; ?></option>
                                                                     <option value=1>Ibu</option>
                                                                     <option value=2>Anak</option>
                                                                     <option value=3>Lainnya</option>
                                                                 </select>
                                                             </div>
 
-                                                        
+
                                                             <!-- script form status keluarga -->
                                                             <!-- <script type="text/javascript">
 
@@ -697,13 +785,15 @@
                                                             <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
                                                             <div class="form-group">
                                                                 <label for="kpl">Kepala Keluarga</label>
-                                                                <select class="form-control" id="kpl" name="kpl" required>
-                                                                    <option selected value="{{$pengungsi->idKepala}}" hidden>{{$pengungsi->namaKepala}}
+                                                                <select class="form-control" id="kpl" name="kpl"
+                                                                    required>
+                                                                    <option selected value="{{$pengungsi->idKepala}}"
+                                                                        hidden>{{$pengungsi->namaKepala}}
                                                                         <!-- {{ $pengungsi->lokKel}} -->
                                                                         ({{ $pengungsi->detail}})
                                                                     </option>
                                                                     @foreach ($kpl as $kplk)
-                                                                    <option value="{{$kplk->id}}">{{$kplk->nama}} 
+                                                                    <option value="{{$kplk->id}}">{{$kplk->nama}}
                                                                         <!-- (Kec.
                                                                         {{$kplk->kecamatan}}, Kel. {{$kplk->kelurahan}}, -->
                                                                         ({{ $kplk->detail }})
@@ -741,17 +831,19 @@
                                                                 </div>
                                                             </div> -->
 
-                                                               <!-- jika belum perlu menambahkan alamat -->
-                                            <div class="wrapper-kk" class="hidden" id="form_4"">
+                                                            <!-- jika belum perlu menambahkan alamat -->
+                                                            <div class="wrapper-kk" class="hidden" id="form_4"">
                                                 @foreach ($getLokasi as $lokasi)
-                                                <div class="form-group">
-                                                    <label for="exampleInputProvinsi">Lokasi bencana</label>
-                                                    <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="lokasi" value="{{$lokasi->lokasi}}" readonly>
-                                                </div>
-                                                @break
-                                                @endforeach
+                                                <div class=" form-group">
+                                                                <label for="exampleInputProvinsi">Lokasi bencana</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="exampleInputnama" placeholder="Masukan provinsi"
+                                                                    name="lokasi" value="{{$lokasi->lokasi}}" readonly>
+                                                            </div>
+                                                            @break
+                                                            @endforeach
 
-                                                <!-- <div class="form-group">
+                                                            <!-- <div class="form-group">
                                                     <label for="provinsi">Provinsi</label>
                                                     <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi">
                                                 </div>
@@ -771,16 +863,17 @@
                                                     <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan">
                                                 </div> -->
 
-                                                <!-- <div class="form-group">
+                                                            <!-- <div class="form-group">
                                                     <label for="detail">Detail</label>
                                                     <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
                                                 </div> -->
-                                            </div>
+                                                        </div>
 
-                                                            <div class="form-group">
-                                                                <label for="gender">Jenis Kelamin</label>
-                                                                <select class="form-control" id="gender" name="gender" required>
-                                                                    <?php
+                                                        <div class="form-group">
+                                                            <label for="gender">Jenis Kelamin</label>
+                                                            <select class="form-control" id="gender" name="gender"
+                                                                required>
+                                                                <?php
                                                                     $getGender = $pengungsi->gender;
                                                                     if ($getGender == 0) {
                                                                         $statGen = "Perempuan";
@@ -788,21 +881,25 @@
                                                                         $statGen = "Laki-laki";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$pengungsi->gender}}" hidden><?php echo $statGen; ?></option>
-                                                                    <option value=1>Laki - Laki</option>
-                                                                    <option value=0>Perempuan</option>
-                                                                </select>
-                                                            </div>
+                                                                <option selected value="{{$pengungsi->gender}}" hidden>
+                                                                    <?php echo $statGen; ?></option>
+                                                                <option value=1>Laki - Laki</option>
+                                                                <option value=0>Perempuan</option>
+                                                            </select>
+                                                        </div>
 
-                                                            <div class="form-group">
-                                                                <label for="umur">Umur</label>
-                                                                <input type="text" class="form-control" id="umur" name="umur" placeholder="Masukan umur" value="{{$pengungsi->umur}}" required>
-                                                            </div>
+                                                        <div class="form-group">
+                                                            <label for="umur">Umur</label>
+                                                            <input type="text" class="form-control" id="umur"
+                                                                name="umur" placeholder="Masukan umur"
+                                                                value="{{$pengungsi->umur}}" required>
+                                                        </div>
 
-                                                            <div class="form-group">
-                                                                <label for="statKon">Kondisi</label>
-                                                                <select class="form-control" id="statKon" name="statKon" required>
-                                                                    <?php
+                                                        <div class="form-group">
+                                                            <label for="statKon">Kondisi</label>
+                                                            <select class="form-control" id="statKon" name="statKon"
+                                                                required>
+                                                                <?php
                                                                     $getKon = $pengungsi->statKon;
                                                                     if ($getKon == 0) {
                                                                         $statKon = "Sehat";
@@ -818,20 +915,22 @@
                                                                         $statKon = "Difabel";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$pengungsi->statKon}}" hidden><?php echo $statKon; ?></option>
-                                                                    <option value=0>Sehat</option>
-                                                                    <option value=1>Luka Ringan</option>
-                                                                    <option value=2>Luka Sedang</option>
-                                                                    <option value=3>Luka Berat</option>
-                                                                    <option value=4>Hamil atau menyusui</option>
-                                                                    <option value=5>Difabel</option>
-                                                                </select>
-                                                            </div>
+                                                                <option selected value="{{$pengungsi->statKon}}" hidden>
+                                                                    <?php echo $statKon; ?></option>
+                                                                <option value=0>Sehat</option>
+                                                                <option value=1>Luka Ringan</option>
+                                                                <option value=2>Luka Sedang</option>
+                                                                <option value=3>Luka Berat</option>
+                                                                <option value=4>Hamil atau menyusui</option>
+                                                                <option value=5>Difabel</option>
+                                                            </select>
+                                                        </div>
 
-                                                            <div class="form-group">
-                                                                <label for="statPos">Status</label>
-                                                                <select class="form-control" id="statPos" name="statPos" required>
-                                                                    <?php
+                                                        <div class="form-group">
+                                                            <label for="statPos">Status</label>
+                                                            <select class="form-control" id="statPos" name="statPos"
+                                                                required>
+                                                                <?php
                                                                     $getPos = $pengungsi->statPos;
                                                                     if ($getPos == 0) {
                                                                         $statPos = "Keluar";
@@ -839,156 +938,351 @@
                                                                         $statPos = "Di Posko";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$pengungsi->statPos}}" hidden><?php echo $statPos; ?></option>
-                                                                    <option value=1>Di Posko</option>
-                                                                    <option value=0>Keluar</option>
-                                                                    <option value=2>Pencarian</option>
-                                                                </select>
-                                                            </div>
-
-
+                                                                <option selected value="{{$pengungsi->statPos}}" hidden>
+                                                                    <?php echo $statPos; ?></option>
+                                                                <option value=1>Di Posko</option>
+                                                                <option value=0>Keluar</option>
+                                                                <option value=2>Pencarian</option>
+                                                            </select>
                                                         </div>
-                                                        <!-- /.card-body -->
 
-                                                        <div class="card-footer">
-                                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                                        </div>
-                                                    </form>
-                                                              <?php  }?>
+
                                                 </div>
+                                                <!-- /.card-body -->
+
+                                                <div class="card-footer">
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+                                                </form>
+                                                <?php  }?>
                                             </div>
-                                            <!-- /.modal-content -->
                                         </div>
-                                        <!-- /.modal-dialog -->
+                                        <!-- /.modal-content -->
                                     </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <br />
-                        {{ $data->links() }}
-                        <br />
+                                    <!-- /.modal-dialog -->
                     </div>
-                    <!-- /.card-body -->
+
+                    <div class="modal fade" id="modal-psiko-{{$pengungsi->idPengungsi}}">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Tes Psikologi untuk {{ $pengungsi->nama ?? 'Pengungsi' }}
+                                    </h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <!-- <form action="{{ route('kondisiPsikologis.create')  }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="idPengungsi" value="{{ $pengungsi->idPengungsi }}">
+
+                                    <div class="modal-body">
+                                        {{-- Pertanyaan 1 --}}
+                                        <div class="form-group">
+                                            <label>1. Semenjak di posko, sesering apa Anda merasa gugup?</label>
+                                            @foreach ([
+                                            0 => 'Tidak Pernah',
+                                            1 => 'Sedikit',
+                                            2 => 'Beberapa Kali',
+                                            3 => 'Sering',
+                                            4 => 'Selalu'
+                                            ] as $val => $label)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="jawaban1"
+                                                    value="{{ $val }}" id="j1_{{ $val }}" required>
+                                                <label class="form-check-label" for="j1_{{ $val }}">{{ $label }}</label>
+                                            </div>
+                                            @endforeach
+                                        </div>
+
+                                        {{-- Pertanyaan 2 --}}
+                                        <div class="form-group">
+                                            <label>2. Semenjak di posko, seberapa sering Anda berputus asa?</label>
+                                            @foreach ([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="jawaban2"
+                                                    value="{{ $val }}" id="j2_{{ $val }}" required>
+                                                <label class="form-check-label" for="j2_{{ $val }}">{{ $label }}</label>
+                                            </div>
+                                            @endforeach
+                                        </div>
+
+                                        {{-- Pertanyaan 3 --}}
+                                        <div class="form-group">
+                                            <label>3. Semenjak di posko, seberapa sering Anda gelisah? </label>
+                                            @foreach ([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="jawaban3"
+                                                    value="{{ $val }}" id="j3_{{ $val }}" required>
+                                                <label class="form-check-label" for="j3_{{ $val }}">{{ $label }}</label>
+                                            </div>
+                                            @endforeach
+                                        </div>
+
+                                        {{-- Pertanyaan 4 --}}
+                                        <div class="form-group">
+                                            <label>4. Semenjak di posko, seberapa sering Anda tertekan?</label>
+                                            @foreach ([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="jawaban4"
+                                                    value="{{ $val }}" id="j4_{{ $val }}" required>
+                                                <label class="form-check-label" for="j4_{{ $val }}">{{ $label }}</label>
+                                            </div>
+                                            @endforeach
+                                        </div>
+
+                                        {{-- Pertanyaan 5 --}}
+                                        <div class="form-group">
+                                            <label>5. Semenjak di posko, seberapa sering Anda mengalami hal-hal yang sulit?</label>
+                                            @foreach ([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="jawaban5"
+                                                    value="{{ $val }}" id="j5_{{ $val }}" required>
+                                                <label class="form-check-label" for="j5_{{ $val }}">{{ $label }}</label>
+                                            </div>
+                                            @endforeach
+                                        </div>
+
+                                        {{-- Pertanyaan 6 --}}
+                                        <div class="form-group">
+                                            <label>6. Semenjak di posko, seberapa sering Anda merasa tidak berharga atau tidak berguna?</label>
+                                            @foreach ([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="jawaban6"
+                                                    value="{{ $val }}" id="j6_{{ $val }}" required>
+                                                <label class="form-check-label" for="j6_{{ $val }}">{{ $label }}</label>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Simpan Jawaban</button>
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Tutup</button>
+                                    </div>
+                                </form> -->
+
+                                <form action="{{ route('kondisiPsikologis.create')  }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="idPengungsi" value="{{ $pengungsi->idPengungsi }}">
+
+                                    <div class="modal-body">
+
+                                        <div class="form-group">
+                                            <label>1. Apakah Anda merasa cemas akhir-akhir ini?</label><br>
+                                            @foreach([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <label><input type="radio" name="jawaban1" value="{{ $val }}"
+                                                    {{ $pengungsi->jawaban1 == $val ? 'checked' : '' }}>
+                                                {{ $label }}</label><br>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>2. Apakah Anda mengalami kesulitan tidur?</label><br>
+                                            @foreach([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <label><input type="radio" name="jawaban2" value="{{ $val }}"
+                                                    {{ $pengungsi->jawaban2 == $val ? 'checked' : '' }}>
+                                                {{ $label }}</label><br>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>3. Apakah Anda merasa sedih berkepanjangan?</label><br>
+                                            @foreach([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <label><input type="radio" name="jawaban3" value="{{ $val }}"
+                                                    {{ $pengungsi->jawaban3 == $val ? 'checked' : '' }}>
+                                                {{ $label }}</label><br>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>4. Apakah Anda mudah marah atau tersinggung?</label><br>
+                                            @foreach([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <label><input type="radio" name="jawaban4" value="{{ $val }}"
+                                                    {{ $pengungsi->jawaban4 == $val ? 'checked' : '' }}>
+                                                {{ $label }}</label><br>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>5. Apakah Anda mengalami kehilangan minat dalam aktivitas
+                                                sehari-hari?</label><br>
+                                            @foreach([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <label><input type="radio" name="jawaban5" value="{{ $val }}"
+                                                    {{ $pengungsi->jawaban5 == $val ? 'checked' : '' }}>
+                                                {{ $label }}</label><br>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label>6. Apakah Anda merasa kesulitan berkonsentrasi?</label><br>
+                                            @foreach([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
+                                            'Sering', 4 => 'Selalu'] as $val => $label)
+                                            <label><input type="radio" name="jawaban6" value="{{ $val }}"
+                                                    {{ $pengungsi->jawaban6 == $val ? 'checked' : '' }}>
+                                                {{ $label }}</label><br>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-primary">Simpan Jawaban</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Tutup</button>
+                                        </div>
+                                    </div>
+                                 </form>
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                    </td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                    </table>
+                    <br />
+                    {{ $data->links() }}
+                    <br />
                 </div>
+                <!-- /.card-body -->
             </div>
         </div>
     </div>
+    </div>
 
     <script type="text/javascript">
-        function deleteConfirmation(id) {
-            swal.fire({
-                title: "Hapus?",
-                icon: 'question',
-                text: "Apakah Anda yakin menghapus ?",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Iya, hapus!",
-                cancelButtonText: "Batal!",
-                reverseButtons: !0
-            }).then(function(e) {
+    function deleteConfirmation(id) {
+        swal.fire({
+            title: "Hapus?",
+            icon: 'question',
+            text: "Apakah Anda yakin menghapus ?",
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "Iya, hapus!",
+            cancelButtonText: "Batal!",
+            reverseButtons: !0
+        }).then(function(e) {
 
-                if (e.value === true) {
-                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            if (e.value === true) {
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-                    $.ajax({
-                        type: 'POST',
-                        url: "{{url('pengungsi/delete')}}/" + id,
-                        data: {
-                            _token: CSRF_TOKEN
-                        },
-                        dataType: 'JSON',
-                        success: function(results) {
-                            if (results.success === true) {
-                                swal.fire("Berhasil!", results.message, "success");
-                                // refresh page after 2 seconds
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 2000);
-                            } else {
-                                swal.fire("Gagal!", results.message, "error");
-                            }
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('pengungsi/delete')}}/" + id,
+                    data: {
+                        _token: CSRF_TOKEN
+                    },
+                    dataType: 'JSON',
+                    success: function(results) {
+                        if (results.success === true) {
+                            swal.fire("Berhasil!", results.message, "success");
+                            // refresh page after 2 seconds
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            swal.fire("Gagal!", results.message, "error");
                         }
-                    });
+                    }
+                });
 
-                } else {
-                    e.dismiss;
-                }
+            } else {
+                e.dismiss;
+            }
 
-            }, function(dismiss) {
-                return false;
-            })
-        }
+        }, function(dismiss) {
+            return false;
+        })
+    }
     </script>
 
 
 
     <script>
-        let form = document.getElementById('search');
-        form.addEventListener('beforeinput', e => {
-            const formdata = new FormData(form);
-            let search = formdata.get('search');
-            let url = "{{ route('searchPengungsi',"search=")}}"+search
+    let form = document.getElementById('search');
+    form.addEventListener('beforeinput', e => {
+        const formdata = new FormData(form);
+        let search = formdata.get('search');
+        let url = "{{ route('searchPengungsi',"
+        search = ")}}" + search
 
-            // let data = url;
-            // alert(data);
+        // let data = url;
+        // alert(data);
 
-            if (url === "") {
-                result;
-            } else {
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        {
-                            let i;
-                            let result = "";
-                            if (data.length === 0) {
-                                result += 'Data tidak ditemukan'
+        if (url === "") {
+            result;
+        } else {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    {
+                        let i;
+                        let result = "";
+                        if (data.length === 0) {
+                            result += 'Data tidak ditemukan'
+                        }
+                        for (i = 0; i < data.length; i++) {
+                            let pengungsi = data[i]
+                            let statKel = pengungsi.statKel
+                            if (statKel == 0) {
+                                statKel = 'Kepala Keluarga';
+                            } else if (statKel == 1) {
+                                statKel = 'Ibu';
+                            } else if (statKel == 2) {
+                                statKel = 'Anak';
+                            } else if (statKel == 3) {
+                                statKel = 'Lainnya';
                             }
-                            for (i = 0; i < data.length; i++) {
-                                let pengungsi = data[i]
-                                let statKel = pengungsi.statKel
-                                if (statKel == 0) {
-                                    statKel = 'Kepala Keluarga';
-                                } else if (statKel == 1) {
-                                    statKel = 'Ibu';
-                                } else if (statKel == 2) {
-                                    statKel = 'Anak';
-                                } else if (statKel == 3) {
-                                    statKel = 'Lainnya';
-                                }
-                                let gender = pengungsi.gender
-                                if (gender == 0) {
-                                    gender = "Perempuan";
-                                } else if (gender == 1) {
-                                    gender = "Laki-laki";
-                                }
-                                let kondisi = pengungsi.statKon
-                                if (kondisi == 0) {
-                                    kondisi = "Sehat";
-                                } else if (kondisi == 1) {
-                                    kondisi = "Luka Ringan";
-                                } else if (kondisi == 2) {
-                                    kondisi = "Luka Sedang";
-                                } else if (kondisi == 3) {
-                                    kondisi = "Luka Berat";
-                                else if (kondisi == 4) 
+                            let gender = pengungsi.gender
+                            if (gender == 0) {
+                                gender = "Perempuan";
+                            } else if (gender == 1) {
+                                gender = "Laki-laki";
+                            }
+                            let kondisi = pengungsi.statKon
+                            if (kondisi == 0) {
+                                kondisi = "Sehat";
+                            } else if (kondisi == 1) {
+                                kondisi = "Luka Ringan";
+                            } else if (kondisi == 2) {
+                                kondisi = "Luka Sedang";
+                            } else if (kondisi == 3) {
+                                kondisi = "Luka Berat";
+                                else if (kondisi == 4)
                                     kondisi = "Hamil atau menyusui";
-                                } else if (kondisi == 5) {
-                                    kondisi = "Difabel";
-                                }
-                                let statPos = pengungsi.statPos;
-                                if (statPos == 0) {
-                                    statPos = "<span class='badge badge-danger'>Keluar</span>";
-                                } else if (statPos == 1) {
-                                    statPos = "<span class='badge badge-success'>Di Posko</span>";
-                                } else if (statPos == 2) {
-                                    statPos = "<span class='badge badge-success'>Pencarian</span>";
-                                }
+                            } else if (kondisi == 5) {
+                                kondisi = "Difabel";
+                            }
+                            let statPos = pengungsi.statPos;
+                            if (statPos == 0) {
+                                statPos = "<span class='badge badge-danger'>Keluar</span>";
+                            } else if (statPos == 1) {
+                                statPos = "<span class='badge badge-success'>Di Posko</span>";
+                            } else if (statPos == 2) {
+                                statPos = "<span class='badge badge-success'>Pencarian</span>";
+                            }
 
-                                result +=
-                                    `<tr>
+                            result +=
+                                `<tr>
                                     <td>${i+1}</td>
                                     <td>${pengungsi.nama }</td>
                                     <td>${statKel}</td>
@@ -1034,13 +1328,13 @@
                                     
 
                 </tr>`;
-                            }
-                            document.getElementById('result').innerHTML = result;
-
                         }
-                    }).catch((err) => console.log(err))
-            }
-        });
+                        document.getElementById('result').innerHTML = result;
+
+                    }
+                }).catch((err) => console.log(err))
+        }
+    });
     </script>
 
 </section>
