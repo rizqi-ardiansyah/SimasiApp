@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Models\KondisiRumah;
+use App\Models\Karyawan;
+
 
 class KondisiRumahController extends Controller
 {
@@ -483,7 +485,7 @@ class KondisiRumahController extends Controller
         )
             // ->join('posko as p','pengungsi.posko_id','=','p.id')
             ->join('integrasi as int','int.posko_id','=','posko.id')
-            ->join('users as u', 'u.id', '=', 'int.user_id')
+            ->join('karyawans as u', 'u.id', '=', 'int.user_id')
             ->where('posko.id', $request->id)
             ->distinct()
             ->get();

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bencana;
 use App\Models\Pengungsi;
 use App\Models\Integrasi;
+use App\Models\Karyawan;
 use App\Models\Posko;
 use App\Models\User;
 use Carbon\Carbon;
@@ -56,7 +57,7 @@ class PoskoController extends Controller
             'posko.namaPosko as namaSamaran'
         )
             ->join('integrasi as int','int.posko_id','=','posko.id')
-            ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
+            ->leftJoin('karyawans AS u', 'int.user_id', '=', 'u.id')
             ->join('bencana as b', 'int.bencana_id', '=', 'b.id')
             ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
             ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'posko.id'
@@ -66,19 +67,36 @@ class PoskoController extends Controller
             ->orderBy('u.id', 'desc')
             ->paginate(5);
 
-        $trc = User::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
-        'users.id as idAdmin', 'lastname')
-            ->join('model_has_roles as mr', 'mr.model_id', '=', 'users.id')
-            ->join('roles as r', 'r.id', '=', 'mr.role_id')
-            ->where(function ($query) {
-                $query->where('r.id', 2)
-                    ->orWhere('r.id', 3);
-                }) //memilih role yang akan ditampilkan (p,trc,r)
-            ->whereNotExists(function ($query) {
-                $query->select(DB::raw(1))
-                    ->from('integrasi')
-                    ->whereRaw('users.id = integrasi.user_id');
-            })->get();
+            $trc = Karyawan::select(
+                DB::raw("concat(firstname, ' ', lastname) as fullName"),
+                'firstname',
+                'lastname',
+                'karyawans.email',
+                'karyawans.id as idAdmin'
+            )
+            ->leftJoin('integrasi', 'karyawans.id', '=', 'integrasi.user_id')
+            ->leftJoin('bencana', 'integrasi.bencana_id', '=', 'bencana.id')
+            ->where(function($query) {
+                $query->whereNull('bencana.status')
+                      ->orWhere('bencana.status', '=', 0);
+            })
+            ->groupBy('karyawans.id', 'firstname', 'lastname', 'karyawans.email')
+            ->orderBy('firstname', 'asc')
+            ->get();
+
+        // $trc = Karyawan::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
+        // 'karyawans.id as idAdmin', 'lastname')
+        //     // ->join('model_has_roles as mr', 'mr.model_id', '=', 'users.id')
+        //     // ->join('roles as r', 'r.id', '=', 'mr.role_id')
+        //     // ->where(function ($query) {
+        //     //     $query->where('r.id', 2)
+        //     //         ->orWhere('r.id', 3);
+        //     //     }) //memilih role yang akan ditampilkan (p,trc,r)
+        //     ->whereNotExists(function ($query) {
+        //         $query->select(DB::raw(1))
+        //             ->from('integrasi')
+        //             ->whereRaw('karyawans.id = integrasi.user_id');
+        //     })->get();
 
         $getTtlPengungsi = Pengungsi::select(DB::raw("count('int.posko_id') as ttlPengungsi"))
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
@@ -147,7 +165,7 @@ class PoskoController extends Controller
             DB::raw('count(int.posko_id) as ttlPengungsi'), 'kapasitas',
         )
             ->leftJoin('integrasi as int','int.posko_id','=','posko.id')
-            ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
+            ->leftJoin('karyawans AS u', 'int.user_id', '=', 'u.id')
             ->leftJoin('bencana as b', 'int.bencana_id', '=', 'b.id')
             ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
             ->groupBy('lokasi', 'b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'detail', 'posko.id'
@@ -171,20 +189,37 @@ class PoskoController extends Controller
             // ->orWhere('b.kelurahan', 'LIKE', "%".$cari."%")
             // ->orWhere('posko.detail', 'LIKE', "%".$cari."%")
             ->paginate(5);
+
+            $trc = Karyawan::select(
+                DB::raw("concat(firstname, ' ', lastname) as fullName"),
+                'firstname',
+                'lastname',
+                'karyawans.email',
+                'karyawans.id as idAdmin'
+            )
+            ->leftJoin('integrasi', 'karyawans.id', '=', 'integrasi.user_id')
+            ->leftJoin('bencana', 'integrasi.bencana_id', '=', 'bencana.id')
+            ->where(function($query) {
+                $query->whereNull('bencana.status')
+                      ->orWhere('bencana.status', '=', 0);
+            })
+            ->groupBy('karyawans.id', 'firstname', 'lastname', 'karyawans.email')
+            ->orderBy('firstname', 'asc')
+            ->get();
     
-            $trc = User::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
-        'users.id as idAdmin', 'lastname')
-            ->join('model_has_roles as mr', 'mr.model_id', '=', 'users.id')
-            ->join('roles as r', 'r.id', '=', 'mr.role_id')
-            ->where(function ($query) {
-                $query->where('r.id', 2)
-                    ->orWhere('r.id', 3);
-                }) //memilih role yang akan ditampilkan (p,trc,r)
-            ->whereNotExists(function ($query) {
-                $query->select(DB::raw(1))
-                    ->from('integrasi')
-                    ->whereRaw('users.id = integrasi.user_id');
-            })->get();
+        //     $trc = User::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
+        // 'karyawans.id as idAdmin', 'lastname')
+        //     // ->join('model_has_roles as mr', 'mr.model_id', '=', 'users.id')
+        //     // ->join('roles as r', 'r.id', '=', 'mr.role_id')
+        //     // ->where(function ($query) {
+        //     //     $query->where('r.id', 2)
+        //     //         ->orWhere('r.id', 3);
+        //     //     }) //memilih role yang akan ditampilkan (p,trc,r)
+        //     ->whereNotExists(function ($query) {
+        //         $query->select(DB::raw(1))
+        //             ->from('integrasi')
+        //             ->whereRaw('karyawans.id = integrasi.user_id');
+        //     })->get();
 
         $getTtlPengungsi = Pengungsi::select(DB::raw("count('int.posko_id') as ttlPengungsi"))
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
@@ -248,7 +283,7 @@ class PoskoController extends Controller
             DB::raw('count(p.posko_id) as ttlPengungsi'),
         )
             ->leftJoin('integrasi as int','int.posko_id','=','posko.id')
-            ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
+            ->leftJoin('karyawans AS u', 'int.user_id', '=', 'u.id')
             ->leftJoin('bencana as b', 'int.bencana_id', '=', 'b.id')
             ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
             ->groupBy('lokasi', 'provinsi', 'kota', 'kecamatan', 'kelurahan', 'detail', 'posko.id'
@@ -274,7 +309,7 @@ class PoskoController extends Controller
      */
     public function createPosko(Request $request)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $request->validate([
             //     // 'namaBelakang' => ['required', 'max:50'],
             //     'nama' => ['string', 'unique:posko'],
@@ -317,8 +352,8 @@ class PoskoController extends Controller
             // $getIdIntegrasi->update();
             
             Alert::success('Success', 'Data berhasil ditambahkan');
-            return back();
-        }
+        //     return back();
+        // }
         return back();
     }
 
@@ -360,7 +395,7 @@ class PoskoController extends Controller
         
         $posko = Posko::where('id', $id)->first();
 
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $posko->namaPosko = $request->namaSamaran;
             // $posko->provinsi = $request->provinsi;
             // $posko->kota = $request->kota;
@@ -383,8 +418,8 @@ class PoskoController extends Controller
             // $member->syncRoles($role);
             Alert::success('Success', 'Data berhasil diubah');
             return redirect()->back();
-        }
-        return redirect()->back();
+        // }
+        // return redirect()->back();
     }
 
     /**
@@ -401,7 +436,7 @@ class PoskoController extends Controller
 
     public function delete(Request $request, $id)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $delete = Posko::destroy($id);yy
             Bencana::where('id', $request->session()->get('idBencana'))
             ->update([
@@ -432,7 +467,7 @@ class PoskoController extends Controller
                 'success' => $success,
                 'message' => $message,
             ]);
-        }
-        return back();
+        // }
+        // return back();
     }
 }

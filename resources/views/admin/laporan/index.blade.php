@@ -66,9 +66,9 @@
                                     <th>Waktu</th>
                                     <th>Lokasi</th>
                                     <th>Total posko</th>
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <th>Aksi</th>
-                                    @endrole
+                                    @endauth
                                 </tr>
                             </thead>
                             <tbody id="result">
@@ -82,7 +82,7 @@
                                     <td>{{$laporan->lokasi}}</td>
                                     <td>{{$laporan->jmlPosko}}</td>
 
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
@@ -107,7 +107,7 @@
 
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
                                 </tr>
                                 @endforeach
 
@@ -253,7 +253,7 @@
                                     <td>${user.fullName}</td>
                                     <td>${user.email}</td>
                                     <td>${user.namaPeran}</td>
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
@@ -283,7 +283,7 @@
                                         
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
                                            
                                             <!-- /.modal-dialog -->
                                         </div> 

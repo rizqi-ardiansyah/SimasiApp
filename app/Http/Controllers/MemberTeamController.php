@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Karyawan;
 
 class MemberTeamController extends Controller
 {
@@ -22,7 +23,7 @@ class MemberTeamController extends Controller
         $member = MemberTeam::select(DB::raw("concat(memberteam.firstname,' ',memberteam.lastname) 
         as fullName"), 'memberteam.firstname', 'memberteam.lastname', 
         'memberteam.email', 'memberteam.nohp','memberteam.alamat','memberteam.peran')
-            ->leftJoin('users as u', 'u.id', '=', 'memberteam.tim')
+            ->leftJoin('karyawans as u', 'u.id', '=', 'memberteam.tim')
             ->orderBy('firstname', 'asc')
             ->paginate(5);
 

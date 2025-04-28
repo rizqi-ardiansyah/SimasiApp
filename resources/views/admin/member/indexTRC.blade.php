@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{url('dashboard')}}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Member</li>
                 </ol>
             </div>
@@ -54,12 +54,17 @@
                                 </div>
                                 <div class="modal-body">
                                     <!-- form start -->
-                                    <form action="{{ route('member.create') }}" method="POST">
+                                    <form action="{{ route('memberTrc.create') }}" method="POST">
                                         @csrf
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="namaDepan">Nama Tim</label>
+                                                <label for="namaDepan">Nama Depan Tim</label>
                                                 <input type="text" class="form-control" id="namaDepan" placeholder="Masukan nama depan" name="namaDepan" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="namaDepan">Nama Belakang Tim</label>
+                                                <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama depan" name="namaBelakang">
                                             </div>
 
                                             <div class="form-group">
@@ -105,11 +110,11 @@
 
 
                     <div class="card-body table-responsive2 ">
-                        @role('pusdalop')
+                        @auth('web')
                         <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Tim
                         </a>
-                        @endrole
+                        @endauth
 
                         <!-- <div id="search_list"></div> -->
 
@@ -121,9 +126,10 @@
                                     <th>Username</th>
                                     <th>Peran</th>
                                     <th>Status</th>
-                                    @role('pusdalop')
+                                    <th>Posko</th>
+                                    @auth('web')
                                     <th>Aksi</th>
-                                    @endrole
+                                    @endauth
                                 </tr>
                             </thead>
                             <tbody id="result">
@@ -135,24 +141,24 @@
                             @foreach ($trcAktif as $key => $member)
 
                             <tr>
-                                <!-- <td>{{$trcAktif->firstItem() + $key  }}</td> -->
                                 <?php $no++;?>
                                 <td><?php echo $no; ?></td>
-                                <td>{{$member->firstname}}</td>
+                                <td>{{$member->firstname}} {{$member->lastname}}</td>
                                 <td>{{$member->email}}</td>
-                                <td>{{$member->namaPeran}}</td>
+                                <td>TRC</td>
                                 <td>
                             <div class="btn-group">
                             <button  class="btn btn-primary btn-sm btn-success" data-offset="-52">
                                 <i class="fas fa-info mr-1"></i> Aktif
                             </button>
+                                <td>{{$member->namaPosko}}</td>
                                 <!-- <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                                         <i class="fas fa-plus mr-1"></i> Tambah Tim
                                 </a> -->
                             </div>
                     </td>
 
-    @role('pusdalop')
+    @auth('web')
     <td>
         <div class="btn-group">
             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
@@ -188,21 +194,23 @@
 
 @foreach ($trcNonAktif as $key => $member)
 <tr>
-    <!-- <td>{{$trcAktif->firstItem() + $key  }}</td> -->
     <?php $no++;?>
     <td><?php echo $no; ?></td>
-    <td>{{$member->firstname}}</td>
+    <td>{{$member->firstname}} {{$member->lastname}}</td>
     <td>{{$member->email}}</td>
-    <td>{{$member->namaPeran}}</td>
+    <td>TRC</td>
+    <!-- <td>{{$member->namaPeran}}</td> -->
     <td>
 <div class="btn-group">
             <button  class="btn btn-primary btn-sm btn-danger" data-offset="-52">
                 <i class="fas fa-info mr-1"></i> Nonaktif
             </button>
         </div>
+    <td>Belum dipilih</td>
+
 </td>
 
-    @role('pusdalop')
+    @auth('web')
     <td>
         <div class="btn-group">
             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
@@ -234,7 +242,7 @@
             </button>
         </div>
     </td>
-    @endrole
+    @endauth
 
 </tr>
 @endforeach
@@ -265,12 +273,17 @@
                             </div>
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form action="{{ url('/member/edit/'.$detail->idAdmin) }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ url('/member/editTrc/'.$detail->idAdmin) }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="namaDepan">Nama Tim</label>
-                                            <input type="text" class="form-control" id="namaTim" placeholder="Masukan nama tim" name="namaTim" value="{{ $detail->firstname }}" required>
+                                            <label for="namaDepan">Nama Depan Tim</label>
+                                            <input type="text" class="form-control" id="namaTim" placeholder="Masukan nama tim" name="namaDepan" value="{{ $detail->firstname }} " required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="namaBelakang">Nama Belakang Tim</label>
+                                            <input type="text" class="form-control" id="namaTim" placeholder="Masukan nama tim" name="namaBelakang" value="{{ $detail->lastname }} ">
                                         </div>
 
                                         <div class="form-group">
@@ -311,36 +324,24 @@
                             </div>
                             <div class="modal-body">
                                 <!-- form start -->
-                                <form action="{{ url('/member/edit/'.$detail->idAdmin) }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ url('/member/editTrc/'.$detail->idAdmin) }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label for="namaDepan">Nama Tim</label>
-                                            <input type="text" class="form-control" id="namaTim" placeholder="Masukan nama tim" name="namaTim" value="{{ $detail->firstname }}" required>
+                                            <input type="text" class="form-control" id="namaTim" placeholder="Masukan nama tim" name="namaDepan" value="{{ $detail->firstname }}" required>
                                         </div>
 
-                                        <!-- <div class="form-group">
+                                        <div class="form-group">
                                             <label for="namaBelakang">Nama belakang</label>
-                                            <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="namaBelakang" value="{{ $detail->lastname }}" required>
-                                        </div> -->
+                                            <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="namaBelakang" value="{{ $detail->lastname }}">
+                                        </div>
 
                                         <div class="form-group">
                                             <label for="email">Username</label>
                                             <input type="text" class="form-control" id="email" placeholder="Masukan username" name="email" value="{{ $detail->email }}" required>
                                         </div>
 
-                                        <!-- <div class="form-group">
-                                            <label for="position-option">Peran</label>
-                                            <select class="form-control" id="peran" name="peran" required>
-                                                <option selected value="{{ $detail->idRole }}" hidden>
-                                                    {{ $detail->namaPeran }}
-                                                </option>
-                                                @foreach ($role as $peran)
-                                                <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                        </div> -->
 
                                         <div class="form-group">
                                                 <label for="peran">Peran</label>
@@ -382,11 +383,11 @@ $idAdmin = $members->idAdmin;
                 </button>
             </div>
             <div class="modal-body">
-            @role('pusdalop')
+            @auth('web')
                         <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-tambahAnggotaTrcAktif-{{$members->idAdmin}}" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Anggota
                         </a>
-                        @endrole
+                        @endauth
                 <!-- form start -->
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
@@ -423,7 +424,7 @@ if ($peran == 1) {
 }
 ?>
                                 </td>
-                                @role('pusdalop')
+                                @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
@@ -450,7 +451,7 @@ if ($peran == 1) {
 
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
                                 @endif
                             </tr>
                             @endforeach
@@ -484,11 +485,11 @@ $idAdmin = $members->idAdmin;
                 </button>
             </div>
             <div class="modal-body">
-            @role('pusdalop')
+            @auth('web')
                         <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-tambahAnggotaTrcNonaktif-{{$members->idAdmin}}" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Anggota
                         </a>
-                        @endrole
+                        @endauth
                 <!-- form start -->
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
@@ -525,7 +526,7 @@ if ($peran == 1) {
 }
 ?>
                                 </td>
-                                @role('pusdalop')
+                                @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
@@ -552,7 +553,7 @@ if ($peran == 1) {
 
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
                                 @endif
                             </tr>
                             @endforeach
@@ -640,21 +641,7 @@ $idAdmin = $members->idAdmin
                                             </select>
                                             </div>
 
-                                            <!-- <div class="form-group">
-                                                <label for="position-option">Peran</label>
-                                                <select class="form-control" id="peran" name="peran" required>
-                                                    @foreach ($role as $peran)
-                                                    <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
-
-                                            <!-- <div class="form-group">
-                                                <label for="peran">Peran</label>
-                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=pusdalop readonly>
-                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=1 hidden>
-                                            </div> -->
+                                          
 
                                         </div>
                                         <!-- /.card-body -->
@@ -934,7 +921,7 @@ $idAdmin = $members->idAdmin
                                     <td>${user.fullName}</td>
                                     <td>${user.email}</td>
                                     <td>${user.namaPeran}</td>
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
@@ -964,7 +951,7 @@ $idAdmin = $members->idAdmin
 
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
 
                                             <!-- /.modal-dialog -->
                                         </div>

@@ -104,7 +104,7 @@ class RansumController extends Controller
         )
             // ->join('posko as p','pengungsi.posko_id','=','p.id')
             ->join('integrasi as int','int.posko_id','=','posko.id')
-            ->join('users as u', 'u.id', '=', 'int.user_id')
+            ->join('karyawan as u', 'u.id', '=', 'int.user_id')
             ->where('posko.id', $request->id)
             ->distinct()
             ->get();

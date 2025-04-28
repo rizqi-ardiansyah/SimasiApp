@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{url('dashboard')}}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Admin</li>
                 </ol>
             </div>
@@ -76,10 +76,10 @@
                                             <div class="form-group">
                                                 <label for="position-option">Peran</label>
                                                 <select class="form-control" id="peran" name="peran" required>
-                                                    @foreach ($role as $peran)
+                                                    <!-- @foreach ($role as $peran)
                                                     <option value="{{ $peran->id }}">{{ $peran->name }}
                                                     </option>
-                                                    @endforeach
+                                                    @endforeach -->
                                                 </select>
                                             </div>
 
@@ -114,11 +114,11 @@
 
 
                     <div class="card-body table-responsive2 ">
-                        @role('pusdalop')
+                        @auth('web')
                         <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Anggota
                         </a>
-                        @endrole
+                        @endauth
 
                         <!-- <div id="search_list"></div> -->
 
@@ -129,9 +129,9 @@
                                     <th>Nama</th>
                                     <th>Email</th>
                                     <th>Peran</th>
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <th>Aksi</th>
-                                    @endrole
+                                    @endauth
                                 </tr>
                             </thead>
                             <tbody id="result">
@@ -144,7 +144,7 @@
                                     <td>{{$member->email}}</td>
                                     <td>{{$member->namaPeran}}</td>
 
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
@@ -165,7 +165,7 @@
 
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
                                 </tr>
                                 @endforeach
 
@@ -217,10 +217,10 @@
                                                 <option selected value="{{ $detail->idRole }}" hidden>
                                                     {{ $detail->namaPeran }}
                                                 </option>
-                                                @foreach ($role as $peran)
+                                                <!-- @foreach ($role as $peran)
                                                 <option value="{{ $peran->id }}">{{ $peran->name }}
                                                 </option>
-                                                @endforeach
+                                                @endforeach -->
                                             </select>
                                         </div>
 
@@ -318,7 +318,7 @@
                                     <td>${user.fullName}</td>
                                     <td>${user.email}</td>
                                     <td>${user.namaPeran}</td>
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
@@ -348,7 +348,7 @@
 
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
 
                                             <!-- /.modal-dialog -->
                                         </div>

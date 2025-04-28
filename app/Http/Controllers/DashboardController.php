@@ -6,6 +6,7 @@ use App\Models\Posko;
 use Illuminate\Http\Request;
 use App\Models\Bencana;
 use App\Models\User;
+use App\Models\Karyawan;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -17,16 +18,28 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $getRP = User::select('*')
-            ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
-            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
-            ->where('r.id', '=', 1)->get();
+        // $getRP = User::select('*')
+        //     ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+        //     ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+        //     ->where('r.id', '=', 1)->get();
+        // $getRPTotal = $getRP->count();
+
+        $getRP = User::select('*');
+            // ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+            // ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            // ->where('r.id', '=', 1)->get();
         $getRPTotal = $getRP->count();
 
-        $getRT = User::select('*')
-            ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
-            ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
-            ->where('r.id', '=', 2)->get();
+        // $getRT = User::select('*')
+        //     ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+        //     ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+        //     ->where('r.id', '=', 2)->get();
+        // $getRTTotal = $getRT->count();
+
+        $getRT = Karyawan::select('*');
+            // ->leftJoin('model_has_roles as mr', 'users.id', '=', 'mr.model_id')
+            // ->leftJoin('roles AS r', 'mr.role_id', '=', 'r.id')
+            // ->where('r.id', '=', 2)->get();
         $getRTTotal = $getRT->count();
 
         // bencana berjalan

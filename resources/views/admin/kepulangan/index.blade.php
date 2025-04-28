@@ -11,8 +11,9 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{url('/kepulangan')}}">Bencana</a></li>
-                    <li class="breadcrumb-item active">Posko</li>
+                    <li class="breadcrumb-item"><a href="{{url('dashboard')}}">Dashboard</a></li>
+                    <!-- <li class="breadcrumb-item"><a href="{{url('/kepulangan')}}">Bencana</a></li>
+                    <li class="breadcrumb-item active">Posko</li> -->
                 </ol>
             </div>
         </div>
@@ -27,7 +28,7 @@
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">List Bencana</h3>
                         <div class="card-tools">
-                            @role('pusdalop')
+                            @auth('web')
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right" placeholder="Search">
@@ -38,8 +39,8 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
-                            @role('trc')
+                            @endauth
+                            @auth('karyawan')
                             <form id="searchForTrc">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="searchForTrc" class="form-control float-right" placeholder="Search">
@@ -50,7 +51,7 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
+                            @endauth
                         </div>
                     </div>
 
@@ -107,11 +108,6 @@ window.onload = function() {
 </script>
 
                     <div class="card-body table-responsive">
-                        <!-- @role('pusdalop')
-                        <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah" style="font-size: 14px;">
-                            <i class="fas fa-plus mr-1"></i> Tambah Bencana
-                        </a>
-                        @endrole -->
 
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
@@ -126,13 +122,10 @@ window.onload = function() {
                                     <th>Kondisi Sekitar</th>
                                     <th>Waktu Update</th>
                                     <th>Status</th>
-                                    <!-- @role('pusdalop')
-                                    <th>Aksi</th>
-                                    @endrole -->
                                 </tr>
                             </thead>
                             <tbody id="result">
-                            @role('pusdalop')
+                            @auth('web')
                                 @php
                                     // Cek apakah ada data dengan status 3
                                     $isAllowedToReturn = false;
@@ -229,9 +222,9 @@ window.onload = function() {
                                 @endif
                                 @endforeach
                                 @endif
-                            @endrole
+                            @endauth
 
-                                @role('trc')
+                                @auth('karyawan')
                                 <?php $i = 0; ?>
                                 @foreach ($data2 as $key => $bencana)
                                 <tr>
@@ -263,10 +256,10 @@ window.onload = function() {
                                 </tr>
                                 @endif
                                 @endforeach
-                                @endrole
+                                @endauth
 
 
-                                @role('relawan')
+                                @auth('admin')
                                 <?php $i = 0; ?>
                                 @foreach ($data2 as $bencana)
                                 <tr>
@@ -297,7 +290,7 @@ window.onload = function() {
                                 </tr>
                                 @endif
                                 @endforeach
-                                @endrole
+                                @endauth
 
                                 @foreach ($data as $detail)
                                     <div class="modal fade" id="modal-tambahh-{{$detail->idBencana}}">
@@ -645,9 +638,15 @@ window.onload = function() {
                                     <!-- /.modal-dialog -->
                                 </div>
                     </div>
+                    @if(auth('web')->check())
                     <div>
-                        <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{request()->user()->id}}" hidden required>
+                        <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{auth('web')->user()->id}}" hidden required>
                     </div>
+                    @elseif(auth('karyawan')->check())
+                    <div>
+                        <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{auth('karyawan')->user()->id}}" hidden required>
+                    </div>
+                    @endif
                     @endforeach
                     </tbody>
                     </table>

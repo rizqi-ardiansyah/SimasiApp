@@ -13,10 +13,10 @@ return [
     |
     */
 
-    'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
-    ],
+    // 'defaults' => [
+    //     'guard' => 'web',
+    //     'passwords' => 'users',
+    // ],
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +39,14 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+        ],
+        'admin' => [ 
+            'driver' => 'session', 
+            'provider' => 'admins', 
+        ], 
+        'karyawan' => [ 
+            'driver' => 'session', 
+            'provider' => 'karyawans', 
         ],
     ],
 
@@ -64,11 +72,14 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admins' => [ 
+            'driver' => 'eloquent', 
+            'model' => App\Models\Admin::class, 
+        ], 
+        'karyawans' => [ 
+            'driver' => 'eloquent', 
+            'model' => App\Models\Karyawan::class, 
+        ],
     ],
 
     /*
@@ -91,6 +102,18 @@ return [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admins' => [ 
+            'provider' => 'admins', 
+            'table' => 'password_resets', 
+            'expire' => 60, 
+            'throttle' => 60,
+        ],
+        'karyawans' => [ 
+            'provider' => 'karyawans', 
+            'table' => 'password_resets', 
+            'expire' => 60, 
             'throttle' => 60,
         ],
     ],

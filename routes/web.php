@@ -13,6 +13,7 @@ use App\Http\Controllers\RansumController;
 use App\Http\Controllers\KepulanganController;
 use App\Http\Controllers\DropdownController;
 use App\Http\Controllers\KondisiRumahController;
+use App\Http\Controllers\AdminLoginController;
 
 
 use App\Http\Controllers\LoginController;
@@ -27,6 +28,18 @@ use App\Http\Controllers\LoginController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Route::prefix('admin')->name('admin.')->group(function () { 
+//     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');     
+//     Route::post('/login', [AdminLoginController::class, 'login'])->name('login.submit'); 
+//     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+// });
+
+// Route::get('/login', [App\Http\Controllers\LoginController::class, 'showLoginForm'])->name('login'); 
+// Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
+
+// Route::middleware('auth:admin')->get('/admin/dashboard', function () { return 'Selamat datang Admin!'; });
+
+// Route::middleware('auth:karyawan')->get('/karyawan/dashboard', function () { return 'Selamat datang Karyawan!'; });
 
 
 Route::get('', function () {
@@ -34,14 +47,39 @@ Route::get('', function () {
         'title' => 'Silahkan login terlebih dahulu'
     ]);
 });
+
+
+// Halaman login
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+
+// Proses login
+// Route::post('/login', [LoginController::class, 'authenticate']);
+
+// Logout
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Dashboard - hanya bisa diakses setelah login
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// });
+
 // Route::get('/login', [LoginController::class, 'index'])->name('login');
 // Saat memakai localhost:8080
-Route::get('/simasi/public/login', [LoginController::class, 'index'])->name('login');
+// Route::get('/simasi/public/login', [LoginController::class, 'index'])->name('login');
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+// Route::post('/login', [LoginController::class, 'authenticate'])->name('login');
+Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/simasi/public/logout', [LoginController::class, 'logout']);
 
-Route::resource('dashboard', DashboardController::class)->middleware('auth');
+// Route::resource('karyawan', DashboardController::class)->middleware('auth');
+Route::get('/karyawan', function () {
+    return view('admin.karyawan.index');
+});
+
+// Route::resource('dashboard', DashboardController::class)->middleware('auth');
+Route::middleware(['auth:web,karyawan,admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 Route::resource('bencana', BencanaController::class);
 Route::resource('posko', PoskoController::class);
 Route::resource('member', MemberController::class);
@@ -52,6 +90,7 @@ Route::resource('cadang', CadangController::class)->only(['index', 'store', 'des
 Route::resource('laporan', LaporanController::class)->only(['index', 'store', 'destroy']);
 
 Route::get('/memberPusdalop', [MemberController::class, 'memberPusdalop']);
+
 Route::get('/memberPusdalop/member', [MemberTeamController::class, 'memberPusdalop']);
 Route::post('/memberPusdalop/create', [MemberTeamController::class, 'createMember'])->name('memberTeam.create');
 Route::match(['get', 'post'], 'memberPusdalop/edit/{id}', [MemberTeamController::class, 'edit']);
@@ -64,10 +103,13 @@ Route::post('memberTRC/deleteAnggota/{id}', [MemberTeamController::class, 'delet
 
 Route::get('/pengungsi/keluarga', 'App\Http\Controllers\PengungsiController@showKeluarga');
 
-Route::resource('member', MemberController::class);
-Route::post('member/create', [MemberController::class, 'createMember'])->name('member.create');
-Route::match(['get', 'post'], 'member/edit/{id}', [MemberController::class, 'edit']);
+// Route::resource('member', MemberController::class);
+Route::post('memberPusdalop/create', [MemberController::class, 'createMemberPusdalop'])->name('memberPusdalop.create');
+Route::match(['get', 'post'], 'member/editPusdalop/{id}', [MemberController::class, 'editPusdalop']);
 Route::post('member/delete/{id}', [MemberController::class, 'delete']);
+
+Route::post('memberTrc/create', [MemberController::class, 'createMemberTrc'])->name('memberTrc.create');
+Route::match(['get', 'post'], 'member/editTrc/{id}', [MemberController::class, 'editTrc']);
 
 Route::post('bencana/create', [BencanaController::class, 'createBencana'])->name('bencana.create');
 Route::match(['get', 'post'], 'bencana/edit/{id}', [BencanaController::class, 'edit']);

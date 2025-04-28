@@ -34,7 +34,7 @@
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">List Posko</h3>
                         <div class="card-tools">
-                            @role('pusdalop')
+                            @auth('web')
                             <form id="search" action="{{ route('posko.searchPosko') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right" placeholder="Search">
@@ -46,9 +46,9 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
+                            @endauth
 
-                            @role('trc')
+                            @auth('karyawan')
                             <form id="searchPoskoTrc">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="searchPoskoTrc" class="form-control float-right" placeholder="Search">
@@ -59,7 +59,7 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
+                            @endauth
 
                         </div>
                     </div>
@@ -84,7 +84,6 @@
                                             <div class="form-group">
                                                 <!-- <label for="exampleInputId">Nama Posko</label> -->
                                                 <input type="text" class="form-control" id="idBencana" name="idBencana" value="{{request()->id}}" hidden required>
-                                                <input type="text" class="form-control" id="idTrc" name="idTrc" value="{{auth()->user()->id}}" hidden required>
                                             </div>
 
                                             <div class="form-group">
@@ -116,7 +115,7 @@
                                                 <select class="form-control" id="trc_id" name="trc_id" required>
                                                     <option selected value="" hidden>Pilih TRC</option>
                                                     @foreach ($getTrc as $trc)
-                                                    <option value="{{ $trc->idAdmin }}">{{ $trc->firstname}}</option>
+                                                   ` <option value="{{ $trc->idAdmin }}">{{ $trc->fullName}}</option>
                                                     <!-- <option value="0">Selesai</option> -->
                                                     @endforeach
                                                     <!-- <option value="">Kosongkan TRC</option> -->
@@ -152,14 +151,14 @@
 
                     <!-- Tabel Posko -->
                     <div class="card-body table-responsive">
-                        @role('pusdalop')
+                        @auth('web')
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Posko
                         </a>
                         <!-- <a href="{{url('/memberTRC')}}" class="btn btn-info mb-2 " style="font-size: 14px;">
                             <i class="fas fa-info mr-1"></i> Cek TRC
                         </a> -->
-                        @endrole
+                        @endauth
 
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
@@ -176,13 +175,9 @@
                                     <th>Rumah Rusak</th>
                                     <!-- <th>Kondisi Sekitar</th> -->
                                     <!-- <th>Waktu Update</th> -->
-                                    <!-- @role('pusdalop')
-                                    <th>Aksi</th>
-                                    @endrole -->
-                                </tr>
                             </thead>
                             <tbody id="result">
-                                @role('pusdalop')
+                                @auth('web')
                                 @foreach($data as $key => $posko)
                                 <tr>
                                     <td>{{ $data->firstItem() + $key  }}</td>
@@ -212,13 +207,13 @@
                                     </td> -->
                                 </tr>
                                 @endforeach
-                                @endrole
+                                @endauth
 
-                                @role('trc')
+                                @auth('karyawan')
                                 <?php $i = 0;?>
                                 @foreach($data as $key => $posko)
                                 <tr>
-                                    @if($posko->idTrc === auth()->user()->id)
+                                    @if($posko->idTrc === auth('karyawan')->user()->id)
                                     <?php $i++;?>
                                     <td>{{ $data->firstItem() + $key  }}</td>
                                     <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
@@ -239,13 +234,13 @@
                                     @endif
                                 </tr>
                                 @endforeach
-                                @endrole
+                                @endauth
 
-                                @role('relawan')
+                                @auth('admin')
                                 <?php $i = 0;?>
                                 @foreach($data as $key => $posko)
                                 <tr>
-                                    @if($posko->idTrc === auth()->user()->id)
+                                    @if($posko->idTrc === auth('karyawan')->user()->id)
                                     <?php $i++;?>
                                     <td>{{ $i }}</td>
                                     <td>{{ $posko->namaPosko }}</td>
@@ -264,7 +259,7 @@
                                     @endif
                                 </tr>
                                 @endforeach
-                                @endrole
+                                @endauth
 
                                 @foreach ($data as $detail)
                                 <div class="modal fade" id="modal-edit-{{$detail->idPosko}}">

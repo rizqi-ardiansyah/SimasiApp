@@ -21,7 +21,13 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">{{auth()->user()->firstname}}</a>
+                        <a href="#" class="d-block">
+                        @if(auth('karyawan')->check())
+                            {{ auth('karyawan')->user()->firstname }} {{ auth('karyawan')->user()->lastname }}
+                        @elseif(auth('web')->check()) 
+                            {{ auth('web')->user()->firstname }} {{ auth('web')->user()->lastname }}
+                        @endif
+                    </a>
                     </div>
                 </div>
                 <!-- Dahsboard -->
@@ -43,7 +49,7 @@
                         </p>
                     </a>
                 </li>
-                @role('pusdalop')
+               
                 <li class="nav-item">
                     <a href="{{url('/cadang')}}" class="nav-link {{ request()->is('cadang') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-window-restore"></i>
@@ -60,7 +66,7 @@
                         </p>
                     </a>
                 </li>
-                @endrole
+                
                 <!-- <li class="nav-item">
                     <a href="{{url('/member')}}" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>

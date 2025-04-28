@@ -20,6 +20,15 @@
               <img class="lgn-logo" src="{{url('/assets/img/logoMangsi.png')}}" alt="logo-login"> <br>
           </div>
     <div class="form">
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
         @if(session()->has('message'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">

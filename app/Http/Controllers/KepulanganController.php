@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kepulangan;
+use App\Models\Karyawan;
 use App\Models\Bencana;
 use App\Models\Posko;
 use App\Models\Pengungsi;
@@ -176,7 +177,7 @@ class KepulanganController extends Controller
                 // 'kr.namaPosko as namaSamaran'
             )
                 ->join('integrasi as int','int.posko_id','=','posko.id')
-                ->leftJoin('users AS u', 'int.user_id', '=', 'u.id')
+                ->leftJoin('karyawans AS u', 'int.user_id', '=', 'u.id')
                 ->join('bencana as b', 'int.bencana_id', '=', 'b.id')
                 // ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
                 ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
@@ -187,18 +188,18 @@ class KepulanganController extends Controller
                 ->orderBy('u.id', 'desc')
                 ->paginate(5);
 
-        $trc = User::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
-        'users.id as idAdmin', 'lastname')
-            ->join('model_has_roles as mr', 'mr.model_id', '=', 'users.id')
-            ->join('roles as r', 'r.id', '=', 'mr.role_id')
-            ->where(function ($query) {
-                $query->where('r.id', 2)
-                    ->orWhere('r.id', 3);
-                }) //memilih role yang akan ditampilkan (p,trc,r)
+        $trc = Karyawan::select(DB::raw("concat(firstname,' ',lastname) as fullName"), 'firstname',
+        'karyawans.id as idAdmin', 'lastname')
+            // ->join('model_has_roles as mr', 'mr.model_id', '=', 'users.id')
+            // ->join('roles as r', 'r.id', '=', 'mr.role_id')
+            // ->where(function ($query) {
+            //     $query->where('r.id', 2)
+            //         ->orWhere('r.id', 3);
+            //     }) //memilih role yang akan ditampilkan (p,trc,r)
             ->whereNotExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('integrasi')
-                    ->whereRaw('users.id = integrasi.user_id');
+                    ->whereRaw('karyawans.id = integrasi.user_id');
             })->get();
 
         $getTtlPengungsi = Pengungsi::select(DB::raw("count('int.posko_id') as ttlPengungsi"))
@@ -788,7 +789,7 @@ class KepulanganController extends Controller
         )
             // ->join('posko as p','pengungsi.posko_id','=','p.id')
             ->join('integrasi as int','int.posko_id','=','posko.id')
-            ->join('users as u', 'u.id', '=', 'int.user_id')
+            ->join('karyawans as u', 'u.id', '=', 'int.user_id')
             ->where('posko.id', $request->id)
             ->distinct()
             ->get();
@@ -852,7 +853,7 @@ class KepulanganController extends Controller
      */
     public function createRumah(Request $request)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $request->validate([
             //     'namaDepan' => ['required', 'max:50'],
             //     'namaBelakang' => ['required', 'max:50'],
@@ -938,8 +939,8 @@ class KepulanganController extends Controller
             }
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
-        }
-        return back();
+        // }
+        // return back();
     }
 
     public function editRumahRusak(Request $request, $id)
@@ -952,7 +953,7 @@ class KepulanganController extends Controller
         
         // $posko = Posko::where('id', $id)->first();
 
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $selectedIds = $request->carinama;
             foreach ($selectedIds as $id) {
                 // $addRumah = new KondisiRumah;
@@ -983,6 +984,7 @@ class KepulanganController extends Controller
                     $editRumah->picRumah = $filename;
                 }
                 $editRumah->status = $request->status;
+                $editRumah->keterangan = $request->keterangan;
                 $editRumah->save();
 
                 $getIdPengungsi = KondisiRumah::select('idPengungsi')->orderBy('id', 'desc')->value('idPengungsi');
@@ -998,13 +1000,13 @@ class KepulanganController extends Controller
 
             Alert::success('Success', 'Data berhasil diubah');
             return back();
-        }
-        return redirect()->back();
+        // }
+        // return redirect()->back();
     }
 
     public function createKondisi(Request $request)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $request->validate([
             //     'namaDepan' => ['required', 'max:50'],
             //     'namaBelakang' => ['required', 'max:50'],
@@ -1093,8 +1095,8 @@ class KepulanganController extends Controller
             }
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
-        }
-        return back();
+        // }
+        // return back();
     }
 
     public function editKondisiSekitar(Request $request, $id)
@@ -1107,7 +1109,7 @@ class KepulanganController extends Controller
         
         // $posko = Posko::where('id', $id)->first();
 
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $selectedIds = $request->cariAlamat;
             foreach ($selectedIds as $id) {
                 // $addRumah = new KondisiRumah;
@@ -1150,7 +1152,7 @@ class KepulanganController extends Controller
 
                 // $getIdKpl = KondisiRumah::select('idKepala')->orderBy('id', 'desc')->value('idKepala');
                 if($id != 0){
-                $getIdKpl = KondisiRumah::where('idKepala', $id)
+                $getIdKpl = kondisiSekitar::where('idKepala', $id)
                 // ->orderBy('id', 'desc')
                 ->value('idKepala');
                 // $getIdKondisiSekitar = KondisiRumah::select('id')->orderBy('id', 'desc')->value('id');
@@ -1167,8 +1169,8 @@ class KepulanganController extends Controller
 
             Alert::success('Success', 'Data berhasil diubah');
             return back();
-        }
-        return redirect()->back();
+        // }
+        // return redirect()->back();
     }
 
     
@@ -1215,7 +1217,7 @@ class KepulanganController extends Controller
      */
     public function delete(Request $request, $id)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $delete = Posko::destroy($id);yy
             Integrasi::where('kondisiRumah_id', $id)
             ->update([
@@ -1245,13 +1247,13 @@ class KepulanganController extends Controller
                 'success' => $success,
                 'message' => $message,
             ]);
-        }
-        return back();
+        // }
+        // return back();
     }
 
     public function deleteKondisiSekitar(Request $request, $id)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $delete = Posko::destroy($id);yy
 
             // Hapus baris jika kpl_id NULL
@@ -1289,7 +1291,7 @@ class KepulanganController extends Controller
                 'success' => $success,
                 'message' => $message,
             ]);
-        }
-        return back();
+        // }
+        // return back();
     }
 }

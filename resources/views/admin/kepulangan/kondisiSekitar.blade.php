@@ -29,7 +29,7 @@
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">Kondisi sekitar bencana <b>{{ $namaBencana }}</b></h3>
                         <div class="card-tools">
-                            @role('pusdalop')
+                            @auth('web')
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right"
@@ -41,8 +41,8 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
-                            @role('trc')
+                            @endauth
+                            @auth('karyawan')
                             <form id="searchForTrc">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="searchForTrc" class="form-control float-right"
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
+                            @endauth
                         </div>
                     </div>
 
@@ -215,12 +215,12 @@
 
 
                     <div class="card-body table-responsive">
-                        @role('pusdalop')
+                        @auth('web')
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah"
                             style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Data
                         </a>
-                        @endrole
+                        @endauth
 
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
@@ -233,14 +233,11 @@
                                     <th>Keterangan</th>
                                     <th>Waktu Update</th>
                                     <th>Aksi</th>
-                                    <!-- @role('pusdalop')
-                                    <th>Aksi</th>
-                                    @endrole -->
                                 </tr>
                             </thead>
                             <tbody id="result">
 
-                                @role('pusdalop')
+                                
                                 @php
                                 $shown = [];
                                 @endphp
@@ -345,10 +342,9 @@
                                 @endif
                                 @endif
                                 @endforeach
-                                @endrole
 
 
-                                @role('trc')
+                                @auth('karyawan')
                                 <?php $i = 0; ?>
                                 @foreach ($data2 as $key => $bencana)
                                 <tr>
@@ -382,10 +378,10 @@
                                 </tr>
                                 @endif
                                 @endforeach
-                                @endrole
+                                @endauth
 
 
-                                @role('relawan')
+                                @auth('admin')
                                 <?php $i = 0; ?>
                                 @foreach ($data2 as $bencana)
                                 <tr>
@@ -418,7 +414,7 @@
                                 </tr>
                                 @endif
                                 @endforeach
-                                @endrole
+                                @endauth
 
                                 @foreach ($kondisiSekitar as $detail)
                                 <div class="modal fade" id="modal-edit-{{$detail->idKr}}">
@@ -527,7 +523,7 @@
                                                         <div class="form-group" id="formAlamat2">
                                                             <label for="alamat">Detail Alamat (Isi kalau tidak ada di list)</label>
                                                             <input type="text" class="form-control" id="alamat"
-                                                                name="alamatBaru" value="{{ $bencana->lokKel ? '' : ($bencana->alamatBaru ?? '') }}"
+                                                                name="alamatBaru" value="{{ $detail->lokKel ? '' : ($detail->alamatBaru ?? '') }}"
                                                                 placeholder="Masukan detail alamat pengungsi">
                                                         </div>
 
@@ -589,10 +585,7 @@
                                     <!-- /.modal-dialog -->
                                 </div>
                     </div>
-                    <div>
-                        <input type="text" class="form-control" id="bencana_id" name="bencana_id"
-                            value="{{request()->user()->id}}" hidden required>
-                    </div>
+                  
                     @endforeach
                     </tbody>
                     </table>

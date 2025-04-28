@@ -12,8 +12,10 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="#">Bencana</a></li>
-                    <li class="breadcrumb-item"><a href="#">Posko</a></li>
+                    <li class="breadcrumb-item"><a href="{{url('/kepulangan')}}">Bencana</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/poskoKepulangan/' . request()->bencana_id) }}">Posko</a></li>
+                    
+
                     <li class="breadcrumb-item active">Daftar Rumah Rusak</a></li>
                 </ol>
             </div>
@@ -29,7 +31,7 @@
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">Daftar rumah rusak pada posko <b>{{ $namaPosko }}</b></h3>
                         <div class="card-tools">
-                            @role('pusdalop')
+                            @auth('web')
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right"
@@ -41,8 +43,8 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
-                            @role('trc')
+                            @endauth
+                            @auth('karyawan')
                             <form id="searchForTrc">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="searchForTrc" class="form-control float-right"
@@ -54,7 +56,7 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
+                            @endauth
                         </div>
                     </div>
 
@@ -221,12 +223,12 @@
 
 
                     <div class="card-body table-responsive">
-                        @role('pusdalop')
+                        @auth('web')
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah"
                             style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Data
                         </a>
-                        @endrole
+                        @endauth
 
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
@@ -240,14 +242,11 @@
                                     <th>Keterangan</th>
                                     <th>Waktu Update</th>
                                     <th>Aksi</th>
-                                    <!-- @role('pusdalop')
-                                    <th>Aksi</th>
-                                    @endrole -->
                                 </tr>
                             </thead>
                             <tbody id="result">
 
-                                @role('pusdalop')
+                                @auth('web')
                                 @foreach ($kondisiRumah as $key => $bencana)
                                 @if(empty($bencana->kondisiRumah_id))
                                 <p>Data kosong</p>
@@ -352,9 +351,9 @@
                                 </tr>
                                 @endif
                                 @endforeach
-                                @endrole
+                                @endauth
 
-                                @role('trc')
+                                @auth('karyawan')
                                 <?php $i = 0; ?>
                                 @foreach ($data2 as $key => $bencana)
                                 <tr>
@@ -388,10 +387,10 @@
                                 </tr>
                                 @endif
                                 @endforeach
-                                @endrole
+                                @endauth
 
 
-                                @role('relawan')
+                                @auth('admin')
                                 <?php $i = 0; ?>
                                 @foreach ($data2 as $bencana)
                                 <tr>
@@ -424,7 +423,7 @@
                                 </tr>
                                 @endif
                                 @endforeach
-                                @endrole
+                                @endauth
 
                                 @foreach ($kondisiRumah as $detail)
                                 <div class="modal fade" id="modal-edit-{{$detail->idKr}}">
@@ -589,10 +588,6 @@
                                     </div>
                                     <!-- /.modal-dialog -->
                                 </div>
-                    </div>
-                    <div>
-                        <input type="text" class="form-control" id="bencana_id" name="bencana_id"
-                            value="{{request()->user()->id}}" hidden required>
                     </div>
                     @endforeach
                     </tbody>

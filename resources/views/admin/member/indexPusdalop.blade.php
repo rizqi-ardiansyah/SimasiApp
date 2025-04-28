@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{{url('dashboard')}}">Dashboard</a></li>
                     <li class="breadcrumb-item active">Member</li>
                 </ol>
             </div>
@@ -52,12 +52,17 @@
                                 </div>
                                 <div class="modal-body">
                                     <!-- form start -->
-                                    <form action="{{ route('member.create') }}" method="POST">
+                                    <form action="{{ route('memberPusdalop.create') }}" method="POST">
                                         @csrf
                                         <div class="card-body">
                                             <div class="form-group">
-                                                <label for="namaDepan">Nama Tim</label>
+                                                <label for="namaDepan">Nama Depan Tim</label>
                                                 <input type="text" class="form-control" id="namaDepan" placeholder="Masukan nama depan" name="namaDepan" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="namaDepan">Nama Belakang Tim</label>
+                                                <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama belakang" name="namaBelakang" required>
                                             </div>
 
                                             <div class="form-group">
@@ -103,11 +108,11 @@
 
 
                     <div class="card-body table-responsive2 ">
-                        @role('pusdalop')
+                        @auth('web')
                         <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Tim
                         </a>
-                        @endrole
+                        @endauth
 
                         <!-- <div id="search_list"></div> -->
 
@@ -118,9 +123,9 @@
                                     <th>Nama</th>
                                     <th>Username</th>
                                     <th>Peran</th>
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <th>Aksi</th>
-                                    @endrole
+                                    @endauth
                                 </tr>
                             </thead>
                             <tbody id="result">
@@ -129,11 +134,12 @@
 
                                 <tr>
                                     <td>{{$data->firstItem() + $key  }}</td>
-                                    <td>{{$member->firstname}}</td>
+                                    <td>{{$member->firstname}} {{$member->lastname}}</td>
                                     <td>{{$member->email}}</td>
-                                    <td>{{$member->namaPeran}}</td>
+                                    <td>Pusdalop</td>
+                                    <!-- <td>{{$member->namaPeran}}</td> -->
 
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
@@ -158,7 +164,7 @@
                                             </button>
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
                                 </tr>
                                 @endforeach
 
@@ -191,8 +197,13 @@
                                     @csrf
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label for="namaDepan">Nama Tim</label>
-                                            <input type="text" class="form-control" id="namaTim" placeholder="Masukan nama tim" name="namaTim" value="{{ $detail->firstname }}" required>
+                                            <label for="namaDepan">Nama Depan Tim</label>
+                                            <input type="text" class="form-control" id="namaDepan" placeholder="Masukan nama tim" name="firstname" value="{{ $detail->firstname }}" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="namaBelakang">Nama Belakang Tim</label>
+                                            <input type="text" class="form-control" id="namaBelakang" placeholder="Masukan nama tim" name="firstname" value="{{ $detail->firstname }}" required>
                                         </div>
 
                                         <div class="form-group">
@@ -239,11 +250,11 @@
                 </button>
             </div>
             <div class="modal-body">
-            @role('pusdalop')
+            @auth('web')
                         <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-tambahAnggota-{{$members->idAdmin}}" style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Anggota
                         </a>
-                        @endrole
+                        @endauth
                 <!-- form start -->
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover">
@@ -280,7 +291,7 @@
                                         }
                                         ?>
                                 </td>
-                                @role('pusdalop')
+                                @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
@@ -300,7 +311,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
                                 @endif
                             </tr>
                             @endforeach
@@ -388,21 +399,7 @@
                                             </select>
                                             </div>
 
-                                            <!-- <div class="form-group">
-                                                <label for="position-option">Peran</label>
-                                                <select class="form-control" id="peran" name="peran" required>
-                                                    @foreach ($role as $peran)
-                                                    <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
-
-                                            <!-- <div class="form-group">
-                                                <label for="peran">Peran</label>
-                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=pusdalop readonly>
-                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=1 hidden>
-                                            </div> -->
+                                           
 
                                         </div>
                                         <!-- /.card-body -->
@@ -491,23 +488,6 @@
                                             @endif
                                             </select>
                                             </div>
-
-                                            <!-- <div class="form-group">
-                                                <label for="position-option">Peran</label>
-                                                <select class="form-control" id="peran" name="peran" required>
-                                                    @foreach ($role as $peran)
-                                                    <option value="{{ $peran->id }}">{{ $peran->name }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
-
-                                            <!-- <div class="form-group">
-                                                <label for="peran">Peran</label>
-                                                <input type="text" class="form-control" id="perans" placeholder="pusdalop" name="peran" value=pusdalop readonly>
-                                                <input type="text" class="form-control" id="peran" placeholder="pusdalop" name="peran" value=1 hidden>
-                                            </div> -->
-
                                         </div>
                                         <!-- /.card-body -->
 
@@ -601,7 +581,7 @@
                                     <td>${user.fullName}</td>
                                     <td>${user.email}</td>
                                     <td>${user.namaPeran}</td>
-                                    @role('pusdalop')
+                                    @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
@@ -631,7 +611,7 @@
                                         
                                         </div>
                                     </td>
-                                    @endrole
+                                    @endauth
                                            
                                             <!-- /.modal-dialog -->
                                         </div> 

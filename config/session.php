@@ -17,6 +17,23 @@ return [
     |            "memcached", "redis", "dynamodb", "array"
     |
     */
+    'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+            'cookie' => 'session_web', // Tambahkan nama cookie unik untuk 'web'
+        ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+            'cookie' => 'session_admin', // Tambahkan nama cookie unik untuk 'admin'
+        ],
+        'karyawan' => [
+            'driver' => 'session',
+            'provider' => 'karyawans',
+            'cookie' => 'session_karyawan', // Tambahkan nama cookie unik untuk 'karyawan'
+        ],
+    ],
 
     'driver' => env('SESSION_DRIVER', 'file'),
 

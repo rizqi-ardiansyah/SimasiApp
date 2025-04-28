@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KepalaKeluarga;
 use App\Models\Pengungsi;
+use App\Models\Karyawan;
 use App\Models\Posko;
 use App\Models\Bencana;
 use App\Models\Integrasi;
@@ -283,7 +284,7 @@ class PengungsiController extends Controller
         )
             // ->join('posko as p','pengungsi.posko_id','=','p.id')
             ->join('integrasi as int','int.posko_id','=','posko.id')
-            ->join('users as u', 'u.id', '=', 'int.user_id')
+            ->join('karyawans as u', 'u.id', '=', 'int.user_id')
             ->where('posko.id', $request->id)
             ->distinct()
             ->get();
@@ -375,7 +376,7 @@ class PengungsiController extends Controller
             )
                 // ->join('posko as p','pengungsi.posko_id','=','p.id')
                 ->join('integrasi as int','int.posko_id','=','posko.id')
-                ->join('users as u', 'u.id', '=', 'int.user_id')
+                ->join('karyawans as u', 'u.id', '=', 'int.user_id')
                 ->where('posko.id', $request->id)
                 ->distinct()
                 ->get();
@@ -687,7 +688,7 @@ class PengungsiController extends Controller
             )
                 // ->join('posko as p','pengungsi.posko_id','=','p.id')
                 ->join('integrasi as int','int.posko_id','=','posko.id')
-                ->join('users as u', 'u.id', '=', 'int.user_id')
+                ->join('karyawans as u', 'u.id', '=', 'int.user_id')
                 ->where('posko.id', $request->id)
                 ->distinct()
                 ->get();
