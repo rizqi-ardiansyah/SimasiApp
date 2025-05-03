@@ -86,39 +86,43 @@ class BencanaController extends Controller
 
     public function searchBencana(Request $request)
     {
-        
-        $cari = $request->search;
+    $cari = $request->search;
 
-        $data = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
-        'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
-        'bencana.nama as namaBencana', 'status',
-        'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
-        'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
-        // DB::raw('count(int.png_id) as ttlPengungsi'),
-        //  DB::raw('count(int.posko_id) as ttlPosko'),
-        'bencana.jmlPosko',
-        DB::raw('count(int.png_id) as ttlPengungsi'),
-        DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
-         ' ',bencana.kelurahan) as alamat")
+    $query = Bencana::select(
+        'bencana.id as idBencana',
+        DB::raw("MAX(bencana.nama) as namaBencana"),
+        DB::raw("MAX(bencana.tanggal) as tgl"),
+        DB::raw("MAX(bencana.waktu) as time"),
+        DB::raw("MAX(bencana.status) as status"),
+        DB::raw("MAX(bencana.updated_at) as waktuUpdate"),
+        DB::raw("MAX(bencana.jmlPengungsi) as jmlPengungsi"),
+        DB::raw("MAX(bencana.provinsi) as provinsi"),
+        DB::raw("MAX(bencana.kota) as kota"),
+        DB::raw("MAX(bencana.kecamatan) as kecamatan"),
+        DB::raw("MAX(bencana.kelurahan) as kelurahan"),
+        DB::raw("MAX(bencana.jmlPosko) as jmlPosko"),
+        DB::raw("COUNT(DISTINCT int.png_id) as ttlPengungsi"),
+        DB::raw("CONCAT(MAX(bencana.provinsi), ', ', MAX(bencana.kota), ', ', MAX(bencana.kecamatan), ', ', MAX(bencana.kelurahan)) as alamat")
     )
-        ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
-        ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
-        ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
-        ->orderBy('bencana.tanggal', 'desc')
-        ->distinct()
-    // ->where('p.bencana_id', '=', 'b.id')
-    // ->where('peng.posko_id','=','p.id')
-        ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
-            'bencana.nama', 'status', 'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
-            'bencana.updated_at', 'bencana.jmlPengungsi', 'bencana.jmlPosko')
-            ->where('bencana.nama', )
-            ->orWhere('bencana.kelurahan', 'LIKE', "%".$cari."%")
-            ->orderBy('bencana.tanggal', 'desc')
-            ->paginate(5);
+    ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
+    ->leftJoin('posko as p', 'int.posko_id', '=', 'p.id')
+    ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
+    ->groupBy('bencana.id')
+    ->orderBy('tgl', 'desc');
     
-            return view('admin.bencana.index', compact('data'))->with('i', (request()->input('page', 1) - 1) * 5);
+
+    // Jika input search tidak kosong, tambahkan filter
+    if (!empty($cari)) {
+        $query->where(function($q) use ($cari) {
+            $q->where('bencana.nama', 'LIKE', "%{$cari}%")
+              ->orWhere('bencana.kelurahan', 'LIKE', "%{$cari}%");
+        });
     }
 
+    $bencana = $query->get();
+
+    return response()->json($bencana);
+    }
 
     
 
@@ -155,7 +159,7 @@ class BencanaController extends Controller
      */
     public function createBencana(Request $request)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             // $request->validate([
             //     'namaDepan' => ['required', 'max:50'],
             //     'namaBelakang' => ['required', 'max:50'],
@@ -182,8 +186,8 @@ class BencanaController extends Controller
             // $addMember->assignRole($role);
             Alert::success('Success', 'Data berhasil ditambahkan');
             return back();
-        }
-        return back();
+        // }
+        // return back();
     }
 
     /**
@@ -218,7 +222,7 @@ class BencanaController extends Controller
     {
         $bencana = Bencana::where('id', $id)->first();
 
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $bencana->nama = $request->namaBencana;
             $bencana->tanggal = $request->tanggal;
             $bencana->waktu = $request->waktu;
@@ -230,8 +234,8 @@ class BencanaController extends Controller
             $bencana->update();
             Alert::success('Success', 'Data berhasil diubah');
             return redirect()->back();
-        }
-        return redirect()->back();
+        // }
+        // return redirect()->back();
     }
 
     /**
@@ -248,7 +252,7 @@ class BencanaController extends Controller
 
     public function delete($id)
     {
-        if (auth()->user()->hasAnyRole(['pusdalop'])) {
+        // if (auth()->user()->hasAnyRole(['pusdalop'])) {
             $getIdPosko = Integrasi::select('posko_id')->where('bencana_id', $id)->value('posko_id');
             $getIdIntegrasi = Integrasi::where('bencana_id', $id)->get();
             $getPosko = Posko::where('id', $getIdPosko)->get();
@@ -272,8 +276,8 @@ class BencanaController extends Controller
                 'success' => $success,
                 'message' => $message,
             ]);
-        }
-        return back();
+        // }
+        // return back();
     }
 
     public function getfrontpage()

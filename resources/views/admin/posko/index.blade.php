@@ -38,8 +38,7 @@
                             @auth('web')
                             <form id="search" action="{{ route('posko.searchPosko') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="search" class="form-control float-right" placeholder="Search">
-                                    <input type="text" class="form-control" id="idBencana" name="idBencana" value="{{request()->id}}" hidden required>
+                                    <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search...">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -402,102 +401,223 @@
         }
     </script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
-    </script>
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous">
+    </script> -->
+
+    <!-- <script>
+    $(document).ready(function(){
+        // Trigger saat user mengetik
+        $('input[name="search"]').on('input', function() {
+            var search = $(this).val(); // Ambil nilai input
+
+            $.ajax({
+                url: "{{ route('posko.searchPosko') }}",
+                method: "GET",
+                data: { search: search },
+                success: function(response){
+                    var html = '';
+                    if(response.length === 0){
+                        html += '<tr><td colspan="10">Data kosong</td></tr>';
+                    }
+                    $.each(response, function(index, bencana){
+                        html += `<tr>
+                            <td>${index+1}</td>
+                            <td>${bencana.namaBencana}</td>
+                            <td>${bencana.time}</td>
+                            <td>${bencana.alamat}</td>
+                            <td>${bencana.jmlPosko} tempat<br>
+                                <a href="{{url('/listPosko')}}/${bencana.idBencana}" class="btn btn-primary btn-xs" title="Lihat posko">
+                                <i class="fas fa-eye"></i> Posko </a>
+                            <td>${bencana.ttlPengungsi} orang</td>
+                            <td>${bencana.waktuUpdate}</td>
+                            <td>
+                                ${
+                                    bencana.status == 1
+                                        ? '<span class="badge badge-danger" style="font-size: 14px;">Siaga</span>'
+                                        : bencana.status == 2
+                                        ? '<span class="badge badge-danger" style="font-size: 14px;">Tanggap Darurat</span>'
+                                        : bencana.status == 3
+                                        ? '<span class="badge badge-success" style="font-size: 14px;">Pemulihan</span>'
+                                        : bencana.status == 0
+                                        ? '<span class="badge badge-info" style="font-size: 14px;">Selesai</span>'
+                                        : '<span class="badge badge-secondary" style="font-size: 14px;">Tidak Diketahui</span>'
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                        <i class="fas fa-bars"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                        <a href="#" class="dropdown-item" title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-${bencana.idBencana}">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item" title="Hapus Bencana" onclick="deleteConfirmation(${bencana.idBencana})">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#result').html(html);
+                }
+            });
+        });
+
+        // Cegah form submit default
+        $('#search').on('submit', function(e) {
+            e.preventDefault();
+        });
+    });
+    </script> -->
 
     <script>
-        let form = document.getElementById('search');
-        form.addEventListener('beforeinput', e => {
-            const formdata = new FormData(form);
-            let search = formdata.get('search');
-            let url = "{{ route('posko.searchPosko', "search = ")   }}" + search
+    function formatDateTimeLocal(dateStr) {
+        const date = new Date(dateStr);
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        const hh = String(date.getHours()).padStart(2, '0');
+        const mi = String(date.getMinutes()).padStart(2, '0');
+        const ss = String(date.getSeconds()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
+    }
+    $(document).ready(function(){
+        // Trigger saat user mengetik
+        $('input[name="search"]').on('input', function() {
+            var search = $(this).val(); // Ambil nilai input
+            var idBencana = "{{ request()->id ?? '' }}"; // jika pakai filter by idBencana
 
-            // let data = url;
-            // alert(data);
-
-            if (url === "") {
-                result;
-            } else {
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        {
-                            let i;
-                            let result = "";
-                            if (data.length === 0) {
-                                result += 'Data tidak ditemukan'
-                            }
-                            for (i = 0; i < data.length; i++) {
-                                let posko = data[i]
-                                let trc = posko.fullName;
-                                if (trc == null) {
-                                    trc = ' ';
-                                } else {
-                                    trc = posko.fullName
-                                }
-                                let dateCreate = new Date(posko.created_at);
-                                dateCreate = dateCreate.toLocaleString();
-                                let dateUpdate = new Date(posko.updated_at);
-                                dateUpdate = dateUpdate.toLocaleString();
-                                result +=
-                                    `<tr>
-                <td>${i+1}</td>
-                                    <td>${posko.namaPosko }</td>
-                                    <td>${posko.lokasi}</td>
-                                    <td>${trc}</td>
-                                    <td>${posko.ttlPengungsi} orang</br>
-                                        <a href="{{url('/listPengungsi')}}/${posko.idPosko}"
-                                            class="btn btn-primary btn-xs" title="Lihat pengungsi"><i
-                                                class="fas fa-eye"></i> Posko </a>
-                                    </td>
-                                    <td>${posko.kapasitas - posko.ttlPengungsi} orang</td>
-                                    <td>${dateCreate}</td>
-                                    <td>${dateUpdate}</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
-                                            data-toggle="dropdown" data-offset="-52">
-                                            <i class="fas fa-bars"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                            <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                                                <i class="fas fa-eye mr-1"></i> Detail
-                                            </a>
-                                            <div class="dropdown-divider"></div> -->
-                                            <a href="#" class="dropdown-item " title="Edit Bencana"
-                                                data-toggle="modal"
-                                                data-target="#modal-edit-${posko.idPosko}">
-                                                <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                    <path fill="currentColor"
-                                                        d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                                                </svg>
-                                                Edit
-                                            </a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="#" class="dropdown-item " title="Hapus Pengungsi"
-                                                onclick="deleteConfirmation(${posko.idPosko})">
-                                                <i class="fas fa-trash mr-1"></i> Hapus
-                                            </a>
-                                        </div>
-
+            $.ajax({
+                url: "{{ route('posko.searchPosko') }}",
+                method: "GET",
+                data: {
+                    search: search,
+                    idBencana: idBencana
+                },
+                success: function(response){
+                    var html = '';
+                    if(response.length === 0){
+                        html += '<tr><td colspan="10">Data tidak ditemukan</td></tr>';
+                    }
+                    $.each(response, function(index, posko){
+                        let sisa = posko.kapasitas - posko.ttlPengungsi;
+                        let admin = posko.fullName ?? ' ';
+                        html += `<tr>
+                            <td>${index+1}</td>
+                            <td>${posko.namaPosko}</td>
+                            <td>${posko.lokasi}</td>
+                            <td>${admin}</td>
+                            <td>${posko.ttlPengungsi} orang<br>
+                                <a href="{{url('/listPengungsi')}}/<?php echo $posko->idPosko; ?>/<?php echo $posko->bencana_id; ?>/<?php echo $posko->idTrc; ?>" class="btn btn-primary btn-xs"><i class="fas fa-eye"></i> Pengungsi </a>
+                                    <i class="fas fa-eye"></i> Pengungsi </a>
+                            </td>
+                            <td>${sisa} orang</td>
+                            <td>${formatDateTimeLocal(posko.created_at)}</td>
+                            <td>${formatDateTimeLocal(posko.updated_at)}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                        <i class="fas fa-bars"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                        <a href="#" class="dropdown-item" title="Edit Posko"
+                                            data-toggle="modal" data-target="#modal-edit-${posko.idPosko}">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item" title="Hapus Posko"
+                                            onclick="deleteConfirmation(${posko.idPosko})">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </a>
                                     </div>
-                                </td>
-
-                                        <!-- /.modal-dialog -->
-                                    </div>
-
-                                </td>
-
-                </tr>`;
-                            }
-                            document.getElementById('result').innerHTML = result;
-
-                        }
-                    }).catch((err) => console.log(err))
-            }
+                                </div>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#result').html(html);
+                },
+                error: function(xhr) {
+                    console.error(xhr.responseText);
+                }
+            });
         });
-    </script>
 
+        // Cegah submit form
+        $('#search').on('submit', function(e) {
+            e.preventDefault();
+        });
+    });
+</script>
+
+
+    <script>
+    let input = document.getElementById('searchs');
+
+    input.addEventListener('input', function () {
+        let search = input.value;
+        let idBencana = "{{ request()->idBencana ?? '' }}"; // sesuaikan jika pakai param lain
+        let url = `/searchPosko?idBencana=${idBencana}&search=${search}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                let result = '';
+                if (data.data.length === 0) {
+                    result = '<tr><td colspan="8">Data tidak ditemukan</td></tr>';
+                } else {
+                    data.data.forEach((posko, i) => {
+                        let trc = posko.fullName ?? ' ';
+                        let dateCreate = new Date(posko.created_at).toLocaleString();
+                        let dateUpdate = new Date(posko.updated_at).toLocaleString();
+
+                        result += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${posko.namaPosko}</td>
+                            <td>${posko.lokasi}</td>
+                            <td>${trc}</td>
+                            <td>${posko.ttlPengungsi} orang<br>
+                                <a href="/listPengungsi/${posko.idPosko}" class="btn btn-primary btn-xs" title="Lihat pengungsi">
+                                    <i class="fas fa-eye"></i> Posko
+                                </a>
+                            </td>
+                            <td>${posko.kapasitas - posko.ttlPengungsi} orang</td>
+                            <td>${dateCreate}</td>
+                            <td>${dateUpdate}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                        <i class="fas fa-bars"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                        <a href="#" class="dropdown-item" title="Edit Posko"
+                                            data-toggle="modal"
+                                            data-target="#modal-edit-${posko.idPosko}">
+                                            <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                                <path fill="currentColor"
+                                                    d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                                            </svg>
+                                            Edit
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item" title="Hapus Posko" onclick="deleteConfirmation(${posko.idPosko})">
+                                            <i class="fas fa-trash mr-1"></i> Hapus
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>`;
+                    });
+                }
+
+                document.getElementById('result').innerHTML = result;
+            })
+            .catch((err) => console.log(err));
+    });
+</script>
 
     <script>
         let form2 = document.getElementById('searchPoskoTrc');

@@ -34,7 +34,7 @@
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">List Pegungsi yang Boleh Pulang</h3>
                         <div class="card-tools">
-                            @role('pusdalop')
+                            @auth('web')
                             <form id="search" action="{{ route('posko.searchPosko') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right"
@@ -48,9 +48,9 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
+                            @endauth
 
-                            @role('trc')
+                            @auth('karyawan')
                             <form id="searchPoskoTrc">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="searchPoskoTrc" class="form-control float-right"
@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                             </form>
-                            @endrole
+                            @endauth
 
                         </div>
                     </div>
@@ -82,14 +82,14 @@
 
                     <!-- Tabel Posko -->
                     <div class="card-body table-responsive">
-                        @role('pusdalop')
+                        @auth('web')
                         <!-- <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#modal-default" style="font-size: 14px;">
                                 <i class="fas fa-plus mr-1"></i> Tambah Posko
                             </a> -->
                         <!-- <a href="{{url('/memberTRC')}}" class="btn btn-info mb-2 " style="font-size: 14px;">
                             <i class="fas fa-info mr-1"></i> Cek TRC
                         </a> -->
-                        @endrole
+                        @endauth
 
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
@@ -108,26 +108,26 @@
                                 </tr>
                             </thead>
                             <tbody id="result">
-                                @role('pusdalop')
+                                @auth('web')
                                 @foreach($kepulangan as $key => $psiko)
                                 <tr>
                                     <td>{{ $kepulangan->firstItem() + $key  }}</td>
                                     <td>{{ $psiko->nama }}</td>
                                     <!-- <td>{{ $psiko->telpon}}</td> -->
-                                    <td>{{ $psiko->lokKel}}</td>
+                                    <td>{{ $psiko->lokKel ?: $psiko->alamatPengungsi }}</td>
                                     <td>{{ $psiko->umur}}</td>
                                     <!-- <td>{{ $psiko->statusBencana}}</td> -->
                                     <td>
                                         <div style="margin-bottom: 6px;">
                                             <?php
                                             $statBen = $psiko->statusBencana;
-                                            if ($statBen === 0) {
+                                            if ($statBen === 1) {
                                                 echo "<span class='badge badge-danger' style='font-size: 14px'>Siaga</span>";
-                                            } else if ($statBen == 1) {
-                                                echo "<span class='badge badge-info' style='font-size: 14px' >Tanggap Darurat</span>";
+                                            } else if ($statBen == 2) {
+                                                echo "<span class='badge badge-danger' style='font-size: 14px' >Tanggap Darurat</span>";
                                             }else if ($statBen == 3) {
                                                 echo "<span class='badge badge-success' style='font-size: 14px' >Pemulihan</span>";
-                                            }else if ($statBen == 4) {
+                                            }else if ($statBen == 0) {
                                                 echo "<span class='badge badge-info' style='font-size: 14px' >Selesai</span>";
                                             }else{
                                                 echo "-";
@@ -503,7 +503,7 @@
                                                                 <div class="form-group" id="formAlamat">
                                                                     <label for="alamat">Alamat</label>
                                                                     <input type="text" class="form-control" id="alamat"
-                                                                        name="alamat" value="{{$psiko->lokKel}}"
+                                                                        name="alamat" value="{{ $psiko->lokKel ?: $psiko->alamatPengungsi }}"
                                                                         placeholder="Masukan detail alamat pengungsi"
                                                                         readonly>
                                                                 </div>
@@ -832,9 +832,9 @@
                                             </td>
                                 </tr>
                                 @endforeach
-                                @endrole
+                                @endauth
 
-                                @role('trc')
+                                @auth('karyawan')
                                 <?php $i = 0;?>
                                 @foreach($kepulangan as $key => $psiko)
                                 <tr>
@@ -857,9 +857,9 @@
                                     @endif
                                 </tr>
                                 @endforeach
-                                @endrole
+                                @endauth
 
-                                @role('relawan')
+                                @auth('admin')
                                 <?php $i = 0;?>
                                 @foreach($data as $key => $posko)
                                 <tr>
@@ -883,7 +883,7 @@
                                     @endif
                                 </tr>
                                 @endforeach
-                                @endrole
+                                @endauth
                             </tbody>
                         </table>
                         <br />

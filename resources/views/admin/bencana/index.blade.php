@@ -30,7 +30,7 @@
                             @auth('web') 
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="search" class="form-control float-right" placeholder="Search">
+                                    <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search...">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -164,7 +164,9 @@ window.onload = function() {
                                                 <label for="status">Status</label>
                                                 <select class="form-control" id="status" name="status" required>
                                                     <option selected value="" hidden>Pilih status</option>
-                                                    <option value="1">Berjalan</option>
+                                                    <option value="1">Siaga</option>
+                                                    <option value="2">Tanggap Darurat</option>
+                                                    <option value="3">Pemulihan</option>
                                                     <option value="0">Selesai</option>
                                                 </select>
                                             </div>
@@ -244,22 +246,22 @@ window.onload = function() {
                                         @php
                                         $value = 'Siaga'
                                         @endphp
-                                        <span class="badge badge-danger"><?php echo $value; ?></span>
+                                        <span class="badge badge-danger" style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 2)
                                         @php
                                         $value = 'Tanggap Darurat'
                                         @endphp
-                                        <span class="badge badge-danger"><?php echo $value; ?></span>
+                                        <span class="badge badge-danger" style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 3)
                                         @php
                                         $value = 'Pemulihan'
                                         @endphp
-                                        <span class="badge badge-success"><?php echo $value; ?></span>
+                                        <span class="badge badge-success" style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 0)
                                         @php
                                         $value = 'Selesai'
                                         @endphp
-                                        <span class="badge badge-info">Selesai</span>
+                                        <span class="badge badge-info" style="font-size: 14px;">Selesai</span>
                                         @endif
                                     </td>
                                     <td>
@@ -524,92 +526,72 @@ window.onload = function() {
     </script>
 
     <script>
-        let form = document.getElementById('search');
-        form.addEventListener('beforeinput', e => {
-            const formdata = new FormData(form);
-            let search = formdata.get('search');
+    $(document).ready(function(){
+        // Trigger saat user mengetik
+        $('input[name="search"]').on('input', function() {
+            var search = $(this).val(); // Ambil nilai input
 
-            if (url === "") {
-                result;
-            } else {
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        let i;
-                        let result = "";
-                        if (data.length === 0) {
-                            result += 'Data kosong'
-                        }
-                        for (i = 0; i < data.length; i++) {
-                            let bencana = data[i]
-                            result +=
-                                `<tr>
-                                   <td>${i+1}</td>
-                                    <td>${bencana.namaBencana }</td>
-                                    <td>${bencana.time}</td>
-                                    <td>${bencana.alamat}</td>
-                                    <td>${bencana.jmlPosko} tempat</br>
-                                        <a href="{{url('/listPosko')}}/${bencana.idBencana}"
-                                            class="btn btn-primary btn-xs" title="Lihat posko"><i
-                                                class="fas fa-eye"></i> Posko </a>
-                                    </td>
-                                    <td>${bencana.ttlPengungsi }</td>
-                                    <td>${bencana.waktuUpdate }</td>
-                                    <td>
-                                        @if($bencana->status == 1)
-                                        @php
-                                        $value = 'Berjalan'
-                                        @endphp
-                                        <span class="badge badge-success"><?php echo $value; ?></span>
-                                        @else
-                                        @php
-                                        $value = 'Selesai'
-                                        @endphp
-                                        <span class="badge badge-danger">Selesai</span>
-                                        @endif
-                                    </td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
-                                            data-toggle="dropdown" data-offset="-52">
-                                            <i class="fas fa-bars"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                            <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                                                <i class="fas fa-eye mr-1"></i> Detail
-                                            </a>
-                                            <div class="dropdown-divider"></div> -->
-                                            <a href="#" class="dropdown-item " title="Edit Bencana"
-                                                data-toggle="modal"
-                                                data-target="#modal-edit-${bencana.idBencana}">
-                                                <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                    <path fill="currentColor"
-                                                        d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                                                </svg>
-                                                Edit
-                                            </a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="#" class="dropdown-item " title="Hapus Pengungsi"
-                                                onclick="deleteConfirmation(${bencana.idBencana})">
-                                                <i class="fas fa-trash mr-1"></i> Hapus
-                                            </a>
-                                        </div>
-
+            $.ajax({
+                url: "{{ route('bencana.searchBencana') }}",
+                method: "GET",
+                data: { search: search },
+                success: function(response){
+                    var html = '';
+                    if(response.length === 0){
+                        html += '<tr><td colspan="10">Data kosong</td></tr>';
+                    }
+                    $.each(response, function(index, bencana){
+                        html += `<tr>
+                            <td>${index+1}</td>
+                            <td>${bencana.namaBencana}</td>
+                            <td>${bencana.time}</td>
+                            <td>${bencana.alamat}</td>
+                            <td>${bencana.jmlPosko} tempat<br>
+                                <a href="{{url('/listPosko')}}/${bencana.idBencana}" class="btn btn-primary btn-xs" title="Lihat posko">
+                                <i class="fas fa-eye"></i> Posko </a>
+                            <td>${bencana.ttlPengungsi} orang</td>
+                            <td>${bencana.waktuUpdate}</td>
+                            <td>
+                                ${
+                                    bencana.status == 1
+                                        ? '<span class="badge badge-danger" style="font-size: 14px;">Siaga</span>'
+                                        : bencana.status == 2
+                                        ? '<span class="badge badge-danger" style="font-size: 14px;">Tanggap Darurat</span>'
+                                        : bencana.status == 3
+                                        ? '<span class="badge badge-success" style="font-size: 14px;">Pemulihan</span>'
+                                        : bencana.status == 0
+                                        ? '<span class="badge badge-info" style="font-size: 14px;">Selesai</span>'
+                                        : '<span class="badge badge-secondary" style="font-size: 14px;">Tidak Diketahui</span>'
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                        <i class="fas fa-bars"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                        <a href="#" class="dropdown-item" title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-${bencana.idBencana}">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item" title="Hapus Bencana" onclick="deleteConfirmation(${bencana.idBencana})">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </a>
                                     </div>
-                                </td>
-
-                                        <!-- /.modal-dialog -->
-                                    </div>
-
-                                </td>
-
-                </tr>`;
-                        }
-                        document.getElementById('result').innerHTML = result;
-
-                    }).catch((err) => console.log(err))
-            }
+                                </div>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#result').html(html);
+                }
+            });
         });
+
+        // Cegah form submit default
+        $('#search').on('submit', function(e) {
+            e.preventDefault();
+        });
+    });
     </script>
 
     <script>
@@ -638,7 +620,7 @@ window.onload = function() {
                             let bencana = data[i]
                             result +=
                                 `<tr>
-                <td>${i+1}</td>
+                                <td>${i+1}</td>
                                     <td>${bencana.namaBencana }</td>
                                     <td>${bencana.waktu}</td>
                                     <td>${bencana.lokasi}</td>

@@ -347,7 +347,7 @@
                                         }
                                         ?>
                                     </td>
-                                    <td>{{ $pengungsi->namaKepala}}</td>
+                                    <td><center>{{ $pengungsi->namaKepala ? $pengungsi->namaKepala : '-'}}<center></td>
                                     <td>{{ $pengungsi->telpon }}</td>
                                     <td>
                                         <?php
@@ -1216,7 +1216,7 @@
     </script>
 
 
-
+<!-- 
     <script>
     let form = document.getElementById('search');
     form.addEventListener('beforeinput', e => {
@@ -1224,9 +1224,6 @@
         let search = formdata.get('search');
         let url = "{{ route('searchPengungsi',"
         search = ")}}" + search
-
-        // let data = url;
-        // alert(data);
 
         if (url === "") {
             result;
@@ -1299,10 +1296,6 @@
                                                 <i class="fas fa-bars"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-lg" role="menu">
-                                                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                                                    <i class="fas fa-eye mr-1"></i> Detail
-                                                </a>
-                                                <div class="dropdown-divider"></div> -->
                                                 <a href="#" class="dropdown-item " title="Edit Pengungsi"
                                                     data-toggle="modal"
                                                     data-target="#modal-edit-${pengungsi.idPengungsi}">
@@ -1318,11 +1311,7 @@
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
-                                            <!-- /.modal-dialog -->
                                         </div>
-                                        <!-- <a href="#" class="btn btn-danger btn-sm" title="Hapus Pengungsi">
-                                            Hapus
-                                        </a> -->
                                     </td>
 
                                     
@@ -1335,7 +1324,86 @@
                 }).catch((err) => console.log(err))
         }
     });
-    </script>
+    </script> -->
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const inputSearch = document.querySelector('input[name="search"]');
+
+    inputSearch.addEventListener('input', function() {
+        let search = this.value;
+
+        fetch(`{{ route('pengungsi.searchPengungsis') }}?search=${search}`)
+            .then(response => response.json())
+            .then(data => {
+                let result = '';
+
+                if (data.length === 0) {
+                    result += '<tr><td colspan="10">Data tidak ditemukan</td></tr>';
+                } else {
+                    data.forEach((pengungsi, i) => {
+                        let statKel = ['Kepala Keluarga', 'Ibu', 'Anak', 'Lainnya'][pengungsi.statKel] || '-';
+                        let gender = ['Perempuan', 'Laki-laki'][pengungsi.gender] || '-';
+                        let kondisiList = ["Sehat", "Luka Ringan", "Luka Sedang", "Luka Berat", "Hamil atau menyusui", "Difabel"];
+                        let kondisi = kondisiList[pengungsi.statKon] || "-";
+                        let statPos = ['<span class="badge badge-danger">Keluar</span>', 
+                                       '<span class="badge badge-success">Di Posko</span>',
+                                       '<span class="badge badge-success">Pencarian</span>'][pengungsi.statPos] || "-";
+                        let statPsikoList = ["Belum Baik", "Baik"];
+                        let statPsiko = statPsikoList[pengungsi.statPsiko] || "-";
+
+                        result += `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${pengungsi.nama}</td>
+                            <td style="text-align: center;">${statKel}</td>
+                            <td style="text-align: center;">${pengungsi.namaKepala ? pengungsi.namaKepala : '-'}</td>        
+                            <td>${pengungsi.telpon}</td>
+                            <td>${pengungsi.lokKel ? pengungsi.lokKel : pengungsi.alamat}</td>
+                            <td style="text-align: center;">${gender}</td>
+                            <td>${pengungsi.umur}</td>
+                            <td style="text-align: center;">${kondisi}</td>
+                            <td style="text-align: center;">${statPsiko}</td>
+                            <td style="text-align: center;">${statPos}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                        <i class="fas fa-bars"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                        <a href="#" class="dropdown-item" title="Edit Pengungsi" data-toggle="modal" data-target="#modal-edit-${pengungsi.idPengungsi}">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item " title="Cek Psikologi"
+                                                    data-toggle="modal"
+                                                    data-target="#modal-psiko-{{$pengungsi->idPengungsi}}">
+                                                    <i class="fas fa-brain"></i>
+                                                    Cek Psikologi
+                                                </a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" class="dropdown-item" title="Hapus Pengungsi" onclick="deleteConfirmation(${pengungsi.idPengungsi})">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>`;
+                    });
+                }
+
+                document.getElementById('result').innerHTML = result;
+            })
+            .catch(error => console.error('Fetch error:', error));
+    });
+
+    // Optional: Cegah form submit bawaan
+    document.getElementById('search').addEventListener('submit', function(e) {
+        e.preventDefault();
+    });
+});
+</script>
+
 
 </section>
 
