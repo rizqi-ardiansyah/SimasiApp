@@ -14,7 +14,8 @@ use App\Http\Controllers\KepulanganController;
 use App\Http\Controllers\DropdownController;
 use App\Http\Controllers\KondisiRumahController;
 use App\Http\Controllers\AdminLoginController;
-
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\LoginController;
 
@@ -177,6 +178,29 @@ Route::get("/search/memberTRC", [MemberController::class, 'searchTRC'])->name('s
 
 Route::get('/carinama', [KepulanganController::class, 'getData'])->name('dropdown.data');
 // Route::get('selectName', [IndonesiaController::class, 'provinsi'])->name('provinsi.index');
+
+// Route::get('/predict', function () {
+//     return view('admin.pengungsi.index');
+// });
+
+// web.php
+
+
+Route::get('/predict', function () {
+    return view('admin.predict.index');
+});
+
+Route::post('/predict', function (Request $request) {
+
+    $foto = $request->file('foto');
+
+    $response = Http::attach(
+        'foto', file_get_contents($foto->getRealPath()), $foto->getClientOriginalName()
+    )->post('http://127.0.0.1:8000/predict'); // ini URL backend Docker kamu
+
+    return response()->json($response->json());
+});
+
 
 
 
