@@ -169,6 +169,7 @@
                                     <!-- <th>Detail</th> -->
                                     <th>TRC</th>
                                     <th>Pengungsi</th>
+                                    <th>Sisa Kapasitas</th>
                                     <th>Boleh Pulang</th>
                                     <!-- <th>Waktu Pelaporan</th>
                                     <th>Waktu Update</th> -->
@@ -186,7 +187,7 @@
                                     <td>{{$posko->namaSamaran }}</td>
                                     <td>{{ $posko->lokasi}}</td>
                                     <!-- <td>{{ $posko->detail}}</td> -->
-                                    <td>{{ $posko->firstname}}</td>
+                                    <td>{{ $posko->fullName}}</td>
                                     <td>
                                         {{ $posko->ttlPengungsi}} orang
                                         <!-- @foreach($ttlPengungsi as $ttl)
@@ -195,6 +196,9 @@
                                         <a href="{{url('/listPengungsi')}}/<?php echo $posko->idPosko; ?>/<?php echo $posko->bencana_id; ?>/<?php echo $posko->idTrc; ?>" class="btn btn-primary btn-xs" style="font-size: 14px;"><i class="fas fa-eye"></i> Pengungsi </a>
                                     </td>
                                     <td><?php echo $posko->kapasitas - $posko->ttlPengungsi; ?> orang</td>
+                                    <td>
+                                        {{ $posko->jmlPengungsiPulang}} orang
+                                    </td>
                                     <!-- <td>{{ $posko->created_at}}</td>
                                     <td>{{ $posko->updated_at}}</td> -->
                                     <td>

@@ -347,7 +347,9 @@
                                         }
                                         ?>
                                     </td>
-                                    <td><center>{{ $pengungsi->namaKepala ? $pengungsi->namaKepala : '-'}}<center></td>
+                                    <td>
+                                        <center>{{ $pengungsi->namaKepala ? $pengungsi->namaKepala : '-'}}<center>
+                                    </td>
                                     <td>{{ $pengungsi->telpon }}</td>
                                     <td>
                                         <?php
@@ -407,12 +409,14 @@
                                     <td>
                                         <?php
                                         $statPos = $pengungsi->statPos;
-                                        if ($statPos == 0) {
+                                        if ($statPos === 0) {
                                             echo "<span class='badge badge-danger'>Keluar</span>";
-                                        } else if ($statPos == 1) {
+                                        } else if ($statPos === 1) {
                                             echo "<span class='badge badge-success'>Di Posko</span>";
-                                        }else if ($statPos == 2) {
+                                        }else if ($statPos === 2) {
                                             echo "<span class='badge badge-danger'>Pencarian</span>";
+                                        }else {
+                                            echo "<span class='badge badge-warning'>Belum diisi</span>";
                                         }
                                         ?>
                                     </td>
@@ -972,12 +976,13 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
+                                <div class="modal-body">
+
 
                                 <form action="{{ route('kondisiPsikologis.create')  }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="idPengungsi" value="{{ $pengungsi->idPengungsi }}">
 
-                                    <div class="modal-body">
 
                                         <div class="form-group">
                                             <label>1. Apakah Anda merasa cemas akhir-akhir ini?</label><br>
@@ -1045,10 +1050,78 @@
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Tutup</button>
                                         </div>
+                                    
+                                </form>
+
+
+
+                                <form id="formPrediksi-{{$pengungsi->idPengungsi}}" enctype="multipart/form-data">
+                                    @csrf
+
+                                    <div class="form-group">
+                                        <label for="fotoInput-{{$pengungsi->idPengungsi}}">Upload Foto Wajah</label><br>
+                                        <input type="file" class="form-control-file" name="foto"
+                                            id="fotoInput-{{$pengungsi->idPengungsi}}" required>
                                     </div>
-                                 </form>
+
+                                    <button type="submit" id="submitBtn" class="d-none">Kirim</button>
+                                    <!-- Tetap disembunyikan -->
+                                </form>
+
+                                <div id="hasil-{{$pengungsi->idPengungsi}}" class="mt-3"></div>
+                                </div>
+
+                                <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const form = document.getElementById(
+                                        'formPrediksi-{{$pengungsi->idPengungsi}}');
+                                    const fotoInput = document.getElementById(
+                                        'fotoInput-{{$pengungsi->idPengungsi}}');
+                                    const hasil = document.getElementById('hasil-{{$pengungsi->idPengungsi}}');
 
 
+                                    // Trigger submit otomatis setelah file diubah
+                                    fotoInput.addEventListener('change', function() {
+                                        if (fotoInput.files.length > 0) {
+                                            // Trigger submit programmatically
+                                            form.dispatchEvent(new Event('submit', {
+                                                cancelable: true
+                                            }));
+                                        }
+                                    });
+
+                                    form.addEventListener('submit', function(e) {
+                                        e.preventDefault();
+
+                                        let formData = new FormData(form);
+
+                                        fetch("{{ url('/predict') }}", {
+                                                method: 'POST',
+                                                body: formData
+                                            })
+                                            .then(res => res.json())
+                                            .then(data => {
+                                                const label = {
+                                                    0: 'Marah',
+                                                    1: 'Senang',
+                                                    2: 'Netral',
+                                                    3: 'Sedih',
+                                                    4: 'Terkejut'
+                                                };
+                                                hasil.className = 'alert alert-info';
+                                                hasil.innerText = 'Ekspresi: ' + label[data
+                                                        .predicted_class] + ' (Confidence: ' + data
+                                                    .confidence + ')';
+                                            })
+                                            .catch(err => {
+                                                console.error(err);
+                                                hasil.className = 'alert alert-danger';
+                                                hasil.innerText =
+                                                    'Terjadi kesalahan saat memproses.';
+                                            });
+                                    });
+                                });
+                                </script>
 
                             </div>
                         </div>
@@ -1072,6 +1145,8 @@
         </div>
     </div>
     </div>
+
+
 
     <script type="text/javascript">
     function deleteConfirmation(id) {
@@ -1121,31 +1196,38 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const inputSearch = document.querySelector('input[name="search"]');
+        const inputSearch = document.querySelector('input[name="search"]');
 
-    inputSearch.addEventListener('input', function() {
-        let search = this.value;
+        inputSearch.addEventListener('input', function() {
+            let search = this.value;
 
-        fetch(`{{ route('pengungsi.searchPengungsis') }}?search=${search}`)
-            .then(response => response.json())
-            .then(data => {
-                let result = '';
+            fetch(`{{ route('pengungsi.searchPengungsis') }}?search=${search}`)
+                .then(response => response.json())
+                .then(data => {
+                    let result = '';
 
-                if (data.length === 0) {
-                    result += '<tr><td colspan="10">Data tidak ditemukan</td></tr>';
-                } else {
-                    data.forEach((pengungsi, i) => {
-                        let statKel = ['Kepala Keluarga', 'Ibu', 'Anak', 'Lainnya'][pengungsi.statKel] || '-';
-                        let gender = ['Perempuan', 'Laki-laki'][pengungsi.gender] || '-';
-                        let kondisiList = ["Sehat", "Luka Ringan", "Luka Sedang", "Luka Berat", "Hamil atau menyusui", "Difabel"];
-                        let kondisi = kondisiList[pengungsi.statKon] || "-";
-                        let statPos = ['<span class="badge badge-danger">Keluar</span>', 
-                                       '<span class="badge badge-success">Di Posko</span>',
-                                       '<span class="badge badge-success">Pencarian</span>'][pengungsi.statPos] || "-";
-                        let statPsikoList = ["Belum Baik", "Baik"];
-                        let statPsiko = statPsikoList[pengungsi.statPsiko] || "-";
+                    if (data.length === 0) {
+                        result += '<tr><td colspan="10">Data tidak ditemukan</td></tr>';
+                    } else {
+                        data.forEach((pengungsi, i) => {
+                            let statKel = ['Kepala Keluarga', 'Ibu', 'Anak', 'Lainnya'][
+                                pengungsi.statKel
+                            ] || '-';
+                            let gender = ['Perempuan', 'Laki-laki'][pengungsi.gender] ||
+                                '-';
+                            let kondisiList = ["Sehat", "Luka Ringan", "Luka Sedang",
+                                "Luka Berat", "Hamil atau menyusui", "Difabel"
+                            ];
+                            let kondisi = kondisiList[pengungsi.statKon] || "-";
+                            let statPos = ['<span class="badge badge-danger">Keluar</span>',
+                                    '<span class="badge badge-success">Di Posko</span>',
+                                    '<span class="badge badge-success">Pencarian</span>'
+                                ][pengungsi.statPos] ||
+                                '<span class="badge badge-warning">Belum diisi</span>';
+                            let statPsikoList = ["Belum Baik", "Baik"];
+                            let statPsiko = statPsikoList[pengungsi.statPsiko] || "-";
 
-                        result += `
+                            result += `
                         <tr>
                             <td>${i + 1}</td>
                             <td>${pengungsi.nama}</td>
@@ -1182,20 +1264,20 @@
                                 </div>
                             </td>
                         </tr>`;
-                    });
-                }
+                        });
+                    }
 
-                document.getElementById('result').innerHTML = result;
-            })
-            .catch(error => console.error('Fetch error:', error));
-    });
+                    document.getElementById('result').innerHTML = result;
+                })
+                .catch(error => console.error('Fetch error:', error));
+        });
 
-    // Optional: Cegah form submit bawaan
-    document.getElementById('search').addEventListener('submit', function(e) {
-        e.preventDefault();
+        // Optional: Cegah form submit bawaan
+        document.getElementById('search').addEventListener('submit', function(e) {
+            e.preventDefault();
+        });
     });
-});
-</script>
+    </script>
 
 
 </section>

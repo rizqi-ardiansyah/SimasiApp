@@ -191,12 +191,17 @@ Route::get('/predict', function () {
 });
 
 Route::post('/predict', function (Request $request) {
+    // Validasi input
+    $request->validate([
+        'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
     $foto = $request->file('foto');
 
+    // Kirim file ke FastAPI Docker backend
     $response = Http::attach(
         'foto', file_get_contents($foto->getRealPath()), $foto->getClientOriginalName()
-    )->post('http://127.0.0.1:8000/predict'); // ini URL backend Docker kamu
+    )->post('http://127.0.0.1:8000/predict'); // URL backend Docker
 
     return response()->json($response->json());
 });

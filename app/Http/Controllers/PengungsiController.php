@@ -123,7 +123,7 @@ class PengungsiController extends Controller
         )
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('posko as p','p.id','=','int.posko_id')
-            ->join('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+            ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
             // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
             // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
             ->where('int.posko_id', $request->id)

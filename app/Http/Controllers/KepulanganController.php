@@ -40,7 +40,7 @@ class KepulanganController extends Controller
             DB::raw('count(int.png_id) as ttlPengungsi'),
             DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
              ' ',bencana.kelurahan) as alamat"),
-            DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL THEN 1 END) as jumlahRumahRusak"),
+            DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL AND int.png_id IS NOT NULL THEN 1 END) as jumlahRumahRusak"),
             DB::raw('MIN(int.user_id) as trc_id'),
             DB::raw("COUNT(CASE WHEN int.kondisiSekitar_id IS NOT NULL THEN 1 END) as jumlahKondisiSekitar"), 
         )
@@ -173,17 +173,35 @@ class KepulanganController extends Controller
                 'b.jmlPosko as jmlPosko',
                 DB::raw('count(int.png_id) as ttlPengungsi'),
                 'posko.namaPosko as namaSamaran',
-                DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL THEN 1 END) as jumlahRumahRusak"),
+                DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL AND int.png_id IS NOT NULL THEN 1 END) as jumlahRumahRusak"),
                 // 'kr.namaPosko as namaSamaran'
+                DB::raw("COUNT(CASE 
+                WHEN b.status = 3 
+                 AND p.statKon != 3 
+                 AND kr.status != 3 
+                 AND ks.status != 3 
+                 AND kp.status = 1
+                THEN 1 ELSE NULL END) as jmlPengungsiPulang")
             )
                 ->join('integrasi as int','int.posko_id','=','posko.id')
                 ->leftJoin('karyawans AS u', 'int.user_id', '=', 'u.id')
                 ->join('bencana as b', 'int.bencana_id', '=', 'b.id')
                 // ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
                 ->leftJoin('pengungsi as p', 'int.png_id', '=', 'p.id')
-                ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'posko.id'
-                    , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
-                    'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail','b.jmlPosko','posko.namaPosko')
+                ->leftJoin('kondisi_rumah as kr', 'kr.id', '=', 'int.kondisiRumah_id')
+                ->leftJoin('kondisi_sekitar as ks', 'ks.id', '=', 'int.kondisiSekitar_id')
+                ->leftJoin('kondisi_psikologis as kp', 'kp.id', '=', 'int.psikologis_id')
+                ->groupBy(
+                    'b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 
+                    'posko.id', 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id',
+                    'posko.created_at', 'posko.updated_at', 'kapasitas',
+                    'int.bencana_id','int.user_id','b.nama','posko.detail','b.jmlPosko','posko.namaPosko'
+                )
+
+
+                // ->groupBy('b.provinsi', 'b.kota', 'b.kecamatan', 'b.kelurahan', 'posko.id'
+                //     , 'posko.nama', 'b.id', 'u.firstname', 'u.lastname', 'u.id', 'posko.created_at',
+                //     'posko.updated_at', 'kapasitas','int.bencana_id','int.user_id','b.nama','posko.detail','b.jmlPosko','posko.namaPosko')
                 ->where('int.bencana_id', $id)
                 ->orderBy('u.id', 'desc')
                 ->paginate(5);
