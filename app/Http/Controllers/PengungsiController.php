@@ -732,7 +732,7 @@ class PengungsiController extends Controller
             $request->jawaban4 + $request->jawaban5 + $request->jawaban6;
 
             // Tentukan status berdasarkan skor
-            $status = $skor < 13 ? 1 : 0;
+            $status = ($skor < 13 && ($request->ekspresi == 1 || $request->ekspresi == 2)) ? 1 : 0;
 
             KondisiPsikologis::create([
                 'idPengungsi' => $request->idPengungsi,
@@ -742,6 +742,7 @@ class PengungsiController extends Controller
                 'jawaban4' => $request->jawaban4,
                 'jawaban5' => $request->jawaban5,
                 'jawaban6' => $request->jawaban6,
+                'skor_wajah' => $request->ekspresi,
                 'skor' => $skor,
                 'status' => $status                
             ]);

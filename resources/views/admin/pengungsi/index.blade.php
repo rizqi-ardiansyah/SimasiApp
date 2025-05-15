@@ -978,12 +978,91 @@
                                 </div>
                                 <div class="modal-body">
 
+                                    <form id="formPrediksi-{{$pengungsi->idPengungsi}}" enctype="multipart/form-data">
+                                        @csrf
 
-                                <form action="{{ route('kondisiPsikologis.create')  }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="idPengungsi" value="{{ $pengungsi->idPengungsi }}">
+                                        <div class="form-group">
+                                            <label for="fotoInput-{{$pengungsi->idPengungsi}}">Upload Foto
+                                                Wajah</label><br>
+                                            <input type="file" class="form-control-file" name="foto"
+                                                id="fotoInput-{{$pengungsi->idPengungsi}}" required>
+                                        </div>
+
+                                        <button type="submit" id="submitBtn" class="d-none">Kirim</button>
+                                        <!-- Tetap disembunyikan -->
+                                    </form>
+
+                                    <div id="hasil-{{$pengungsi->idPengungsi}}" class="mt-3"></div>
+
+                                    <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const form = document.getElementById(
+                                            'formPrediksi-{{$pengungsi->idPengungsi}}');
+                                        const fotoInput = document.getElementById(
+                                            'fotoInput-{{$pengungsi->idPengungsi}}');
+                                        const hasil = document.getElementById(
+                                            'hasil-{{$pengungsi->idPengungsi}}');
+                                        const ekspresiInput = document.getElementById(
+                                            'ekspresi-{{$pengungsi->idPengungsi}}');
 
 
+                                        // Trigger submit otomatis setelah file diubah
+                                        fotoInput.addEventListener('change', function() {
+                                            if (fotoInput.files.length > 0) {
+                                                // Trigger submit programmatically
+                                                form.dispatchEvent(new Event('submit', {
+                                                    cancelable: true
+                                                }));
+                                            }
+                                        });
+
+                                        form.addEventListener('submit', function(e) {
+                                            e.preventDefault();
+
+                                            let formData = new FormData(form);
+
+                                            fetch("{{ url('/predict') }}", {
+                                                    method: 'POST',
+                                                    body: formData
+                                                })
+                                                .then(res => res.json())
+                                                .then(data => {
+                                                    const label = {
+                                                        0: 'Marah',
+                                                        1: 'Senang',
+                                                        2: 'Netral',
+                                                        3: 'Sedih',
+                                                        4: 'Terkejut'
+                                                    };
+                                                    hasil.className = 'alert alert-info';
+                                                    hasil.innerText = 'Ekspresi: ' + label[data
+                                                            .predicted_class] + ' (Confidence: ' +
+                                                        data
+                                                        .confidence + ')';
+
+                                                    if (ekspresiInput) {
+                                                        ekspresiInput.value = parseInt(data
+                                                            .predicted_class);
+                                                    }
+                                                })
+                                                .catch(err => {
+                                                    console.error(err);
+                                                    hasil.className = 'alert alert-danger';
+                                                    hasil.innerText =
+                                                        'Terjadi kesalahan saat memproses.';
+                                                });
+                                        });
+                                    });
+                                    </script>
+
+
+                                    <form action="{{ route('kondisiPsikologis.create')  }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="idPengungsi" value="{{ $pengungsi->idPengungsi }}">
+
+                                        <input type="hidden" name="ekspresi" id="ekspresi-{{$pengungsi->idPengungsi}}">
+
+                                        
                                         <div class="form-group">
                                             <label>1. Apakah Anda merasa cemas akhir-akhir ini?</label><br>
                                             @foreach([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
@@ -1050,78 +1129,12 @@
                                             <button type="button" class="btn btn-secondary"
                                                 data-dismiss="modal">Tutup</button>
                                         </div>
-                                    
-                                </form>
 
+                                    </form>
 
-
-                                <form id="formPrediksi-{{$pengungsi->idPengungsi}}" enctype="multipart/form-data">
-                                    @csrf
-
-                                    <div class="form-group">
-                                        <label for="fotoInput-{{$pengungsi->idPengungsi}}">Upload Foto Wajah</label><br>
-                                        <input type="file" class="form-control-file" name="foto"
-                                            id="fotoInput-{{$pengungsi->idPengungsi}}" required>
-                                    </div>
-
-                                    <button type="submit" id="submitBtn" class="d-none">Kirim</button>
-                                    <!-- Tetap disembunyikan -->
-                                </form>
-
-                                <div id="hasil-{{$pengungsi->idPengungsi}}" class="mt-3"></div>
                                 </div>
 
-                                <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    const form = document.getElementById(
-                                        'formPrediksi-{{$pengungsi->idPengungsi}}');
-                                    const fotoInput = document.getElementById(
-                                        'fotoInput-{{$pengungsi->idPengungsi}}');
-                                    const hasil = document.getElementById('hasil-{{$pengungsi->idPengungsi}}');
 
-
-                                    // Trigger submit otomatis setelah file diubah
-                                    fotoInput.addEventListener('change', function() {
-                                        if (fotoInput.files.length > 0) {
-                                            // Trigger submit programmatically
-                                            form.dispatchEvent(new Event('submit', {
-                                                cancelable: true
-                                            }));
-                                        }
-                                    });
-
-                                    form.addEventListener('submit', function(e) {
-                                        e.preventDefault();
-
-                                        let formData = new FormData(form);
-
-                                        fetch("{{ url('/predict') }}", {
-                                                method: 'POST',
-                                                body: formData
-                                            })
-                                            .then(res => res.json())
-                                            .then(data => {
-                                                const label = {
-                                                    0: 'Marah',
-                                                    1: 'Senang',
-                                                    2: 'Netral',
-                                                    3: 'Sedih',
-                                                    4: 'Terkejut'
-                                                };
-                                                hasil.className = 'alert alert-info';
-                                                hasil.innerText = 'Ekspresi: ' + label[data
-                                                        .predicted_class] + ' (Confidence: ' + data
-                                                    .confidence + ')';
-                                            })
-                                            .catch(err => {
-                                                console.error(err);
-                                                hasil.className = 'alert alert-danger';
-                                                hasil.innerText =
-                                                    'Terjadi kesalahan saat memproses.';
-                                            });
-                                    });
-                                });
-                                </script>
 
                             </div>
                         </div>

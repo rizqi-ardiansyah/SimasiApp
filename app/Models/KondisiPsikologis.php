@@ -19,6 +19,7 @@ class KondisiPsikologis extends Model
         'jawaban4',
         'jawaban5',
         'jawaban6',
+        'skor_wajah',
         'skor',
         'status'
     ];
