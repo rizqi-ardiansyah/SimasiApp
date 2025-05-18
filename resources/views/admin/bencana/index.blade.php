@@ -27,10 +27,11 @@
                     <div class="card-header justify-content-between">
                         <h3 class="card-title">List Bencana</h3>
                         <div class="card-tools">
-                            @auth('web') 
+                            @auth('web')
                             <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="search" id="search" class="form-control float-right" placeholder="Search...">
+                                    <input type="text" name="search" id="search" class="form-control float-right"
+                                        placeholder="Search...">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -42,7 +43,8 @@
                             @auth('karyawan')
                             <form id="searchForTrc">
                                 <div class="input-group input-group-sm" style="width: 150px;">
-                                    <input type="text" name="searchForTrc" class="form-control float-right" placeholder="Search">
+                                    <input type="text" name="searchForTrc" class="form-control float-right"
+                                        placeholder="Search">
                                     <div class="input-group-append">
                                         <button type="submit" class="btn btn-default">
                                             <i class="fas fa-search"></i>
@@ -56,55 +58,55 @@
 
                     <!-- Data yang di dalam kurung [] tidak terpakai -->
                     <script>
-var subjectObject = {
-  "Batu": {
-    "Oro-oro Ombo": ["Links", "Images", "Tables", "Lists"],
-    "Pesanggrahan": ["Borders", "Margins", "Backgrounds", "Float"],
-    "Sumberejo": ["Variables", "Operators", "Functions", "Conditions"],
-    "Ngaglik": ["Variables", "Operators", "Functions", "Conditions"],
-    "Sisir": ["Variables", "Operators", "Functions", "Conditions"],
-    "Songgokerto": ["Variables", "Operators", "Functions", "Conditions"],
-    "Temas": ["Variables", "Operators", "Functions", "Conditions"],
-  },
-  "Bumiaji": {
-    "Bulukerto": ["Variables", "Strings", "Arrays"],
-    "Bumiaji": ["SELECT", "UPDATE", "DELETE"],
-    "Giripurno": ["Borders", "Margins", "Backgrounds", "Float"],
-    "Gunungsari": ["Variables", "Operators", "Functions", "Conditions"],
-    "Pandanrejo": ["Variables", "Operators", "Functions", "Conditions"],
-    "Punten": ["Variables", "Operators", "Functions", "Conditions"],
-    "Sumbergondo": ["Borders", "Margins", "Backgrounds", "Float"],
-    "Tulungrejo": ["Variables", "Operators", "Functions", "Conditions"],
-    "Sumber Brantas": ["Variables", "Operators", "Functions", "Conditions"],
-  },
-  "Junrejo": {
-    "Beji": ["Links", "Images", "Tables", "Lists"],
-    "Dadaprejo": ["Borders", "Margins", "Backgrounds", "Float"],
-    "Junrejo": ["Variables", "Operators", "Functions", "Conditions"],
-    "Mojorejo": ["Variables", "Operators", "Functions", "Conditions"],
-    "Pendem": ["Variables", "Operators", "Functions", "Conditions"],
-    "Tlekung": ["Variables", "Operators", "Functions", "Conditions"],
-    "Torongrejo": ["Variables", "Operators", "Functions", "Conditions"],
-  },
-}
-window.onload = function() {
-  var subjectSel = document.getElementById("kecamatan");
-  var topicSel = document.getElementById("kelurahan");
+                    var subjectObject = {
+                        "Batu": {
+                            "Oro-oro Ombo": ["Links", "Images", "Tables", "Lists"],
+                            "Pesanggrahan": ["Borders", "Margins", "Backgrounds", "Float"],
+                            "Sumberejo": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Ngaglik": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Sisir": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Songgokerto": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Temas": ["Variables", "Operators", "Functions", "Conditions"],
+                        },
+                        "Bumiaji": {
+                            "Bulukerto": ["Variables", "Strings", "Arrays"],
+                            "Bumiaji": ["SELECT", "UPDATE", "DELETE"],
+                            "Giripurno": ["Borders", "Margins", "Backgrounds", "Float"],
+                            "Gunungsari": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Pandanrejo": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Punten": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Sumbergondo": ["Borders", "Margins", "Backgrounds", "Float"],
+                            "Tulungrejo": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Sumber Brantas": ["Variables", "Operators", "Functions", "Conditions"],
+                        },
+                        "Junrejo": {
+                            "Beji": ["Links", "Images", "Tables", "Lists"],
+                            "Dadaprejo": ["Borders", "Margins", "Backgrounds", "Float"],
+                            "Junrejo": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Mojorejo": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Pendem": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Tlekung": ["Variables", "Operators", "Functions", "Conditions"],
+                            "Torongrejo": ["Variables", "Operators", "Functions", "Conditions"],
+                        },
+                    }
+                    window.onload = function() {
+                        var subjectSel = document.getElementById("kecamatan");
+                        var topicSel = document.getElementById("kelurahan");
 
-  for (var x in subjectObject) {
-    subjectSel.options[subjectSel.options.length] = new Option(x, x);
-  }
-    subjectSel.onchange = function() {
-//empty Chapters- and Topics- dropdowns
-    // chapterSel.length = 1;
-    topicSel.length = 1;
-    //display correct values
-    for (var y in subjectObject[this.value]) {
-        topicSel.options[topicSel.options.length] = new Option(y, y);
-    }
-  }
-}
-</script>
+                        for (var x in subjectObject) {
+                            subjectSel.options[subjectSel.options.length] = new Option(x, x);
+                        }
+                        subjectSel.onchange = function() {
+                            //empty Chapters- and Topics- dropdowns
+                            // chapterSel.length = 1;
+                            topicSel.length = 1;
+                            //display correct values
+                            for (var y in subjectObject[this.value]) {
+                                topicSel.options[topicSel.options.length] = new Option(y, y);
+                            }
+                        }
+                    }
+                    </script>
 
                     <!-- Tambah bencana -->
                     <div class="modal fade" id="tambah">
@@ -123,27 +125,33 @@ window.onload = function() {
                                         <div class="card-body">
                                             <div class="form-group">
                                                 <label for="exampleInputNama">Nama Bencana</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" name="namaBencana" placeholder="Masukan nama bencana" required>
+                                                <input type="text" class="form-control" id="exampleInputnama"
+                                                    name="namaBencana" placeholder="Masukan nama bencana" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputPosko">Tanggal</label>
-                                                <input type="date" class="form-control" id="exampleInputnama" placeholder="Masukan tanggal" name="tanggal" required>
+                                                <input type="date" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan tanggal" name="tanggal" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputPengungsi">Waktu</label>
-                                                <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan waktu" name="waktu" required>
+                                                <input type="time" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan waktu" name="waktu" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputProvinsi">Provinsi</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="Jawa Timur" required>
+                                                <input type="text" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan provinsi" name="provinsi" value="Jawa Timur"
+                                                    required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputKota">Kota</label>
-                                                <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kota" value="Batu" required>
+                                                <input type="text" class="form-control" id="exampleInputnama"
+                                                    placeholder="Masukan kota" name="kota" value="Batu" required>
                                             </div>
 
                                             <div class="form-group">
@@ -190,7 +198,8 @@ window.onload = function() {
 
                     <div class="card-body table-responsive">
                         @auth('web')
-                        <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah" style="font-size: 14px;">
+                        <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah"
+                            style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Bencana
                         </a>
                         @endauth
@@ -218,8 +227,8 @@ window.onload = function() {
                                 @auth('web')
                                 @foreach ($data as $key => $bencana)
                                 @if(empty($bencana->namaBencana))
-                                    <p>Data kosong</p>
-                                    // whatever you need to do here
+                                <p>Data kosong</p>
+                                // whatever you need to do here
                                 @else
 
                                 <tr>
@@ -229,10 +238,12 @@ window.onload = function() {
                                     <td>{{ $bencana->alamat }}</td>
                                     <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->jmlPosko }} tempat</br>
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
+                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>"
+                                            class="btn btn-primary btn-xs" title="Lihat posko"><i
+                                                class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->ttlPengungsi }} orang</br>
-                                    <!-- <td>
+                                        <!-- <td>
                                         {{ $bencana->null }} rumah rusak
                                         <a href="{{url('/rumahRusak')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat rumah rusak"><i class="fas fa-eye"></i> Detail</a>
                                     </td>
@@ -246,17 +257,20 @@ window.onload = function() {
                                         @php
                                         $value = 'Siaga'
                                         @endphp
-                                        <span class="badge badge-danger" style="font-size: 14px;"><?php echo $value; ?></span>
+                                        <span class="badge badge-danger"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 2)
                                         @php
                                         $value = 'Tanggap Darurat'
                                         @endphp
-                                        <span class="badge badge-danger" style="font-size: 14px;"><?php echo $value; ?></span>
+                                        <span class="badge badge-danger"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 3)
                                         @php
                                         $value = 'Pemulihan'
                                         @endphp
-                                        <span class="badge badge-success" style="font-size: 14px;"><?php echo $value; ?></span>
+                                        <span class="badge badge-success"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
                                         @elseif($bencana->status == 0)
                                         @php
                                         $value = 'Selesai'
@@ -266,7 +280,8 @@ window.onload = function() {
                                     </td>
                                     <td>
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
+                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                                                data-toggle="dropdown" data-offset="-52">
                                                 <i class="fas fa-bars"></i>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-lg" role="menu">
@@ -274,14 +289,18 @@ window.onload = function() {
                                                     <i class="fas fa-eye mr-1"></i> Detail
                                                 </a>
                                                 <div class="dropdown-divider"></div> -->
-                                                <a href="#" class="dropdown-item " title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-{{$bencana->idBencana}}">
+                                                <a href="#" class="dropdown-item " title="Edit Bencana"
+                                                    data-toggle="modal"
+                                                    data-target="#modal-edit-{{$bencana->idBencana}}">
                                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                                                        <path fill="currentColor"
+                                                            d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
                                                     </svg>
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idBencana}})">
+                                                <a href="#" class="dropdown-item " title="Hapus Bencana"
+                                                    onclick="deleteConfirmation({{$bencana->idBencana}})">
                                                     <i class="fas fa-trash mr-1"></i> Hapus
                                                 </a>
                                             </div>
@@ -300,29 +319,53 @@ window.onload = function() {
                                 <?php $i = 0;?>
                                 @foreach ($data2 as $key => $bencana)
                                 <tr>
-                                    @if($bencana->trc == auth('karyawan')->user()->id)
+                                    @if($bencana->idTrc == auth('karyawan')->user()->id)
+
+                                    @php
+                                        $jmlPoskoTrc = \DB::table('integrasi')
+                                            ->where('bencana_id', $bencana->idBencana)
+                                            ->where('user_id', auth('karyawan')->id())
+                                            ->distinct()
+                                            ->count('posko_id');
+                                    @endphp
+                                    
                                     <?php $i++;?>
-                                    <td>{{ $data2->firstItem() + $key }}</td>
+                                    <td>{{ $i }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
                                     <td>{{ $bencana->alamat }}</td>
                                     <!-- <td>{{ $bencana->posko }}</td> -->
-                                    <td>{{ $bencana->jmlPosko }} tempat</br>
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
+                                    <td>{{ $jmlPoskoTrc }} tempat</br>
+                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>"
+                                            class="btn btn-primary btn-xs" title="Lihat posko"><i
+                                                class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->jmlPengungsi }} orang</br>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
-                                        @if($bencana->status == 1)
+                                    @if($bencana->status == 1)
                                         @php
-                                        $value = 'Berjalan'
+                                        $value = 'Siaga'
                                         @endphp
-                                        <span class="badge badge-success"><?php echo $value; ?></span>
-                                        @else
+                                        <span class="badge badge-danger"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 2)
+                                        @php
+                                        $value = 'Tanggap Darurat'
+                                        @endphp
+                                        <span class="badge badge-danger"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 3)
+                                        @php
+                                        $value = 'Pemulihan'
+                                        @endphp
+                                        <span class="badge badge-success"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 0)
                                         @php
                                         $value = 'Selesai'
                                         @endphp
-                                        <span class="badge badge-danger">Selesai</span>
+                                        <span class="badge badge-info" style="font-size: 14px;">Selesai</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -343,7 +386,9 @@ window.onload = function() {
                                     <!-- <td>{{ $bencana->lokasi }}</td> -->
                                     <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->ttlPosko }} tempat</br>
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
+                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>"
+                                            class="btn btn-primary btn-xs" title="Lihat posko"><i
+                                                class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
@@ -370,49 +415,68 @@ window.onload = function() {
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h4 class="modal-title">Ubah Bencana</h4>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
                                                 <!-- form start -->
-                                                <form action="{{ url('/bencana/edit/'.$detail->idBencana) }}" method="post" enctype="multipart/form-data">
+                                                <form action="{{ url('/bencana/edit/'.$detail->idBencana) }}"
+                                                    method="post" enctype="multipart/form-data">
                                                     @csrf
                                                     <div class="card-body">
                                                         <div class="form-group">
                                                             <label for="exampleInputNama">Nama Bencana</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" name="namaBencana" placeholder="Masukan nama bencana" value="{{$detail->namaBencana}}" required>
+                                                            <input type="text" class="form-control"
+                                                                id="exampleInputnama" name="namaBencana"
+                                                                placeholder="Masukan nama bencana"
+                                                                value="{{$detail->namaBencana}}" required>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="exampleInputPosko">Tanggal</label>
-                                                            <input type="date" class="form-control" id="exampleInputnama" placeholder="Masukan tanggal" name="tanggal" value="{{$detail->tgl}}" required>
+                                                            <input type="date" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan tanggal"
+                                                                name="tanggal" value="{{$detail->tgl}}" required>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="exampleInputPengungsi">Waktu</label>
-                                                            <input type="time" class="form-control" id="exampleInputnama" placeholder="Masukan waktu" name="waktu" value="{{$detail->time}}" required>
+                                                            <input type="time" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan waktu"
+                                                                name="waktu" value="{{$detail->time}}" required>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="exampleInputProvinsi">Provinsi</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan provinsi" name="provinsi" value="{{$detail->provinsi}}" required>
+                                                            <input type="text" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan provinsi"
+                                                                name="provinsi" value="{{$detail->provinsi}}" required>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="exampleInputKota">Kota</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kota" value="{{$detail->kota}}" required>
+                                                            <input type="text" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan kota"
+                                                                name="kota" value="{{$detail->kota}}" required>
                                                         </div>
 
 
                                                         <div class="form-group">
                                                             <label for="kecamatan">Kecamatan</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kecamatan" value="{{$detail->kecamatan}}" required>
+                                                            <input type="text" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan kota"
+                                                                name="kecamatan" value="{{$detail->kecamatan}}"
+                                                                required>
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="kelurahan">Kelurahan</label>
-                                                            <input type="text" class="form-control" id="exampleInputnama" placeholder="Masukan kota" name="kelurahan" value="{{$detail->kelurahan}}" required>
+                                                            <input type="text" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan kota"
+                                                                name="kelurahan" value="{{$detail->kelurahan}}"
+                                                                required>
 
                                                         </div>
 
@@ -432,7 +496,8 @@ window.onload = function() {
 
                                                         <div class="form-group">
                                                             <label for="status">Status</label>
-                                                            <select class="form-control" id="status" name="status" required>
+                                                            <select class="form-control" id="status" name="status"
+                                                                required>
                                                                 <option selected value="{{$detail->status}}" hidden>
                                                                     <?php echo $value; ?>
                                                                 </option>
@@ -457,10 +522,12 @@ window.onload = function() {
                                 </div>
                     </div>
                     <div>
-                          @if(auth('karyawan')->check())
-                            <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{ auth('karyawan')->user()->id }}" hidden required>
-                        @elseif(auth('web')->check()) 
-                            <input type="text" class="form-control" id="bencana_id" name="bencana_id" value="{{ auth('web')->user()->id }}" hidden required>
+                        @if(auth('karyawan')->check())
+                        <input type="text" class="form-control" id="bencana_id" name="bencana_id"
+                            value="{{ auth('karyawan')->user()->id }}" hidden required>
+                        @elseif(auth('web')->check())
+                        <input type="text" class="form-control" id="bencana_id" name="bencana_id"
+                            value="{{ auth('web')->user()->id }}" hidden required>
                         @endif
                     </div>
                     @endforeach
@@ -473,60 +540,60 @@ window.onload = function() {
 
 
 
-        <!-- /.card-body -->
-    </div>
-    </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
     </div>
     </div>
 
     <script type="text/javascript">
-        function deleteConfirmation(id) {
-            swal.fire({
-                title: "Hapus?",
-                icon: 'question',
-                text: "Apakah Anda yakin?",
-                type: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Iya, hapus!",
-                cancelButtonText: "Batal!",
-                reverseButtons: !0
-            }).then(function(e) {
+    function deleteConfirmation(id) {
+        swal.fire({
+            title: "Hapus?",
+            icon: 'question',
+            text: "Apakah Anda yakin?",
+            type: "warning",
+            showCancelButton: !0,
+            confirmButtonText: "Iya, hapus!",
+            cancelButtonText: "Batal!",
+            reverseButtons: !0
+        }).then(function(e) {
 
-                if (e.value === true) {
-                    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            if (e.value === true) {
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-                    $.ajax({
-                        type: 'POST',
-                        url: "{{url('bencana/delete')}}/" + id,
-                        data: {
-                            _token: CSRF_TOKEN
-                        },
-                        dataType: 'JSON',
-                        success: function(results) {
-                            if (results.success === true) {
-                                swal.fire("Berhasil!", results.message, "success");
-                                // refresh page after 2 seconds
-                                setTimeout(function() {
-                                    location.reload();
-                                }, 2000);
-                            } else {
-                                swal.fire("Gagal!", results.message, "error");
-                            }
+                $.ajax({
+                    type: 'POST',
+                    url: "{{url('bencana/delete')}}/" + id,
+                    data: {
+                        _token: CSRF_TOKEN
+                    },
+                    dataType: 'JSON',
+                    success: function(results) {
+                        if (results.success === true) {
+                            swal.fire("Berhasil!", results.message, "success");
+                            // refresh page after 2 seconds
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                        } else {
+                            swal.fire("Gagal!", results.message, "error");
                         }
-                    });
+                    }
+                });
 
-                } else {
-                    e.dismiss;
-                }
+            } else {
+                e.dismiss;
+            }
 
-            }, function(dismiss) {
-                return false;
-            })
-        }
+        }, function(dismiss) {
+            return false;
+        })
+    }
     </script>
 
     <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         // Trigger saat user mengetik
         $('input[name="search"]').on('input', function() {
             var search = $(this).val(); // Ambil nilai input
@@ -534,13 +601,15 @@ window.onload = function() {
             $.ajax({
                 url: "{{ route('bencana.searchBencana') }}",
                 method: "GET",
-                data: { search: search },
-                success: function(response){
+                data: {
+                    search: search
+                },
+                success: function(response) {
                     var html = '';
-                    if(response.length === 0){
+                    if (response.length === 0) {
                         html += '<tr><td colspan="10">Data kosong</td></tr>';
                     }
-                    $.each(response, function(index, bencana){
+                    $.each(response, function(index, bencana) {
                         html += `<tr>
                             <td>${index+1}</td>
                             <td>${bencana.namaBencana}</td>
@@ -595,31 +664,31 @@ window.onload = function() {
     </script>
 
     <script>
-        let form2 = document.getElementById('searchForTrc');
-        form2.addEventListener('beforeinput', e => {
-            const formdata = new FormData(form2);
-            let search = formdata.get('searchForTrc');
-            let url2 = document.getElementById('bencana_id').value;
-            let url = "{{url('/search/bencanaTrc')}}/"+url2+"?search="+search
+    let form2 = document.getElementById('searchForTrc');
+    form2.addEventListener('beforeinput', e => {
+        const formdata = new FormData(form2);
+        let search = formdata.get('searchForTrc');
+        let url2 = document.getElementById('bencana_id').value;
+        let url = "{{url('/search/bencanaTrc')}}/" + url2 + "?search=" + search
 
-            // let data = url;
-            // alert(data);
+        // let data = url;
+        // alert(data);
 
-            if (url === "") {
-                result;
-            } else {
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        let i;
-                        let result = "";
-                        if (data.length === 0) {
-                            result += 'Data tidak ditemukan'
-                        }
-                        for (i = 0; i < data.length; i++) {
-                            let bencana = data[i]
-                            result +=
-                                `<tr>
+        if (url === "") {
+            result;
+        } else {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    let i;
+                    let result = "";
+                    if (data.length === 0) {
+                        result += 'Data tidak ditemukan'
+                    }
+                    for (i = 0; i < data.length; i++) {
+                        let bencana = data[i]
+                        result +=
+                            `<tr>
                                 <td>${i+1}</td>
                                     <td>${bencana.namaBencana }</td>
                                     <td>${bencana.waktu}</td>
@@ -651,12 +720,12 @@ window.onload = function() {
                                 </td>
 
                 </tr>`;
-                        }
-                        document.getElementById('result').innerHTML = result;
+                    }
+                    document.getElementById('result').innerHTML = result;
 
-                    }).catch((err) => console.log(err))
-            }
-        });
+                }).catch((err) => console.log(err))
+        }
+    });
     </script>
 
 </section>

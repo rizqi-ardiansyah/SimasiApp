@@ -268,6 +268,7 @@
                             style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Unggah Data
                         </a>
+                        @auth('web')
                         <a href="{{url('/ransum')}}/{{ request()->id }}/{{ request()->bencana_id }}/{{ request()->trc_id }}"
                             class="btn btn-info mb-2" target="__blank" style="font-size: 14px;">
 
@@ -277,6 +278,7 @@
                             class="btn btn-success mb-2" style="font-size: 14px;">
                             <i class="fas fa-info mr-1"></i> Cek Kepulangan
                         </a>
+                        @endauth
 
                         <!-- Tambah bencana -->
                         <div class="modal fade" id="upload">
@@ -322,10 +324,14 @@
                                     <th>Alamat</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Umur</th>
+                                    @auth('web')
                                     <th>Kondisi Fisik</th>
                                     <th>Kondisi Psikologi</th>
+                                    @endauth
                                     <th>Status</th>
+                                    @if(Auth::guard('web')->check() || Auth::guard('karyawan')->check())
                                     <th>Aksi</th>
+                                    @endauth
                                 </tr>
                             </thead>
                             <tbody id="result">
@@ -377,6 +383,7 @@
                                         ?>
                                     </td>
                                     <td>{{ $pengungsi->umur }}</td>
+                                    @auth('web')
                                     <td>
                                         <?php
                                         $kondisi = $pengungsi->statKon;
@@ -406,6 +413,7 @@
                                         -
                                         @endif
                                     </td>
+                                    @endauth
                                     <td>
                                         <?php
                                         $statPos = $pengungsi->statPos;
@@ -441,12 +449,14 @@
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
+                                                @auth('web')
                                                 <a href="#" class="dropdown-item " title="Cek Psikologi"
                                                     data-toggle="modal"
                                                     data-target="#modal-psiko-{{$pengungsi->idPengungsi}}">
                                                     <i class="fas fa-brain"></i>
                                                     Cek Psikologi
                                                 </a>
+                                                @endauth
                                                 <div class="dropdown-divider"></div>
                                                 <a href="#" class="dropdown-item " title="Hapus Pengungsi"
                                                     onclick="deleteConfirmation({{$pengungsi->idPengungsi}})">
@@ -525,59 +535,6 @@
 
                                                             </div>
 
-
-                                                            <!-- script form status keluarga -->
-                                                            <!-- <script type="text/javascript">
-
-                                                                function showDiv(select) {
-                                                                    if (select.value == 0) {
-                                                                        document.getElementById("form_3").style.display = "none";
-                                                                        document.getElementById("form_4").style.display ="block";
-                                                                        // idForm_1.style.display = "block";
-                                                                        // idForm_2.style.display = "none";
-                                                                    } else {
-                                                                        document.getElementById("form_3").style.display = "block";
-                                                                        document.getElementById("form_4").style.display =  "none";
-                                                                    } if (select.value == 1 || select.value == 2){
-                                                                         document.getElementById("form_3").style.display = "block";
-                                                                        document.getElementById("form_4").style.display =  "none";
-                                                                    }
-
-                                                                }
-                                                            </script> -->
-                                                            <!-- end -->
-
-                                                            <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
-
-
-                                                            <!-- jika belum perlu menambahkan alamat -->
-                                                            <!-- <div class="wrapper-kk" class="hidden" id="form_4">
-                                                                <div class="form-group">
-                                                                    <label for="provinsi">Provinsi</label>
-                                                                    <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi" value="{{$pengungsi->provinsi}}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="kota">Kota</label>
-                                                                    <input type="text" class="form-control" id="kota" placeholder="Masukan kota" name="kota" value="{{$pengungsi->kota}}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="kecamatan">Kecamatan</label>
-                                                                    <input type="text" class="form-control" id="kecamatan" placeholder="Masukan kecamatan" name="kecamatan" value="{{$pengungsi->kecamatan}}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="kelurahan">Kelurahan</label>
-                                                                    <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan" value="{{$pengungsi->kelurahan}}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="detail">Detail</label>
-                                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail" value="{{$pengungsi->detail}}">
-                                                                </div>
-                                                            </div> -->
-
                                                             <!-- jika belum perlu menambahkan alamat -->
                                                             <div class="wrapper-kk" class="hidden" id="form_4">
                                                                 @foreach ($getLokasi as $lokasi)
@@ -591,26 +548,6 @@
                                                                 </div>
                                                                 @break
                                                                 @endforeach
-
-                                                                <!-- <div class="form-group">
-                                                    <label for="provinsi">Provinsi</label>
-                                                    <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kota">Kota</label>
-                                                    <input type="text" class="form-control" id="kota" placeholder="Masukan kota" name="kota">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kecamatan">Kecamatan</label>
-                                                    <input type="text" class="form-control" id="kecamatan" placeholder="Masukan kecamatan" name="kecamatan">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kelurahan">Kelurahan</label>
-                                                    <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan">
-                                                </div> -->
 
                                                                 <div class="form-group">
                                                                     <label for="detail">Detail</label>
@@ -764,28 +701,6 @@
                                                                 </select>
                                                             </div>
 
-
-                                                            <!-- script form status keluarga -->
-                                                            <!-- <script type="text/javascript">
-
-                                                                function showDiv(select) {
-                                                                    if (select.value == 0) {
-                                                                        document.getElementById("form_3").style.display = "none";
-                                                                        document.getElementById("form_4").style.display ="block";
-                                                                        // idForm_1.style.display = "block";
-                                                                        // idForm_2.style.display = "none";
-                                                                    } else {
-                                                                        document.getElementById("form_3").style.display = "block";
-                                                                        document.getElementById("form_4").style.display =  "none";
-                                                                    } if (select.value == 1 || select.value == 2){
-                                                                         document.getElementById("form_3").style.display = "block";
-                                                                        document.getElementById("form_4").style.display =  "none";
-                                                                    }
-
-                                                                }
-                                                            </script> -->
-                                                            <!-- end -->
-
                                                             <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
                                                             <div class="form-group">
                                                                 <label for="kpl">Kepala Keluarga</label>
@@ -807,38 +722,11 @@
                                                                 </select>
                                                             </div>
 
-                                                            <!-- jika belum perlu menambahkan alamat -->
-                                                            <!-- <div class="wrapper-kk" class="hidden" id="form_4">
-                                                                <div class="form-group">
-                                                                    <label for="provinsi">Provinsi</label>
-                                                                    <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi" value="{{$pengungsi->provinsi}}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="kota">Kota</label>
-                                                                    <input type="text" class="form-control" id="kota" placeholder="Masukan kota" name="kota" value="{{$pengungsi->kota}}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="kecamatan">Kecamatan</label>
-                                                                    <input type="text" class="form-control" id="kecamatan" placeholder="Masukan kecamatan" name="kecamatan" value="{{$pengungsi->kecamatan}}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="kelurahan">Kelurahan</label>
-                                                                    <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan" value="{{$pengungsi->kelurahan}}">
-                                                                </div>
-
-                                                                <div class="form-group">
-                                                                    <label for="detail">Detail</label>
-                                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail" value="{{$pengungsi->detail}}">
-                                                                </div>
-                                                            </div> -->
 
                                                             <!-- jika belum perlu menambahkan alamat -->
                                                             <div class="wrapper-kk" class="hidden" id="form_4"">
-                                                @foreach ($getLokasi as $lokasi)
-                                                <div class=" form-group">
+                                                            @foreach ($getLokasi as $lokasi)
+                                                            <div class=" form-group">
                                                                 <label for="exampleInputProvinsi">Lokasi bencana</label>
                                                                 <input type="text" class="form-control"
                                                                     id="exampleInputnama" placeholder="Masukan provinsi"
@@ -846,31 +734,6 @@
                                                             </div>
                                                             @break
                                                             @endforeach
-
-                                                            <!-- <div class="form-group">
-                                                    <label for="provinsi">Provinsi</label>
-                                                    <input type="text" class="form-control" id="provinsi" placeholder="Masukan provinsi" name="provinsi">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kota">Kota</label>
-                                                    <input type="text" class="form-control" id="kota" placeholder="Masukan kota" name="kota">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kecamatan">Kecamatan</label>
-                                                    <input type="text" class="form-control" id="kecamatan" placeholder="Masukan kecamatan" name="kecamatan">
-                                                </div>
-
-                                                <div class="form-group">
-                                                    <label for="kelurahan">Kelurahan</label>
-                                                    <input type="text" class="form-control" id="kelurahan" placeholder="Masukan kelurahan" name="kelurahan">
-                                                </div> -->
-
-                                                            <!-- <div class="form-group">
-                                                    <label for="detail">Detail</label>
-                                                    <input type="text" class="form-control" id="detail" placeholder="Masukan detail" name="detail">
-                                                </div> -->
                                                         </div>
 
                                                         <div class="form-group">
@@ -899,6 +762,7 @@
                                                                 value="{{$pengungsi->umur}}" required>
                                                         </div>
 
+                                                        @auth('web')
                                                         <div class="form-group">
                                                             <label for="statKon">Kondisi</label>
                                                             <select class="form-control" id="statKon" name="statKon"
@@ -929,6 +793,7 @@
                                                                 <option value=5>Difabel</option>
                                                             </select>
                                                         </div>
+                                                        @endauth
 
                                                         <div class="form-group">
                                                             <label for="statPos">Status</label>
@@ -1247,11 +1112,13 @@
                             <td style="text-align: center;">${statKel}</td>
                             <td style="text-align: center;">${pengungsi.namaKepala ? pengungsi.namaKepala : '-'}</td>        
                             <td>${pengungsi.telpon}</td>
-                            <td>${pengungsi.lokKel ? pengungsi.lokKel : pengungsi.alamat}</td>
+                            <td>${pengungsi.lokasi ? pengungsi.lokasi : pengungsi.alamat}</td>
                             <td style="text-align: center;">${gender}</td>
                             <td>${pengungsi.umur}</td>
+                            @auth('web')
                             <td style="text-align: center;">${kondisi}</td>
                             <td style="text-align: center;">${statPsiko}</td>
+                            @endauth
                             <td style="text-align: center;">${statPos}</td>
                             <td>
                                 <div class="btn-group">

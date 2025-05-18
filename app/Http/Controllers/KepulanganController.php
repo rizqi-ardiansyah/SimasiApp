@@ -22,6 +22,8 @@ use Intervention\Image\Facades\Image as Image;
 
 class KepulanganController extends Controller
 {
+    private $idPosko;
+
     /**
      * Display a listing of the resource.
      *
@@ -29,13 +31,12 @@ class KepulanganController extends Controller
      */
     public function index()
     {
+
         $bencana = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
             'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
             'bencana.nama as namaBencana', 'status',
             'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
             'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
-            // DB::raw('count(int.png_id) as ttlPengungsi'),
-            //  DB::raw('count(int.posko_id) as ttlPosko'),
             'bencana.jmlPosko',
             DB::raw('count(int.png_id) as ttlPengungsi'),
             DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
@@ -45,14 +46,11 @@ class KepulanganController extends Controller
             DB::raw("COUNT(CASE WHEN int.kondisiSekitar_id IS NOT NULL THEN 1 END) as jumlahKondisiSekitar"), 
         )
             ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
-            // ->join('kondisi_rumah as kr','kr.id','=','integrasi.kondisiRumah_id')
 
             ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
             ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
             ->orderBy('bencana.tanggal', 'desc')
             ->distinct()
-            // ->where('bencana.status', '=', 3)
-        // ->where('peng.posko_id','=','p.id')
             ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
                 'bencana.nama', 'status', 'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
                 'bencana.updated_at', 'bencana.jmlPengungsi', 'bencana.jmlPosko')
@@ -63,21 +61,25 @@ class KepulanganController extends Controller
         $bencana2 = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
             'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
             'bencana.nama as namaBencana', 'status',
-            'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'int.user_id as trc',
-            DB::raw('count(int.bencana_id) as ttlPosko'), DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',
-            bencana.kecamatan,',',' ',bencana.kelurahan) as alamat"), 'bencana.jmlPosko', 'bencana.jmlPengungsi'
-
-            //  DB::raw('count(p.id) as ttlPengungsi')
+            'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
+            'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+            'bencana.jmlPosko',
+            DB::raw('count(int.png_id) as ttlPengungsi'),
+            DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
+             ' ',bencana.kelurahan) as alamat"),
+            DB::raw("COUNT(CASE WHEN int.kondisiRumah_id IS NOT NULL AND int.png_id IS NOT NULL THEN 1 END) as jumlahRumahRusak"),
+            DB::raw('MIN(int.user_id) as trc_id'),
+            DB::raw("COUNT(CASE WHEN int.kondisiSekitar_id IS NOT NULL THEN 1 END) as jumlahKondisiSekitar")
         )
-        // ->join('posko AS p', 'bencana.id', '=', 'p.bencana_id')
-            ->join('integrasi AS int', 'bencana.id', '=', 'int.bencana_id')
-        // ->join('pengungsi as peng','peng.posko_id','=','p.id')
+            ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
+
+            ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
+            ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
             ->orderBy('bencana.tanggal', 'desc')
             ->distinct()
-        // ->where('p.bencana_id', '=', 'b.id')
             ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
-                'bencana.nama', 'status', 'bencana.updated_at', 'int.user_id', 'bencana.provinsi', 'bencana.kota',
-                'bencana.kecamatan', 'bencana.kelurahan', 'bencana.jmlPosko', 'bencana.jmlPengungsi')
+                'bencana.nama', 'status', 'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+                'bencana.updated_at', 'bencana.jmlPengungsi', 'bencana.jmlPosko')
             ->paginate(5);
 
         $getTtlPengungsi = Posko::select('*')
@@ -260,6 +262,9 @@ class KepulanganController extends Controller
 
     public function rumahRusak(Request $request, $id)
     {
+        $this->idPosko = $request->id;
+        session()->put('idPosko', $this->idPosko); 
+        
         $kondisiRumah = Integrasi::select('integrasi.kpl_id','kpl.nama',
         DB::raw("concat('Prov. ',b.provinsi,', Kota ',b.kota,',
             Kec. ',b.kecamatan,', Ds. ',b.kelurahan,',
@@ -1311,5 +1316,34 @@ class KepulanganController extends Controller
             ]);
         // }
         // return back();
+    }
+
+    public function searchRumahRusak(Request $request)
+    {
+        $cari= $request->search;
+        
+
+        $kondisiRumah = DB::table('kondisi_rumah as kr')
+            ->join('integrasi as int', 'int.kondisiRumah_id', '=', 'kr.id')
+            ->join('pengungsi as p', 'int.png_id', '=', 'p.id')
+            ->leftJoin('kepala_keluarga as kpl', 'int.kpl_id', '=', 'kpl.id')
+            ->select('kr.*','kr.id as idKr', 'p.nama as namaPengungsi', 'kr.status', 'kr.keterangan', 'kr.updated_at', 'kr.picRumah',
+            DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
+            Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+            Daerah ',kpl.detail,' ') as lokKel"), DB::raw("CONCAT(kr.tanggal, ' ', kr.waktu) as ketWaktu"))
+            ->where('int.posko_id', session()->get('idPosko'))
+            ->where(function ($query) use ($cari) {
+                        $query->where('p.nama', 'like', '%' ."%$cari%")
+                            ->orWhere('kpl.nama', 'LIKE', "%$cari%")
+                            ->orWhere('kpl.provinsi', 'LIKE', "%$cari%")
+                            ->orWhere('kpl.kota', 'LIKE', "%$cari%")
+                            ->orWhere('kpl.kecamatan', 'LIKE', "%$cari%")
+                            ->orWhere('kpl.kelurahan', 'LIKE', "%$cari%")
+                            ->orWhere('kpl.detail', 'LIKE', "%$cari%");
+            })
+            ->get();
+                 
+
+        return response()->json($kondisiRumah);
     }
 }

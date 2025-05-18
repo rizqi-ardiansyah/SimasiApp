@@ -22,12 +22,12 @@
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">
-                        @if(auth('karyawan')->check())
+                            @if(auth('karyawan')->check())
                             {{ auth('karyawan')->user()->firstname }} {{ auth('karyawan')->user()->lastname }}
-                        @elseif(auth('web')->check()) 
+                            @elseif(auth('web')->check())
                             {{ auth('web')->user()->firstname }} {{ auth('web')->user()->lastname }}
-                        @endif
-                    </a>
+                            @endif
+                        </a>
                     </div>
                 </div>
                 <!-- Dahsboard -->
@@ -49,7 +49,8 @@
                         </p>
                     </a>
                 </li>
-               
+
+                @auth('web')
                 <li class="nav-item">
                     <a href="{{url('/cadang')}}" class="nav-link {{ request()->is('cadang') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-window-restore"></i>
@@ -58,6 +59,7 @@
                         </p>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a href="{{url('/laporan')}}" class="nav-link {{ request()->is('laporan') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-book"></i>
@@ -66,34 +68,10 @@
                         </p>
                     </a>
                 </li>
-                
-                <!-- <li class="nav-item">
-                    <a href="{{url('/member')}}" class="nav-link">
-                        <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            Admin
-                        </p>
-                    </a>
-                </li> -->
-                <!-- <li class="nav-item">
-                    <form id="form1" action="/logout" method="post">
-                        @csrf
-                        <a href="javascript:;" onclick="document.getElementById('form1').submit();" class="nav-link">
-                            <i class="nav-icon fas fa-power-off"></i>
-                            <p>Keluar</p>
-                        </a>
-                    </form>
-                </li> -->
 
-
-                <!-- <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-power-off"></i>
-                        <p>
-                            Keluar
-                        </p>
-                    </a> -->
-                    <li class="nav-item menu-close">
-                    <a href="{{url('/member')}}" class="nav-link {{ request()->is('memberPusdalop') || request()->is('memberTRC') ? 'active' : ''}}">
+                <li class="nav-item menu-close">
+                    <a href="{{url('/member')}}"
+                        class="nav-link {{ request()->is('memberPusdalop') || request()->is('memberTRC') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-user"></i>
                         <p>
                             Member
@@ -102,42 +80,43 @@
                     </a>
 
                     <ul class="nav nav-treeview">
-                            <li class="nav-item">
+                        <li class="nav-item">
                             <a href="{{url('/memberPusdalop')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Pusdalop</p>
                             </a>
-                            </li>
-                            <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a href="{{url('/memberTRC')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>TRC</p>
                             </a>
-                            </li>
-                            <!-- <li class="nav-item">
+                        </li>
+                        <!-- <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Relawan</p>
                             </a>
                             </li> -->
-                        </ul>
-                        </li>
-                     </li>
+                    </ul>
+                </li>
+                </li>
+                @endauth
 
-                     <li class="nav-item">
-                        <a href="{{url('/kepulangan')}}" class="nav-link {{ request()->is('kepulangan') ? 'active' : ''}}">
-                            <i class="nav-icon fas fa-solid fa-home"></i>
-                            <!-- <i class="fas fa-home"></i> -->
-                            <!-- <i class="fa-solid fa-house"></i> -->
-                            <p>
-                                Kepulangan
-                            </p>
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a href="{{url('/kepulangan')}}" class="nav-link {{ request()->is('kepulangan') ? 'active' : ''}}">
+                        <i class="nav-icon fas fa-solid fa-home"></i>
+                        <!-- <i class="fas fa-home"></i> -->
+                        <!-- <i class="fa-solid fa-house"></i> -->
+                        <p>
+                            Kepulangan
+                        </p>
+                    </a>
+                </li>
 
 
 
-    </nav>
+        </nav>
         <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

@@ -149,6 +149,7 @@ Route::match(['get', 'post'], 'editSekKonRum/edit/{id}', [PengungsiController::c
 Route::get("/search/bencana", [BencanaController::class, 'search'])->name('searchBencana');
 Route::get("/search/bencanaTrc/{id}", [BencanaController::class, 'searchForTrc'])->name('searchForTrc');
 Route::get("/search/member", [MemberController::class, 'search'])->name('searchAdmin');
+Route::get("/search/rumahRusak", [KepulanganController::class, 'searchRumahRusak'])->name('searchRumahRusak');
 Route::get("/search/posko", [PoskoController::class, 'search'])->name('searchPosko');
 Route::get("/search/poskoTrc/{id}", [PoskoController::class, 'searchPoskoTrc']);
 Route::get("/search/pengungsi", [PengungsiController::class, 'search'])->name('searchPengungsi');

@@ -12,8 +12,8 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{url('/dashboard')}}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="#">Bencana</a></li>
-                    <li class="breadcrumb-item"><a href="#">Posko</a></li>
+                    <li class="breadcrumb-item"><a href="{{url('/kepulangan')}}">Bencana</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url('/poskoKepulangan/' . request()->bencana_id)}}">Posko</a></li>
                     <li class="breadcrumb-item active">Kondisi Sekitar Bencana</a></li>
                 </ol>
             </div>
@@ -215,7 +215,7 @@
 
 
                     <div class="card-body table-responsive">
-                        @auth('web')
+                        @if(Auth::guard('web')->check() || Auth::guard('karyawan')->check())
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah"
                             style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Data
@@ -344,41 +344,6 @@
                                 @endforeach
 
 
-                                @auth('karyawan')
-                                <?php $i = 0; ?>
-                                @foreach ($data2 as $key => $bencana)
-                                <tr>
-                                    @if($bencana->trc == auth()->user()->id)
-                                    <?php $i++; ?>
-                                    <td>{{ $data2->firstItem() + $key }}</td>
-                                    <td>{{ $bencana->namaBencana }}</td>
-                                    <td>{{ $bencana->waktu }}</td>
-                                    <td>{{ $bencana->alamat }}</td>
-                                    <!-- <td>{{ $bencana->posko }}</td> -->
-                                    <td>{{ $bencana->jmlPosko }} tempat</br>
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>"
-                                            class="btn btn-primary btn-xs" title="Lihat posko"><i
-                                                class="fas fa-eye"></i> Posko </a>
-                                    </td>
-                                    <td>{{ $bencana->jmlPengungsi }} orang</br>
-                                    <td>{{ $bencana->waktuUpdate }}</td>
-                                    <td>
-                                        @if($bencana->status == 1)
-                                        @php
-                                        $value = 'Berjalan'
-                                        @endphp
-                                        <span class="badge badge-success"><?php echo $value; ?></span>
-                                        @else
-                                        @php
-                                        $value = 'Selesai'
-                                        @endphp
-                                        <span class="badge badge-danger">Selesai</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endif
-                                @endforeach
-                                @endauth
 
 
                                 @auth('admin')
@@ -545,7 +510,7 @@
                                                                         $statKon = "Aman";
                                                                     } else if ($getKondisi == 1) {
                                                                         $statKon = "Rusak ringan";
-                                                                    } else if ($getKondisi == 1) {
+                                                                    } else if ($getKondisi == 2) {
                                                                         $statKon = "Rusak sedang";
                                                                     } else if ($getKondisi == 3) {
                                                                         $statKon = "Rusak berat";

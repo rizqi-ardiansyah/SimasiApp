@@ -24,8 +24,6 @@ class BencanaController extends Controller
             'bencana.nama as namaBencana', 'status',
             'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
             'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
-            // DB::raw('count(int.png_id) as ttlPengungsi'),
-            //  DB::raw('count(int.posko_id) as ttlPosko'),
             'bencana.jmlPosko',
             DB::raw('count(int.png_id) as ttlPengungsi'),
             DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
@@ -36,8 +34,6 @@ class BencanaController extends Controller
             ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
             ->orderBy('bencana.tanggal', 'desc')
             ->distinct()
-        // ->where('p.bencana_id', '=', 'b.id')
-        // ->where('peng.posko_id','=','p.id')
             ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
                 'bencana.nama', 'status', 'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
                 'bencana.updated_at', 'bencana.jmlPengungsi', 'bencana.jmlPosko')
@@ -48,21 +44,22 @@ class BencanaController extends Controller
         $bencana2 = Bencana::select(DB::raw("concat(tanggal,' ',waktu) as waktu"),
             'tanggal as tgl', 'waktu as time', 'bencana.id as idBencana',
             'bencana.nama as namaBencana', 'status',
-            'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'int.user_id as trc',
-            DB::raw('count(int.bencana_id) as ttlPosko'), DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',
-            bencana.kecamatan,',',' ',bencana.kelurahan) as alamat"), 'bencana.jmlPosko', 'bencana.jmlPengungsi'
-
-            //  DB::raw('count(p.id) as ttlPengungsi')
+            'bencana.updated_at as waktuUpdate', 'int.bencana_id', 'bencana.jmlPengungsi',
+            'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+            'bencana.jmlPosko','k.id as idTrc',
+            DB::raw('count(int.png_id) as ttlPengungsi'),
+            DB::raw("concat(bencana.provinsi,',',' ',bencana.kota,',',' ',bencana.kecamatan,',',
+             ' ',bencana.kelurahan) as alamat")
         )
-        // ->join('posko AS p', 'bencana.id', '=', 'p.bencana_id')
-            ->join('integrasi AS int', 'bencana.id', '=', 'int.bencana_id')
-        // ->join('pengungsi as peng','peng.posko_id','=','p.id')
+            ->join('integrasi as int', 'int.bencana_id', '=', 'bencana.id')
+            ->leftJoin('posko AS p', 'int.posko_id', '=', 'p.id')
+            ->leftJoin('pengungsi as peng', 'int.png_id', '=', 'peng.id')
+            ->join('karyawans as k', 'int.user_id', '=', 'k.id')
             ->orderBy('bencana.tanggal', 'desc')
             ->distinct()
-        // ->where('p.bencana_id', '=', 'b.id')
             ->groupBy('int.bencana_id', 'bencana.tanggal', 'bencana.waktu', 'bencana.id',
-                'bencana.nama', 'status', 'bencana.updated_at', 'int.user_id', 'bencana.provinsi', 'bencana.kota',
-                'bencana.kecamatan', 'bencana.kelurahan', 'bencana.jmlPosko', 'bencana.jmlPengungsi')
+                'bencana.nama', 'status', 'bencana.provinsi', 'bencana.kota', 'bencana.kecamatan', 'bencana.kelurahan',
+                'bencana.updated_at', 'bencana.jmlPengungsi', 'bencana.jmlPosko','k.id')
             ->paginate(5);
 
         $getTtlPengungsi = Posko::select('*')

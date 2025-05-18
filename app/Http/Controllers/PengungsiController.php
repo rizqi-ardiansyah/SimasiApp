@@ -455,6 +455,7 @@ class PengungsiController extends Controller
             DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
             Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
             Daerah ',kpl.detail,' ') as lokasi"),
+            'kpl.nama as namaKepala',
             'pengungsi.nama',
             'pengungsi.id as idPengungsi',
             'telpon',

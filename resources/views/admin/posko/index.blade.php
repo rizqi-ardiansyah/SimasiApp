@@ -189,16 +189,11 @@
                                 <tr>
                                     <td>{{ $data->firstItem() + $key  }}</td>
                                     <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
-                                    <!-- <td>{{$namaBencana}} {{ $data->firstItem() + $key  }}</td> -->
                                     <td>{{ $posko->namaSamaran }}</td>
                                     <td>{{ $posko->lokasi}}</td>
-                                    <!-- <td>{{ $posko->detail}}</td> -->
                                     <td>{{ $posko->fullName}}</td>
                                     <td>
                                         {{ $posko->ttlPengungsi}} orang
-                                        <!-- @foreach($ttlPengungsi as $ttl)
-                                    {{ $ttl->ttlPengungsi}}
-                                    @endforeach -->
                                         <a href="{{url('/listPengungsi')}}/<?php echo $posko->idPosko; ?>/<?php echo $posko->bencana_id; ?>/<?php echo $posko->idTrc; ?>" class="btn btn-primary btn-xs"><i class="fas fa-eye"></i> Pengungsi </a>
                                     </td>
                                     <td><?php echo $posko->kapasitas - $posko->ttlPengungsi; ?> orang</td>
@@ -233,17 +228,13 @@
                                 <tr>
                                     @if($posko->idTrc === auth('karyawan')->user()->id)
                                     <?php $i++;?>
-                                    <td>{{ $data->firstItem() + $key  }}</td>
+                                    <td>{{ $i }}</td>
                                     <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
-                                    <td>{{$namaBencana}} {{ $data->firstItem() + $key  }}</td>
+                                    <td>{{ $posko->namaSamaran }}</td>
                                     <td>{{ $posko->lokasi}}</td>
-                                    <td>{{ $posko->detail}}</td>
                                     <td>{{ $posko->fullName}}</td>
                                     <td>
                                         {{ $posko->ttlPengungsi}} orang
-                                        <!-- @foreach($ttlPengungsi as $ttl)
-                                    {{ $ttl->ttlPengungsi}}
-                                    @endforeach -->
                                         <a href="{{url('/listPengungsi')}}/<?php echo $posko->idPosko; ?>/<?php echo $posko->bencana_id; ?>/<?php echo $posko->idTrc; ?>" class="btn btn-primary btn-xs"><i class="fas fa-eye"></i> Pengungsi </a>
                                     </td>
                                     <td><?php echo $posko->kapasitas - $posko->ttlPengungsi; ?> orang</td>

@@ -152,9 +152,7 @@ window.onload = function() {
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
                                     <td>{{ $bencana->alamat }}</td>
-                                    <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->jmlPosko }} tempat</br>
-                                    <!-- url('/poskoKepulangan' -->
                                         <a href="{{url('/poskoKepulangan')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko" style="font-size: 14px;"><i class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->ttlPengungsi }} orang</br>
@@ -191,33 +189,6 @@ window.onload = function() {
                                         <span class="badge badge-info" style="font-size: 14px;">Selesai</span>
                                         @endif
                                     </td>
-                                    <!-- <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">
-                                                <i class="fas fa-bars"></i>
-                                            </button>
-                                            <div class="dropdown-menu dropdown-menu-lg" role="menu"> -->
-                                                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
-                                                    <i class="fas fa-eye mr-1"></i> Detail
-                                                </a>
-                                                <div class="dropdown-divider"></div> -->
-                                                <!-- <a href="#" class="dropdown-item " title="Edit Bencana" data-toggle="modal" data-target="#modal-edit-{{$bencana->idBencana}}">
-                                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                        <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
-                                                    </svg>
-                                                    Edit
-                                                </a>
-                                                <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item " title="Hapus Bencana" onclick="deleteConfirmation({{$bencana->idBencana}})">
-                                                    <i class="fas fa-trash mr-1"></i> Hapus
-                                                </a>
-                                            </div> -->
-                                            <!-- /.modal-dialog -->
-                                        <!-- </div> -->
-                                        <!-- <a href="#" class="btn btn-danger btn-sm" title="Hapus Pengungsi">
-                                            Hapus
-                                        </a> -->
-                                    <!-- </td> -->
                                 </tr>
                                 @endif
                                 @endforeach
@@ -228,29 +199,47 @@ window.onload = function() {
                                 <?php $i = 0; ?>
                                 @foreach ($data2 as $key => $bencana)
                                 <tr>
-                                    @if($bencana->trc == auth()->user()->id)
+                                    @if($bencana->status ==3)
                                     <?php $i++; ?>
-                                    <td>{{ $data2->firstItem() + $key }}</td>
+                                    
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
                                     <td>{{ $bencana->alamat }}</td>
-                                    <!-- <td>{{ $bencana->posko }}</td> -->
                                     <td>{{ $bencana->jmlPosko }} tempat</br>
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Posko </a>
+                                        <a href="{{url('/poskoKepulangan')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko" style="font-size: 14px;"><i class="fas fa-eye"></i> Posko </a>
                                     </td>
-                                    <td>{{ $bencana->jmlPengungsi }} orang</br>
+                                    <td>{{ $bencana->ttlPengungsi }} orang</br>
+                                    <td>
+                                        {{ $bencana->jumlahRumahRusak }} kondisi
+                                        <!-- <a href="{{url('/rumahRusak')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat rumah rusak"><i class="fas fa-eye"></i> Detail</a> -->
+                                        <a href="#" class="btn btn-primary btn-xs" title="Tambah kondisi" data-toggle="modal" data-target="#modal-tambah-{{$bencana->idBencana}}" style="font-size: 14px; margin-bottom: 5px;"><i class="fas fa-plus"></i> Tambah</a>
+                                        <a href="{{url('/poskoKepulangan')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"style="font-size: 14px;"><i class="fas fa-eye"></i> Detail </a>
+                                    </td>
+                                    <td>
+                                        {{ $bencana->jumlahKondisiSekitar }} kondisi
+                                        <a href="{{url('/kondisiSekitar')}}/<?php echo $bencana->idBencana;?>" class="btn btn-primary btn-xs" title="Lihat kondisi sekitar" style="font-size: 14px;"><i class="fas fa-eye"></i> Detail</a>                                    </td>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)
                                         @php
-                                        $value = 'Berjalan'
+                                        $value = 'Siaga'
                                         @endphp
-                                        <span class="badge badge-success"><?php echo $value; ?></span>
-                                        @else
+                                        <span class="badge badge-danger" style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 2)
+                                        @php
+                                        $value = 'Tanggap Darurat'
+                                        @endphp
+                                        <span class="badge badge-danger" style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 3)
+                                        @php
+                                        $value = 'Pemulihan'
+                                        @endphp
+                                        <span class="badge badge-success" style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 0)
                                         @php
                                         $value = 'Selesai'
                                         @endphp
-                                        <span class="badge badge-danger">Selesai</span>
+                                        <span class="badge badge-info" style="font-size: 14px;">Selesai</span>
                                         @endif
                                     </td>
                                 </tr>

@@ -32,7 +32,7 @@
                         <h3 class="card-title">Daftar rumah rusak pada posko <b>{{ $namaPosko }}</b></h3>
                         <div class="card-tools">
                             @auth('web')
-                            <form id="search" action="{{ route('bencana.searchBencana') }}" method="GET">
+                            <form id="search" action="{{ route('searchRumahRusak') }}" method="GET">
                                 <div class="input-group input-group-sm" style="width: 150px;">
                                     <input type="text" name="search" class="form-control float-right"
                                         placeholder="Search">
@@ -223,7 +223,7 @@
 
 
                     <div class="card-body table-responsive">
-                        @auth('web')
+                        @if(Auth::guard('web')->check() || Auth::guard('karyawan')->check())
                         <a href="#" class="btn btn-success mb-2 " data-toggle="modal" data-target="#tambah"
                             style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Data
@@ -355,37 +355,103 @@
 
                                 @auth('karyawan')
                                 <?php $i = 0; ?>
-                                @foreach ($data2 as $key => $bencana)
+                                @foreach ($kondisiRumah as $key => $bencana)
                                 <tr>
-                                    @if($bencana->trc == auth()->user()->id)
-                                    <?php $i++; ?>
-                                    <td>{{ $data2->firstItem() + $key }}</td>
-                                    <td>{{ $bencana->namaBencana }}</td>
-                                    <td>{{ $bencana->waktu }}</td>
-                                    <td>{{ $bencana->alamat }}</td>
-                                    <!-- <td>{{ $bencana->posko }}</td> -->
-                                    <td>{{ $bencana->jmlPosko }} tempat</br>
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>"
-                                            class="btn btn-primary btn-xs" title="Lihat posko"><i
-                                                class="fas fa-eye"></i> Posko </a>
-                                    </td>
-                                    <td>{{ $bencana->jmlPengungsi }} orang</br>
-                                    <td>{{ $bencana->waktuUpdate }}</td>
+                                    <!-- <td>{{ $data->firstItem() + $key }}</td>ss -->
+                                    <td>{{ $bencana->ketWaktu }}</td>
+                                    <td>{{ $bencana->namaPengungsi }}</td>
+                                    <td>{{ $bencana->lokKel }}</td>
+
                                     <td>
-                                        @if($bencana->status == 1)
+                                        <img src="{{ asset('storage/images/' . $bencana->picRumah) }}"
+                                            alt="Foto Pengungsi" width="100" class="img-thumbnail" data-toggle="modal"
+                                            data-target="#imageModal"
+                                            onclick="showImage('{{ asset('storage/images/' . $bencana->picRumah) }}')">
+                                    </td>
+
+                                    <!-- Modal untuk menampilkan gambar -->
+
+                                    <div class="modal fade" id="imageModal" tabindex="-1"
+                                        aria-labelledby="imageModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="imageModalLabel">Preview Gambar</h5>
+                                                    <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <img id="modalImage" src="" class="img-fluid" alt="Preview Image">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                    function showImage(src) {
+                                        document.getElementById("modalImage").src = src;
+                                    }
+                                    </script>
+
+
+                                    <!-- <td>{{ $bencana->posko }}</td> -->
+                                    <!-- <td>{{ $bencana->status }}</td> -->
+                                    <td>
+                                        @if($bencana->status == 0)
                                         @php
-                                        $value = 'Berjalan'
+                                        $value = 'Aman'
                                         @endphp
                                         <span class="badge badge-success"><?php echo $value; ?></span>
-                                        @else
+                                        @elseif($bencana->status == 1)
                                         @php
-                                        $value = 'Selesai'
+                                        $value = 'Rusak ringan'
                                         @endphp
-                                        <span class="badge badge-danger">Selesai</span>
+                                        <span class="badge badge-info"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 2)
+                                        @php
+                                        $value = 'Rusak sedang'
+                                        @endphp
+                                        <span class="badge badge-info"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 3)
+                                        @php
+                                        $value = 'Rusak berat'
+                                        @endphp
+                                        <span class="badge badge-danger"><?php echo $value; ?></span>
                                         @endif
                                     </td>
+                                    <td>{{ $bencana->keterangan }}</td>
+                                    <td>{{ $bencana->updated_at }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                                                data-toggle="dropdown" data-offset="-52">
+                                                <i class="fas fa-bars"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                                <!-- <a href="#" class="dropdown-item " data-toggle="modal" data-target="#modal-detail" title="Detail Pengungsi">
+                                                    <i class="fas fa-eye mr-1"></i> Detail
+                                                </a>
+                                                <div class="dropdown-divider"></div> -->
+                                                <a href="#" class="dropdown-item " title="Edit Bencana"
+                                                    data-toggle="modal" data-target="#modal-edit-{{$bencana->idKr}}">
+                                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                                        <path fill="currentColor"
+                                                            d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+                                                    </svg>
+                                                    Edit
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item " title="Hapus Bencana"
+                                                    onclick="deleteConfirmation({{$bencana->idKr}})">
+                                                    <i class="fas fa-trash mr-1"></i> Hapus
+                                                </a>
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <!-- <a href="#" class="btn btn-danger btn-sm" title="Hapus Pengungsi">
+                                            Hapus
+                                        </a> -->
+                                    </td>
                                 </tr>
-                                @endif
                                 @endforeach
                                 @endauth
 
@@ -604,6 +670,87 @@
         </div>
     </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputSearch = document.querySelector('input[name="search"]');
+
+        inputSearch.addEventListener('input', function () {
+            let search = this.value;
+
+            fetch(`{{ route('searchRumahRusak') }}?search=${search}`)
+                .then(response => response.json())
+                .then(data => {
+                    let result = '';
+
+                    if (data.length === 0) {
+                        result += '<tr><td colspan="10">Data tidak ditemukan</td></tr>';
+                    } else {
+                        data.forEach((kondisiRumah, i) => {
+                            let statusLabel = '-';
+                            if (kondisiRumah.status == 0) {
+                                statusLabel = '<span class="badge badge-success">Aman</span>';
+                            } else if (kondisiRumah.status == 1) {
+                                statusLabel = '<span class="badge badge-info">Rusak Ringan</span>';
+                            } else if (kondisiRumah.status == 2) {
+                                statusLabel = '<span class="badge badge-info">Rusak Sedang</span>';
+                            } else if (kondisiRumah.status == 3) {
+                                statusLabel = '<span class="badge badge-danger">Rusak berat</span>';
+                            }
+
+                            result += `
+                                <tr>
+                                    <td>${kondisiRumah.ketWaktu}</td>
+                                    <td>${kondisiRumah.namaPengungsi}</td>
+                                    <td>${kondisiRumah.lokKel}</td>
+                                    <td>
+                                        <img src="http://localhost:8080/simasi/public/storage/images/${kondisiRumah.picRumah}" alt="Foto Pengungsi"
+                                            width="100" class="img-thumbnail" data-toggle="modal"
+                                            data-target="#imageModal" onclick="showImage('http://localhost:8080/simasi/public/storage/images/${kondisiRumah.picRumah}')">
+                                    </td>
+                                    <td>${statusLabel}</td>
+                                    <td>${kondisiRumah.keterangan}</td>
+                                    <td>${kondisiRumah.updated_at}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                                                data-toggle="dropdown" data-offset="-52">
+                                                <i class="fas fa-bars"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-lg" role="menu">
+                                                <a href="#" class="dropdown-item" title="Edit Bencana"
+                                                    data-toggle="modal" data-target="#modal-edit-${kondisiRumah.idKr}">
+                                                    <i class="fas fa-edit mr-1"></i> Edit
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" class="dropdown-item" title="Hapus Bencana"
+                                                    onclick="deleteConfirmation(${kondisiRumah.idKr})">
+                                                    <i class="fas fa-trash mr-1"></i> Hapus
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+
+                    document.getElementById('result').innerHTML = result;
+                })
+                .catch(error => console.error('Fetch error:', error));
+        });
+
+        document.getElementById('search').addEventListener('submit', function (e) {
+            e.preventDefault();
+        });
+    });
+
+    function showImage(src) {
+        document.getElementById("modalImage").src = src;
+    }
+</script>
+
+
 
     <script type="text/javascript">
     function deleteConfirmation(id) {
