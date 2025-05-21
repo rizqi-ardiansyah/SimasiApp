@@ -26,8 +26,8 @@ class ActivateMultipleGuards
             Auth::guard('karyawan')->onceUsingId(session('karyawan_user_id'));
         }
     
-        if (session()->has('admin_user_id')) {
-            Auth::guard('admin')->onceUsingId(session('admin_user_id'));
+        if (session()->has('medis_user_id')) {
+            Auth::guard('medis')->onceUsingId(session('medis_user_id'));
         }
     
         return $next($request);

@@ -243,14 +243,6 @@
                                                 class="fas fa-eye"></i> Posko </a>
                                     </td>
                                     <td>{{ $bencana->ttlPengungsi }} orang</br>
-                                        <!-- <td>
-                                        {{ $bencana->null }} rumah rusak
-                                        <a href="{{url('/rumahRusak')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat rumah rusak"><i class="fas fa-eye"></i> Detail</a>
-                                    </td>
-                                    <td>
-                                        {{ $bencana->null }} area rusak
-                                        <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>" class="btn btn-primary btn-xs" title="Lihat posko"><i class="fas fa-eye"></i> Detail</a>
-                                    </td> -->
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)
@@ -306,9 +298,6 @@
                                             </div>
                                             <!-- /.modal-dialog -->
                                         </div>
-                                        <!-- <a href="#" class="btn btn-danger btn-sm" title="Hapus Pengungsi">
-                                            Hapus
-                                        </a> -->
                                     </td>
                                 </tr>
                                 @endif
@@ -374,38 +363,51 @@
                                 @endauth
 
 
-                                @auth('admin')
+                                @auth('medis')
                                 <?php $i = 0;?>
-                                @foreach ($data2 as $bencana)
+                                @foreach ($data as $key => $bencana)
                                 <tr>
-                                    @if($bencana->trc == auth()->user()->id)
-                                    <?php $i++;?>
-                                    <td>{{ $i }}</td>
+                                    @if($bencana->status == 3)
+                                    <td>{{ $data->firstItem() + $key }}</td>
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
-                                    <!-- <td>{{ $bencana->lokasi }}</td> -->
+                                    <td>{{ $bencana->alamat }}</td>
                                     <!-- <td>{{ $bencana->posko }}</td> -->
-                                    <td>{{ $bencana->ttlPosko }} tempat</br>
+                                    <td>{{ $bencana->jmlPosko }} tempat</br>
                                         <a href="{{url('/listPosko')}}/<?php echo $bencana->idBencana; ?>"
                                             class="btn btn-primary btn-xs" title="Lihat posko"><i
                                                 class="fas fa-eye"></i> Posko </a>
                                     </td>
+                                    <td>{{ $bencana->ttlPengungsi }} orang</br>
                                     <td>{{ $bencana->waktuUpdate }}</td>
                                     <td>
                                         @if($bencana->status == 1)
                                         @php
-                                        $value = 'Berjalan'
+                                        $value = 'Siaga'
                                         @endphp
-                                        <span class="badge badge-success"><?php echo $value; ?></span>
-                                        @else
+                                        <span class="badge badge-danger"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 2)
+                                        @php
+                                        $value = 'Tanggap Darurat'
+                                        @endphp
+                                        <span class="badge badge-danger"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 3)
+                                        @php
+                                        $value = 'Pemulihan'
+                                        @endphp
+                                        <span class="badge badge-success"
+                                            style="font-size: 14px;"><?php echo $value; ?></span>
+                                        @elseif($bencana->status == 0)
                                         @php
                                         $value = 'Selesai'
                                         @endphp
-                                        <span class="badge badge-danger">Selesai</span>
+                                        <span class="badge badge-info" style="font-size: 14px;">Selesai</span>
                                         @endif
                                     </td>
+                                    @endif
                                 </tr>
-                                @endif
                                 @endforeach
                                 @endauth
 

@@ -245,27 +245,23 @@
                                 @endforeach
                                 @endauth
 
-                                @auth('admin')
+                                @auth('medis')
                                 <?php $i = 0;?>
                                 @foreach($data as $key => $posko)
                                 <tr>
-                                    @if($posko->idTrc === auth('admin')->user()->id)
                                     <?php $i++;?>
                                     <td>{{ $i }}</td>
-                                    <td>{{ $posko->namaPosko }}</td>
+                                    <input type="text" class="form-control" id="exampleInputnama" name="nama" value="{{$namaBencana}}{{$getIdPosko}}" hidden required>
+                                    <td>{{ $posko->namaSamaran }}</td>
                                     <td>{{ $posko->lokasi}}</td>
                                     <td>{{ $posko->fullName}}</td>
                                     <td>
                                         {{ $posko->ttlPengungsi}} orang
-                                        <!-- @foreach($ttlPengungsi as $ttl)
-                                    {{ $ttl->ttlPengungsi}}
-                                    @endforeach -->
-                                        <a href="{{url('/listPengungsi')}}/<?php echo $posko->idPosko; ?>" class="btn btn-primary btn-xs"><i class="fas fa-eye"></i> Pengungsi </a>
+                                        <a href="{{url('/listPengungsi')}}/<?php echo $posko->idPosko; ?>/<?php echo $posko->bencana_id; ?>/<?php echo $posko->idTrc; ?>" class="btn btn-primary btn-xs"><i class="fas fa-eye"></i> Pengungsi </a>
                                     </td>
                                     <td><?php echo $posko->kapasitas - $posko->ttlPengungsi; ?> orang</td>
                                     <td>{{ $posko->created_at}}</td>
                                     <td>{{ $posko->updated_at}}</td>
-                                    @endif
                                 </tr>
                                 @endforeach
                                 @endauth

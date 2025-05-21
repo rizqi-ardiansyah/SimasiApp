@@ -48,6 +48,10 @@ return [
             'driver' => 'session', 
             'provider' => 'karyawans', 
         ],
+        'medis' => [ 
+            'driver' => 'session', 
+            'provider' => 'medis', 
+        ],
     ],
 
     /*
@@ -80,6 +84,10 @@ return [
             'driver' => 'eloquent', 
             'model' => App\Models\Karyawan::class, 
         ],
+        'medis' => [ 
+            'driver' => 'eloquent', 
+            'model' => App\Models\Medis::class, 
+        ]
     ],
 
     /*
@@ -116,6 +124,12 @@ return [
             'expire' => 60, 
             'throttle' => 60,
         ],
+        'medis' => [ 
+            'provider' => 'medis', 
+            'table' => 'password_resets', 
+            'expire' => 60, 
+            'throttle' => 60,
+        ]
     ],
 
     /*

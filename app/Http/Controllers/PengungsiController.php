@@ -11,6 +11,7 @@ use App\Models\Integrasi;
 use App\Models\KondisiPsikologis;
 use App\Models\KondisiRumah;
 use App\Models\KondisiSekitar;
+use App\Models\KondisiMedis;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -78,16 +79,21 @@ class PengungsiController extends Controller
             'kpl.kelurahan as kelurahan',
             'kpl.detail as detail','kp.status as hasilPsiko',
             'kp.jawaban1', 'kp.jawaban2', 'kp.jawaban3', 
-            'kp.jawaban4', 'kp.jawaban5', 'kp.jawaban6'
+            'kp.jawaban4', 'kp.jawaban5', 'kp.jawaban6',
+            'km.tanggal as tglMedis',
+            'km.waktu as waktuMedis',
+            'km.keluhan',
+            'km.riwayat_penyakit',
+            'km.konfis',
+            DB::raw("concat(km.tanggal,' ', km.waktu) as waktuPeriksa")
         )
             ->join('integrasi as int','int.png_id','=','pengungsi.id')
             ->join('posko as p', 'p.id','=','int.posko_id')
             ->leftJoin('kondisi_psikologis as kp', 'kp.id','=','int.psikologis_id')
             ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
-            // ->leftJoin('posko AS p', 'pengungsi.posko_id', '=', 'p.id')
-            // ->leftJoin('kepala_keluarga as kpl', 'pengungsi.kpl_id', '=', 'kpl.id')
+            ->leftJoin('kondisi_medis as km', 'km.idPengungsi', '=', 'pengungsi.id') // 
             ->where('int.posko_id', $request->id)
-            ->orderBy('int.kpl_id', 'desc')
+            ->orderBy('pengungsi.nama', 'asc')
             ->distinct()
             // model paginate agar banyak paginate bisa muncul dalam 1 page
             ->paginate(10, ['*'], 'p');
@@ -168,7 +174,8 @@ class PengungsiController extends Controller
                 'int.updated_at',
                 'int.kondisiRumah_id',
                 'int.kondisiSekitar_id',
-                'int.psikologis_id'
+                'int.psikologis_id',
+                'int.kondisiMedis_id'
             )
             ->get();
 
@@ -813,6 +820,7 @@ class PengungsiController extends Controller
         $getIdIntegrasi = Integrasi::select('id')->where('png_id', $id);
         $idPengungsi = Pengungsi::select('id')->where('id', $id)->value('id');
         $idKepalaKeluarga = KepalaKeluarga::select('id')->where('id', $request->kpl)->value('id');
+        $getIdKepala = Integrasi::select('png_id')->where('kpl_id', $request->kpl)->value('png_id');
         
 
             $statKel = $request->statKel;
@@ -850,11 +858,52 @@ class PengungsiController extends Controller
                     'statKon' => $request->statKon,
                 ]);
             }
+            if (!is_null($request->tanggal) && !is_null($request->waktu)) {
+                // $existingData = KondisiMedis::where('idPengungsi', $request->idPengungsi)->first();
+
+                // if ($existingData) {
+                //     // Jika data sudah ada, lakukan update
+                //     $existingData->update([
+                //         'tanggal' => $request->tanggal,
+                //         'waktu' => $request->waktu,
+                //         'keluhan' => $request->keluhan,
+                //         'riwayat_penyakit' => $request->riwayat_penyakit,
+                //         'konfis' => $request->statKon,
+                //     ]);
+                //     $latestId = $existingData->id;
+                // } else {
+                    // Jika belum ada, buat data baru
+                    $idPengungsi = $statKel == 0 ? $getIdKepala : $request->idPengungsi;
+
+                    $newData = KondisiMedis::create([
+                        'idPengungsi' => $idPengungsi,
+                        'tanggal' => $request->tanggal,
+                        'waktu' => $request->waktu,
+                        'keluhan' => $request->keluhan,
+                        'riwayat_penyakit' => $request->riwayat_penyakit,
+                        'konfis' => $request->statKon,
+                    ]);
+                    $latestId = $newData->id;
+
+                    $getIdIntegrasi->update([
+                        'kondisiMedis_id' => $latestId
+                     ]);
+
+                    // $idPengungsi = $statKel == 0 ? $getIdKepala : $request->idPengungsi;
+
+
+                    //  $idPengungsi = $getIdKepala;
+                     
+                // }
+            }
+
             $getIdIntegrasi->update([
                 'kpl_id' => $idKepalaKeluarga,
-                'png_id' => $idPengungsi,
+                'png_id' => $idPengungsi
              ]);
-            Alert::success('Success', 'Data berhasil diubah');
+             
+
+            Alert::success('Success', 'Data berhasil disimpan');
             return back();
     }
 

@@ -26,6 +26,8 @@
                             {{ auth('karyawan')->user()->firstname }} {{ auth('karyawan')->user()->lastname }}
                             @elseif(auth('web')->check())
                             {{ auth('web')->user()->firstname }} {{ auth('web')->user()->lastname }}
+                            @elseif(auth('medis')->check())
+                            {{ auth('medis')->user()->firstname }} {{ auth('medis')->user()->lastname }}
                             @endif
                         </a>
                     </div>

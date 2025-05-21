@@ -23,10 +23,10 @@ return [
             'provider' => 'users',
             'cookie' => 'session_web', // Tambahkan nama cookie unik untuk 'web'
         ],
-        'admin' => [
+        'medis' => [
             'driver' => 'session',
-            'provider' => 'admins',
-            'cookie' => 'session_admin', // Tambahkan nama cookie unik untuk 'admin'
+            'provider' => 'medis',
+            'cookie' => 'session_medis', // Tambahkan nama cookie unik untuk 'admin'
         ],
         'karyawan' => [
             'driver' => 'session',

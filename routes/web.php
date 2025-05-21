@@ -78,7 +78,7 @@ Route::get('/karyawan', function () {
 });
 
 // Route::resource('dashboard', DashboardController::class)->middleware('auth');
-Route::middleware(['auth:web,karyawan,admin'])->group(function () {
+Route::middleware(['auth:web,karyawan,medis'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 Route::resource('bencana', BencanaController::class);

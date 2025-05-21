@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Karyawan;
-
+use App\Models\Medis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -38,9 +38,9 @@ class LoginController extends Controller
             }
         }
 
-        if ($admin = \App\Models\Admin::where('email', $request->email)->first()) {
-            if (Auth::guard('admin')->attempt($credentials)) {
-                session()->put('admin_user_id', Auth::guard('admin')->id());
+        if ($medis = \App\Models\Medis::where('email', $request->email)->first()) {
+            if (Auth::guard('medis')->attempt($credentials)) {
+                session()->put('medis_user_id', Auth::guard('medis')->id());
                 return redirect()->route('dashboard');
             }
         }
@@ -138,8 +138,8 @@ class LoginController extends Controller
     Auth::guard('karyawan')->logout();
     session()->forget('karyawan_user_id');
 
-    Auth::guard('admin')->logout();
-    session()->forget('admin_user_id');
+    Auth::guard('medis')->logout();
+    session()->forget('medis_user_id');
 
     session()->invalidate();
     session()->regenerateToken();

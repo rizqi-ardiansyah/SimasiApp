@@ -260,6 +260,7 @@
 
                     <!-- /.card-header -->
                     <div class="card-body table-responsive">
+                        @if(Auth::guard('web')->check() || Auth::guard('karyawan')->check())
                         <a href="#" class="btn btn-success mb-2" data-toggle="modal" data-target="#modal-default"
                             style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Tambah Pengungsi
@@ -268,6 +269,7 @@
                             style="font-size: 14px;">
                             <i class="fas fa-plus mr-1"></i> Unggah Data
                         </a>
+                        @endauth
                         @auth('web')
                         <a href="{{url('/ransum')}}/{{ request()->id }}/{{ request()->bencana_id }}/{{ request()->trc_id }}"
                             class="btn btn-info mb-2" target="__blank" style="font-size: 14px;">
@@ -324,19 +326,22 @@
                                     <th>Alamat</th>
                                     <th>Jenis Kelamin</th>
                                     <th>Umur</th>
-                                    @auth('web')
+                                    @if(Auth::guard('web')->check() || Auth::guard('medis')->check())
                                     <th>Kondisi Fisik</th>
+                                    @endauth
+                                    @auth('web')
                                     <th>Kondisi Psikologi</th>
                                     @endauth
                                     <th>Status</th>
-                                    @if(Auth::guard('web')->check() || Auth::guard('karyawan')->check())
+                                    @auth('web')
                                     <th>Aksi</th>
                                     @endauth
                                 </tr>
                             </thead>
                             <tbody id="result">
+                                @foreach ($data->unique('idPengungsi') as $key => $pengungsi)
                                 <tr>
-                                    @foreach ($data as $key => $pengungsi)
+
                                     <td>{{ $data->firstItem() + $key  }}</td>
                                     <td>{{ $pengungsi->nama }}</td>
                                     <td>
@@ -375,15 +380,17 @@
                                     <td>
                                         <?php
                                         $gender = $pengungsi->gender;
-                                        if ($gender == 0) {
+                                        if ($gender === 0) {
                                             echo "Perempuan";
                                         } else if ($gender == 1) {
                                             echo "Laki-laki";
+                                        } else{
+                                            echo "-";
                                         }
                                         ?>
                                     </td>
                                     <td>{{ $pengungsi->umur }}</td>
-                                    @auth('web')
+                                    @if(Auth::guard('web')->check() || Auth::guard('medis')->check())
                                     <td>
                                         <?php
                                         $kondisi = $pengungsi->statKon;
@@ -403,7 +410,18 @@
                                             echo "Difabel";
                                         }
                                         ?>
+                                        <a href="#" class="btn btn-primary btn-xs" style="font-size: 14px;" data-toggle="modal"
+                                            data-target="#modal-konMed-{{$pengungsi->idPengungsi}}"><i
+                                                class="fas fa-eye">
+                                            </i> Detail </a>
+                                        <a href="#" class="btn btn-primary btn-xs" style="font-size: 14px;" data-toggle="modal"
+                                        data-target="#modal-edit-{{$pengungsi->idPengungsi}}"><i
+                                            class="fas fa-eye">
+                                        </i> Edit </a>
                                     </td>
+                                    @endauth
+
+                                    @auth('web')
                                     <td>
                                         @if ($pengungsi->hasilPsiko === 0)
                                         Belum Baik
@@ -428,6 +446,7 @@
                                         }
                                         ?>
                                     </td>
+                                    @auth('web')
                                     <td>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
@@ -449,14 +468,12 @@
                                                     Edit
                                                 </a>
                                                 <div class="dropdown-divider"></div>
-                                                @auth('web')
                                                 <a href="#" class="dropdown-item " title="Cek Psikologi"
                                                     data-toggle="modal"
                                                     data-target="#modal-psiko-{{$pengungsi->idPengungsi}}">
                                                     <i class="fas fa-brain"></i>
                                                     Cek Psikologi
                                                 </a>
-                                                @endauth
                                                 <div class="dropdown-divider"></div>
                                                 <a href="#" class="dropdown-item " title="Hapus Pengungsi"
                                                     onclick="deleteConfirmation({{$pengungsi->idPengungsi}})">
@@ -469,6 +486,7 @@
                                             Hapus
                                         </a> -->
                                     </td>
+                                    @endauth
 
                                     <div class="modal fade" id="modal-edit-{{$pengungsi->idPengungsi}}">
                                         <div class="modal-dialog">
@@ -489,6 +507,9 @@
                                                         action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}"
                                                         method="POST">
                                                         @csrf
+                                                        @php
+                                                        $isReadOnly = auth('medis')->check();
+                                                        @endphp
                                                         <div class="card-body">
                                                             <!-- <div class="form-group"> -->
                                                             <input type="text" class="form-control" id="posko_id"
@@ -500,14 +521,16 @@
                                                                 <label for="nama">Nama Pengungsi</label>
                                                                 <input type="text" class="form-control" id="nama"
                                                                     name="nama" placeholder="Masukan nama pengungsi"
-                                                                    value="{{$pengungsi->nama}}">
+                                                                    value="{{$pengungsi->nama}}" required @if($isReadOnly)
+                                                                    readonly @endif>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="telpon">Nomor HP</label>
                                                                 <input type="text" class="form-control" id="telpon"
                                                                     name="telpon" placeholder="Masukan nomor telepon"
-                                                                    value="{{$pengungsi->telpon}}" required>
+                                                                    value="{{$pengungsi->telpon}}" required @if($isReadOnly)
+                                                                    readonly @endif>
                                                             </div>
 
                                                             <input type="text" class="form-control" id="kpl" name="kpl"
@@ -550,23 +573,27 @@
                                                                 @endforeach
 
                                                                 <div class="form-group">
-                                                                    <label for="detail">Detail</label>
+                                                                    <label for="detail" @if($isReadOnly)
+                                                                    hidden @endif>Detail</label>
                                                                     <input type="text" class="form-control" id="detail"
                                                                         placeholder="Masukan detail" name="detail"
-                                                                        value="{{$pengungsi->detail}}">
+                                                                        value="{{$pengungsi->detail}}" @if($isReadOnly)
+                                                                    hidden @endif>
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="gender">Jenis Kelamin</label>
                                                                 <select class="form-control" id="gender" name="gender"
-                                                                    required>
+                                                                @if($isReadOnly) readonly @endif required>
                                                                     <?php
                                                                     $getGender = $pengungsi->gender;
-                                                                    if ($getGender == 0) {
+                                                                    if ($getGender === 0) {
                                                                         $statGen = "Perempuan";
                                                                     } else if ($getGender == 1) {
                                                                         $statGen = "Laki-laki";
+                                                                    } else{
+                                                                        $statGen = "-";
                                                                     }
                                                                     ?>
                                                                     <option selected value="{{$pengungsi->gender}}"
@@ -580,14 +607,42 @@
                                                                 <label for="umur">Umur</label>
                                                                 <input type="text" class="form-control" id="umur"
                                                                     name="umur" placeholder="Masukan umur"
-                                                                    value="{{$pengungsi->umur}}" required>
+                                                                    value="{{$pengungsi->umur}}" @if($isReadOnly)
+                                                                    readonly @endif required>
                                                             </div>
 
-                                                            <div class="form-group">
-                                                                <label for="statKon">Kondisi</label>
-                                                                <select class="form-control" id="statKon" name="statKon"
-                                                                    required>
-                                                                    <?php
+                                                            @auth('medis')
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPosko">Waktu Pemeriksaan</label>
+                                                            <input type="date" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan tanggal"
+                                                                name="tanggal" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="time" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan waktu"
+                                                                name="waktu" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPosko">Keluhan</label>
+                                                            <input type="text" class="form-control" id="inputKeluhan"
+                                                                placeholder="Masukan keluhan" name="keluhan" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPosko">Riwayat Penyakit</label>
+                                                            <input type="text" name="riwayat_penyakit" 
+                                                            placeholder="Masukan riwayat penyakit" class="form-control"
+                                                            value="{{ $pengungsi->riwayat_penyakit ?? '' }}">
+                                                        </div>
+                                                        @endauth
+
+                                                        @if(Auth::guard('web')->check() ||
+                                                        Auth::guard('medis')->check())
+                                                        <div class="form-group">
+                                                            <label for="statKon">Kondisi</label>
+                                                            <select class="form-control" id="statKon" name="statKon"
+                                                                required>
+                                                                <?php
                                                                     $getKon = $pengungsi->statKon;
                                                                     if ($getKon == 0) {
                                                                         $statKon = "Sehat";
@@ -603,38 +658,38 @@
                                                                         $statKon = "Difabel";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$pengungsi->statKon}}"
-                                                                        hidden><?php echo $statKon; ?></option>
-                                                                    <option value=0>Sehat</option>
-                                                                    <option value=1>Luka Ringan</option>
-                                                                    <option value=2>Luka Sedang</option>
-                                                                    <option value=3>Luka Berat</option>
-                                                                    <option value=4>Hamil atau menyusui</option>
-                                                                    <option value=5>Difabel</option>
-                                                                </select>
-                                                            </div>
+                                                                <option selected value="{{$pengungsi->statKon}}" hidden>
+                                                                    <?php echo $statKon; ?></option>
+                                                                <option value=0>Sehat</option>
+                                                                <option value=1>Luka Ringan</option>
+                                                                <option value=2>Luka Sedang</option>
+                                                                <option value=3>Luka Berat</option>
+                                                                <option value=4>Hamil atau menyusui</option>
+                                                                <option value=5>Difabel</option>
+                                                            </select>
+                                                        </div>
+                                                        @endauth
 
-                                                            <div class="form-group">
-                                                                <label for="statPos">Status</label>
-                                                                <select class="form-control" id="statPos" name="statPos"
-                                                                    required>
-                                                                    <?php
+                                                        <div class="form-group">
+                                                            <label for="statPos">Status</label>
+                                                            <select class="form-control" id="statPos" name="statPos"
+                                                                required>
+                                                                <?php
                                                                     $getPos = $pengungsi->statPos;
                                                                     if ($getPos == 0) {
                                                                         $statPos = "Keluar";
                                                                     } else if ($getPos == 1) {
                                                                         $statPos = "Di Posko";
-                                                                    }else if ($getPos == 2) {
-                                                                        $statPos = "Pencarian";
                                                                     }
                                                                     ?>
-                                                                    <option selected value="{{$pengungsi->statPos}}"
-                                                                        hidden><?php echo $statPos; ?></option>
-                                                                    <option value=1>Di Posko</option>
-                                                                    <option value=0>Keluar</option>
-                                                                    <option value=2>Pencarian</option>
-                                                                </select>
-                                                            </div>
+                                                                <option selected value="{{$pengungsi->statPos}}" hidden>
+                                                                    <?php echo $statPos; ?></option>
+                                                                <option value=1>Di Posko</option>
+                                                                <option value=0>Keluar</option>
+                                                                <option value=2>Pencarian</option>
+                                                            </select>
+                                                        </div>
+
 
 
                                                         </div>
@@ -654,31 +709,40 @@
                                                         action="{{ url('pengungsi/edit/'.$pengungsi->idPengungsi) }}"
                                                         method="POST">
                                                         @csrf
+                                                        @php
+                                                        $isReadOnly = auth('medis')->check();
+                                                        @endphp
                                                         <div class="card-body">
                                                             <!-- <div class="form-group"> -->
                                                             <input type="text" class="form-control" id="posko_id"
                                                                 name="posko_id" value="{{request()->id}}" hidden
                                                                 required>
+                                                            <input type="text" class="form-control" id="posko_id"
+                                                                name="idPengungsi" value="{{$pengungsi->idPengungsi}}"
+                                                                hidden required>
                                                             <!-- </div> -->
 
                                                             <div class="form-group">
                                                                 <label for="nama">Nama Pengungsi</label>
                                                                 <input type="text" class="form-control" id="nama"
                                                                     name="nama" placeholder="Masukan nama pengungsi"
-                                                                    value="{{$pengungsi->nama}}">
+                                                                    value="{{$pengungsi->nama}}" @if($isReadOnly)
+                                                                    readonly @endif>
                                                             </div>
 
                                                             <div class="form-group">
                                                                 <label for="telpon">Nomor HP</label>
                                                                 <input type="text" class="form-control" id="telpon"
                                                                     name="telpon" placeholder="Masukan nomor telepon"
-                                                                    value="{{$pengungsi->telpon}}" required>
+                                                                    value="{{$pengungsi->telpon}}" @if($isReadOnly)
+                                                                    readonly @endif>
                                                             </div>
 
                                                             <div class="form-group">
-                                                                <label for="sKeluarga">Status Keluarga</label>
-                                                                <select class="form-control" id="statKel"
-                                                                    name="statKel">
+                                                                <label for="sKeluarga" @if($isReadOnly) hidden
+                                                                    @endif>Status Keluarga</label>
+                                                                <select class="form-control" id="statKel" name="statKel"
+                                                                    @if($isReadOnly) hidden @endif>
                                                                     <?php
                                                                     $getStatKel = $pengungsi->statKel;
                                                                     if ($getStatKel == 0) {
@@ -695,17 +759,15 @@
                                                                     <!-- <option selected value="{{ $pengungsi->statKel }}" hidden></option> -->
                                                                     <option selected value="{{ $pengungsi->statKel }}"
                                                                         hidden><?php echo $status; ?></option>
-                                                                    <option value=1>Ibu</option>
-                                                                    <option value=2>Anak</option>
-                                                                    <option value=3>Lainnya</option>
                                                                 </select>
                                                             </div>
 
                                                             <!-- jika pengungsi kepala keluarga sudah ditambahkan -->
                                                             <div class="form-group">
-                                                                <label for="kpl">Kepala Keluarga</label>
+                                                                <label for="kpl" @if($isReadOnly) hidden @endif>Kepala
+                                                                    Keluarga</label>
                                                                 <select class="form-control" id="kpl" name="kpl"
-                                                                    required>
+                                                                    @if($isReadOnly) hidden @endif required>
                                                                     <option selected value="{{$pengungsi->idKepala}}"
                                                                         hidden>{{$pengungsi->namaKepala}}
                                                                         <!-- {{ $pengungsi->lokKel}} -->
@@ -739,13 +801,15 @@
                                                         <div class="form-group">
                                                             <label for="gender">Jenis Kelamin</label>
                                                             <select class="form-control" id="gender" name="gender"
-                                                                required>
+                                                                @if($isReadOnly) disabled @endif required>
                                                                 <?php
                                                                     $getGender = $pengungsi->gender;
-                                                                    if ($getGender == 0) {
+                                                                    if ($getGender === 0) {
                                                                         $statGen = "Perempuan";
                                                                     } else if ($getGender == 1) {
                                                                         $statGen = "Laki-laki";
+                                                                    } else{
+                                                                        $statGen = "-";
                                                                     }
                                                                     ?>
                                                                 <option selected value="{{$pengungsi->gender}}" hidden>
@@ -759,10 +823,37 @@
                                                             <label for="umur">Umur</label>
                                                             <input type="text" class="form-control" id="umur"
                                                                 name="umur" placeholder="Masukan umur"
-                                                                value="{{$pengungsi->umur}}" required>
+                                                                value="{{$pengungsi->umur}}" @if($isReadOnly) readonly
+                                                                @endif required>
                                                         </div>
 
-                                                        @auth('web')
+                                                        @auth('medis')
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPosko">Waktu Pemeriksaan</label>
+                                                            <input type="date" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan tanggal"
+                                                                name="tanggal" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="time" class="form-control"
+                                                                id="exampleInputnama" placeholder="Masukan waktu"
+                                                                name="waktu" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPosko">Keluhan</label>
+                                                            <input type="text" class="form-control" id="inputKeluhan"
+                                                                placeholder="Masukan keluhan" name="keluhan" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="exampleInputPosko">Riwayat Penyakit</label>
+                                                            <input type="text" name="riwayat_penyakit" 
+                                                            placeholder="Masukan riwayat penyakit"  class="form-control"
+                                                            value="{{ $pengungsi->riwayat_penyakit ?? '' }}">
+                                                        </div>
+                                                        @endauth
+
+                                                        @if(Auth::guard('web')->check() ||
+                                                        Auth::guard('medis')->check())
                                                         <div class="form-group">
                                                             <label for="statKon">Kondisi</label>
                                                             <select class="form-control" id="statKon" name="statKon"
@@ -927,7 +1018,7 @@
 
                                         <input type="hidden" name="ekspresi" id="ekspresi-{{$pengungsi->idPengungsi}}">
 
-                                        
+
                                         <div class="form-group">
                                             <label>1. Apakah Anda merasa cemas akhir-akhir ini?</label><br>
                                             @foreach([0 => 'Tidak Pernah', 1 => 'Sedikit', 2 => 'Beberapa Kali', 3 =>
@@ -1011,6 +1102,8 @@
 
                     </td>
                     </tr>
+
+                    
                     @endforeach
                     </tbody>
                     </table>
@@ -1023,6 +1116,75 @@
         </div>
     </div>
     </div>
+
+    @foreach ($data as $key => $pengungsi)
+    <div class="modal fade" id="modal-konMed-{{$pengungsi->idPengungsi}}">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Tambah Pengungsi</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                 <div class="table-responsive">
+                    <table id="example2" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal Pemeriksaan</th>
+                                <th>Keluhan</th>
+                                <th>Riwayat Penyakit</th>
+                                <th>Kondisi Fisik</th>
+                            </tr>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $m = 0; ?>
+                            @foreach($data as $pengungsis)
+                                @if ($pengungsis->waktuPeriksa !== null && $pengungsis->idPengungsi == $pengungsi->idPengungsi)
+                            <?php $m++; ?>
+                            <tr>
+                                <td>{{ $m }}</td>
+                                <td>{{ $pengungsis->waktuPeriksa }}</td>
+                                <td>{{ $pengungsis->keluhan }}</td>
+                                <td>{{ $pengungsis->riwayat_penyakit }}</td>
+                                <td>
+                                        <?php
+                                        $kondisi = $pengungsis->konfis;
+                                        if ($kondisi == 0) {
+                                            echo "Sehat";
+                                        } else if ($kondisi == 1) {
+                                            echo "Luka Ringan";
+                                        } else if ($kondisi == 2) {
+                                            echo "Luka Sedang";
+                                        } else if ($kondisi == 3) {
+                                            echo "Luka Berat";
+                                        }
+                                            else if ($kondisi == 4) {
+                                                echo "Hamil atau menyusui";
+                                            
+                                        } else if ($kondisi == 5) {
+                                            echo "Difabel";
+                                        }
+                                        ?>
+                                    </td>
+                            </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                                </div>
+                            </div>
+                            <!-- /.modal-content -->
+                        </div>
+                        <!-- /.modal-dialog -->
+                    </div>
+                    @endforeach
+
+
 
 
 
@@ -1115,8 +1277,10 @@
                             <td>${pengungsi.lokasi ? pengungsi.lokasi : pengungsi.alamat}</td>
                             <td style="text-align: center;">${gender}</td>
                             <td>${pengungsi.umur}</td>
-                            @auth('web')
+                            @if(Auth::guard('web')->check() || Auth::guard('medis')->check())
                             <td style="text-align: center;">${kondisi}</td>
+                            @endauth
+                            @auth('web')
                             <td style="text-align: center;">${statPsiko}</td>
                             @endauth
                             <td style="text-align: center;">${statPos}</td>
