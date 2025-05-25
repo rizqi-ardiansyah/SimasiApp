@@ -28,6 +28,8 @@
                             {{ auth('web')->user()->firstname }} {{ auth('web')->user()->lastname }}
                             @elseif(auth('medis')->check())
                             {{ auth('medis')->user()->firstname }} {{ auth('medis')->user()->lastname }}
+                            @elseif(auth('psikolog')->check())
+                            {{ auth('psikolog')->user()->firstname }} {{ auth('psikolog')->user()->lastname }}
                             @endif
                         </a>
                     </div>
@@ -105,6 +107,7 @@
                 </li>
                 @endauth
 
+                @if(Auth::guard('web')->check() || Auth::guard('karyawan')->check())
                 <li class="nav-item">
                     <a href="{{url('/kepulangan')}}" class="nav-link {{ request()->is('kepulangan') ? 'active' : ''}}">
                         <i class="nav-icon fas fa-solid fa-home"></i>
@@ -115,6 +118,8 @@
                         </p>
                     </a>
                 </li>
+                @endauth
+
 
 
 

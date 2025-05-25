@@ -52,6 +52,10 @@ return [
             'driver' => 'session', 
             'provider' => 'medis', 
         ],
+        'psikolog' => [ 
+            'driver' => 'session', 
+            'provider' => 'psikolog', 
+        ],
     ],
 
     /*
@@ -87,6 +91,10 @@ return [
         'medis' => [ 
             'driver' => 'eloquent', 
             'model' => App\Models\Medis::class, 
+        ],
+        'psikolog' => [ 
+            'driver' => 'eloquent', 
+            'model' => App\Models\Psikolog::class, 
         ]
     ],
 
@@ -126,6 +134,12 @@ return [
         ],
         'medis' => [ 
             'provider' => 'medis', 
+            'table' => 'password_resets', 
+            'expire' => 60, 
+            'throttle' => 60,
+        ],
+        'psikolog' => [ 
+            'provider' => 'psikolog', 
             'table' => 'password_resets', 
             'expire' => 60, 
             'throttle' => 60,

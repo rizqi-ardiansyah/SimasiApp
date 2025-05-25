@@ -45,6 +45,13 @@ class LoginController extends Controller
             }
         }
 
+        if ($psikolog = \App\Models\Psikolog::where('email', $request->email)->first()) {
+            if (Auth::guard('psikolog')->attempt($credentials)) {
+                session()->put('psikolog_user_id', Auth::guard('psikolog')->id());
+                return redirect()->route('dashboard');
+            }
+        }
+
         return back()->withErrors(['email' => 'Email atau password salah.']);
 
 

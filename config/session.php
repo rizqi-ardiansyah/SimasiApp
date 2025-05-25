@@ -33,6 +33,11 @@ return [
             'provider' => 'karyawans',
             'cookie' => 'session_karyawan', // Tambahkan nama cookie unik untuk 'karyawan'
         ],
+        'psikolog' => [
+            'driver' => 'session',
+            'provider' => 'psikolog',
+            'cookie' => 'session_karyawan', // Tambahkan nama cookie unik untuk 'karyawan'
+        ]
     ],
 
     'driver' => env('SESSION_DRIVER', 'file'),

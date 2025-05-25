@@ -207,7 +207,9 @@
                         <table id="example2" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
+                                    @auth('web')
                                     <th>No</th>
+                                    @endauth
                                     <th>Nama</th>
                                     <th>Waktu</th>
                                     <th>Lokasi</th>
@@ -363,12 +365,12 @@
                                 @endauth
 
 
-                                @auth('medis')
+                                @if(Auth::guard('medis')->check() || Auth::guard('psikolog')->check())
                                 <?php $i = 0;?>
                                 @foreach ($data as $key => $bencana)
                                 <tr>
                                     @if($bencana->status == 3)
-                                    <td>{{ $data->firstItem() + $key }}</td>
+                                    <!-- <td>{{ $data->firstItem() + $key }}</td> -->
                                     <td>{{ $bencana->namaBencana }}</td>
                                     <td>{{ $bencana->waktu }}</td>
                                     <td>{{ $bencana->alamat }}</td>

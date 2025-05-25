@@ -245,7 +245,7 @@
                                 @endforeach
                                 @endauth
 
-                                @auth('medis')
+                                @if(Auth::guard('medis')->check() || Auth::guard('psikolog')->check())
                                 <?php $i = 0;?>
                                 @foreach($data as $key => $posko)
                                 <tr>

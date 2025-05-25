@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Karyawan;
 use App\Models\Medis;
+use App\Models\Psikolog;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
@@ -137,10 +138,19 @@ class AdminSeeder extends Seeder
         //     'remember_token' => Str::random(10),
         // ]);
 
-        $medis1 = Medis::create([
+        // $medis1 = Medis::create([
+        //     'firstname' => 'Tim',
+        //     'lastname' => 'Medis 1',
+        //     'email' => 'medis1@gmail.com',
+        //     'email_verified_at' => now(),
+        //     'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        //     'remember_token' => Str::random(10),
+        // ]);
+
+        $psikolog1 = Psikolog::create([
             'firstname' => 'Tim',
-            'lastname' => 'Medis 1',
-            'email' => 'medis1@gmail.com',
+            'lastname' => 'Psikolog 1',
+            'email' => 'psikolog1@gmail.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),

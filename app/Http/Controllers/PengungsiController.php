@@ -49,54 +49,55 @@ class PengungsiController extends Controller
         session()->put('idTrc', $this->idTrc); 
 
         session()->put('idPosko', $request->id);
-        $pengungsi = Pengungsi::select(
-            DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
-            Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
-            Daerah ',kpl.detail,' ')
-        as lokasi"),
-            DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
-            Daerah ',kpl.detail,' ')
-        as lokKel"),'kpl.detail',
-            'pengungsi.nama',
-            'pengungsi.id as idPengungsi',
-            'pengungsi.alamat as alamatPengungsi',
-            'int.kpl_id',
-            'statKel',
-            'telpon',
-            'gender',
-            'umur',
-            'statPos',
-            'int.posko_id as idPospeng',
-            'statKon',
-            'pengungsi.created_at as tglMasuk',
-            'p.id as idPosko',
-            'p.nama as namaPosko',
-            'kpl.id as idKepala',
-            'kpl.nama as namaKepala',
-            'kpl.provinsi as provinsi',
-            'kpl.kota as kota',
-            'kpl.kecamatan as kecamatan',
-            'kpl.kelurahan as kelurahan',
-            'kpl.detail as detail','kp.status as hasilPsiko',
-            'kp.jawaban1', 'kp.jawaban2', 'kp.jawaban3', 
-            'kp.jawaban4', 'kp.jawaban5', 'kp.jawaban6',
-            'km.tanggal as tglMedis',
-            'km.waktu as waktuMedis',
-            'km.keluhan',
-            'km.riwayat_penyakit',
-            'km.konfis',
-            DB::raw("concat(km.tanggal,' ', km.waktu) as waktuPeriksa")
-        )
-            ->join('integrasi as int','int.png_id','=','pengungsi.id')
-            ->join('posko as p', 'p.id','=','int.posko_id')
-            ->leftJoin('kondisi_psikologis as kp', 'kp.id','=','int.psikologis_id')
-            ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
-            ->leftJoin('kondisi_medis as km', 'km.idPengungsi', '=', 'pengungsi.id') // 
-            ->where('int.posko_id', $request->id)
-            ->orderBy('pengungsi.nama', 'asc')
-            ->distinct()
-            // model paginate agar banyak paginate bisa muncul dalam 1 page
-            ->paginate(10, ['*'], 'p');
+            $pengungsi = Pengungsi::select(
+                DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
+                Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+                Daerah ',kpl.detail,' ')
+            as lokasi"),
+                DB::raw("concat('Kec. ',kpl.kecamatan,', Ds. ',kpl.kelurahan,',
+                Daerah ',kpl.detail,' ')
+            as lokKel"),'kpl.detail',
+                'pengungsi.nama',
+                'pengungsi.id as idPengungsi',
+                'pengungsi.alamat as alamatPengungsi',
+                'int.kpl_id',
+                'statKel',
+                'telpon',
+                'gender',
+                'umur',
+                'statPos',
+                'int.posko_id as idPospeng',
+                'statKon',
+                'pengungsi.created_at as tglMasuk',
+                'p.id as idPosko',
+                'p.nama as namaPosko',
+                'kpl.id as idKepala',
+                'kpl.nama as namaKepala',
+                'kpl.provinsi as provinsi',
+                'kpl.kota as kota',
+                'kpl.kecamatan as kecamatan',
+                'kpl.kelurahan as kelurahan',
+                'kpl.detail as detail','kp.status as hasilPsiko',
+                'kp.created_at as waktuPsiko',
+                'kp.jawaban1', 'kp.jawaban2', 'kp.jawaban3', 
+                'kp.jawaban4', 'kp.jawaban5', 'kp.jawaban6',
+                'km.tanggal as tglMedis',
+                'km.waktu as waktuMedis',
+                'km.keluhan',
+                'km.riwayat_penyakit',
+                'km.konfis',
+                DB::raw("concat(km.tanggal,' ', km.waktu) as waktuPeriksa")
+            )
+                ->join('integrasi as int','int.png_id','=','pengungsi.id')
+                ->join('posko as p', 'p.id','=','int.posko_id')
+                ->leftJoin('kondisi_psikologis as kp', 'kp.id','=','int.psikologis_id')
+                ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+                ->leftJoin('kondisi_medis as km', 'km.idPengungsi', '=', 'pengungsi.id') // 
+                ->where('int.posko_id', $request->id)
+                ->orderBy('pengungsi.nama', 'asc')
+                ->distinct()
+                // model paginate agar banyak paginate bisa muncul dalam 1 page
+                ->paginate(10, ['*'], 'p');
 
         $pengungsiKeluar = Pengungsi::select(
             DB::raw("concat('Prov. ',kpl.provinsi,', Kota ',kpl.kota,',
@@ -318,7 +319,29 @@ class PengungsiController extends Controller
 
         $psikologis = KondisiPsikologis::where('idPengungsi', $request->idPengungsi)->first();
 
+        $konpsiko = DB::table('kondisi_psikologis as kp')
+    ->join('pengungsi as p', 'kp.idPengungsi', '=', 'p.id')
+    ->select(
+        'kp.id as idPsikologis',
+        'kp.idPengungsi',
+        'kp.created_at as waktuPsiko',
+        'kp.status as hasilPsiko',
+        'kp.jawaban1',
+        'kp.jawaban2',
+        'kp.jawaban3',
+        'kp.jawaban4',
+        'kp.jawaban5',
+        'kp.jawaban6',
+        'kp.skor_wajah',
+        'p.nama as namaPengungsi'
+    )
+    ->orderBy('kp.idPengungsi')
+    ->orderBy('kp.created_at')
+    ->get(); // <--- Bukan grouped
+
+
         return view('admin.pengungsi.index', [
+            'konpsiko' => $konpsiko,
             'idBencana' => $this->idBencana,
             'anggotaKpl' => $anggotaKpl,
             'pengKel' => $pengungsiKeluar,
