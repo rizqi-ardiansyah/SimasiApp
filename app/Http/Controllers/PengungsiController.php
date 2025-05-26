@@ -81,18 +81,27 @@ class PengungsiController extends Controller
                 'kp.created_at as waktuPsiko',
                 'kp.jawaban1', 'kp.jawaban2', 'kp.jawaban3', 
                 'kp.jawaban4', 'kp.jawaban5', 'kp.jawaban6',
+                'kp.status as statusPsikologis',
                 'km.tanggal as tglMedis',
                 'km.waktu as waktuMedis',
                 'km.keluhan',
                 'km.riwayat_penyakit',
                 'km.konfis',
+                'b.nama as namaBencana',
+                'b.tanggal as tanggalBencana',
+                'b.status as statusBencana',
+                'kr.status as statusRumah',
+                'ks.status as statusSekitar',
                 DB::raw("concat(km.tanggal,' ', km.waktu) as waktuPeriksa")
             )
                 ->join('integrasi as int','int.png_id','=','pengungsi.id')
                 ->join('posko as p', 'p.id','=','int.posko_id')
                 ->leftJoin('kondisi_psikologis as kp', 'kp.id','=','int.psikologis_id')
                 ->leftJoin('kepala_keluarga as kpl','kpl.id','=','int.kpl_id')
+                ->leftJoin('kondisi_rumah as kr', 'kr.id', '=', 'int.kondisiRumah_id')
+                ->leftJoin('kondisi_sekitar as ks', 'ks.id', '=', 'int.kondisiSekitar_id')
                 ->leftJoin('kondisi_medis as km', 'km.idPengungsi', '=', 'pengungsi.id') // 
+                ->leftJoin('bencana as b', 'b.id', '=', 'int.bencana_id')
                 ->where('int.posko_id', $request->id)
                 ->orderBy('pengungsi.nama', 'asc')
                 ->distinct()
@@ -319,9 +328,67 @@ class PengungsiController extends Controller
 
         $psikologis = KondisiPsikologis::where('idPengungsi', $request->idPengungsi)->first();
 
+        $kepulangan = Pengungsi::select(
+            DB::raw("concat('Prov. ', kpl.provinsi, ', Kota ', kpl.kota, ', Kec. ', kpl.kecamatan, ', Ds. ', kpl.kelurahan, ', Daerah ', kpl.detail) as lokasi"),
+            DB::raw("concat('Kec. ', kpl.kecamatan, ', Ds. ', kpl.kelurahan, ', Daerah ', kpl.detail) as lokKel"),
+            'pengungsi.nama',
+            'pengungsi.id as idPengungsi',
+            'pengungsi.alamat as alamatPengungsi',
+            'pengungsi.umur',
+            'pengungsi.gender',
+            'pengungsi.telpon',
+            'pengungsi.created_at as tglMasuk',
+            
+            'int.kpl_id',
+            'int.posko_id as idPospeng',
+            'int.bencana_id',
+            'int.kondisiRumah_id',
+            'int.kondisiSekitar_id',
+            'int.psikologis_id',
+        
+            'p.id as idPosko',
+            'p.namaPosko',
+        
+            'kpl.id as idKepala',
+            'kpl.nama as namaKepala',
+            'kpl.provinsi',
+            'kpl.kota',
+            'kpl.kecamatan',
+            'kpl.kelurahan',
+            'kpl.detail',
+
+            'kr.picRumah',
+            'kr.keterangan as ketRum',
+            'ks.picLokasi',
+            'ks.keterangan as ketLok',
+        
+            'pengungsi.statKon as statusFisik',
+            'kr.status as statusRumah',
+            'kr.id as idKonRum',
+            'ks.status as statusSekitar',
+            'kp.status as statusPsikologis',
+            'kp.jawaban1', 'kp.jawaban2', 'kp.jawaban3', 
+            'kp.jawaban4', 'kp.jawaban5', 'kp.jawaban6',
+            'b.nama as namaBencana',
+            'b.tanggal as tanggalBencana',
+            'b.status as statusBencana'
+        )
+        ->join('integrasi as int', 'int.png_id', '=', 'pengungsi.id')
+        ->join('posko as p', 'p.id', '=', 'int.posko_id')
+        ->leftJoin('kepala_keluarga as kpl', 'kpl.id', '=', 'int.kpl_id')
+        ->leftJoin('kondisi_rumah as kr', 'kr.id', '=', 'int.kondisiRumah_id')
+        ->leftJoin('kondisi_sekitar as ks', 'ks.id', '=', 'int.kondisiSekitar_id')
+        ->leftJoin('kondisi_psikologis as kp', 'kp.id', '=', 'int.psikologis_id')
+        ->leftJoin('bencana as b', 'b.id', '=', 'int.bencana_id')
+        ->where('int.posko_id', $request->id)
+        ->orderBy('int.kpl_id', 'desc')
+        ->distinct()
+        ->paginate(10, ['*'], 'p');
+
+
         $konpsiko = DB::table('kondisi_psikologis as kp')
-    ->join('pengungsi as p', 'kp.idPengungsi', '=', 'p.id')
-    ->select(
+        ->join('pengungsi as p', 'kp.idPengungsi', '=', 'p.id')
+        ->select(
         'kp.id as idPsikologis',
         'kp.idPengungsi',
         'kp.created_at as waktuPsiko',
@@ -369,7 +436,8 @@ class PengungsiController extends Controller
             'getKeluar' => $getKeluar,
             'getSehat' => $getTtlSehat,
             'getLokasi' => $getLokasi,
-            'psikologis' => $psikologis
+            'psikologis' => $psikologis,
+            'kepulangan' => $kepulangan
         ]);
         // return view('admin.pengungsi.index',['data' => $pengungsi],['kpl'=>$getKpl],['datas' => $pengungsi]);
     }
@@ -667,7 +735,7 @@ class PengungsiController extends Controller
                             'umur' => $request->umur,
                             'statPos' => $request->statPos,
                             // 'posko_id' => $request->posko_id,
-                            'statKon' => $request->statKon,
+                            // 'statKon' => $request->statKon,z
                     ]);
                     Integrasi::create([
                         'bencana_id' => $request->bencana_id,
@@ -701,7 +769,7 @@ class PengungsiController extends Controller
                     'umur' => $request->umur,
                     'statPos' => $request->statPos,
                     // 'posko_id' => $request->posko_id,
-                    'statKon' => $request->statKon,
+                    // 'statKon' => $request->statKon,
                 ]);
                 Integrasi::create([
                     'bencana_id' => $request->bencana_id,

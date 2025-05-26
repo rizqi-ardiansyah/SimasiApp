@@ -221,7 +221,7 @@
                                                     placeholder="Masukan umur" required>
                                             </div>
 
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="statKon">Kondisi</label>
                                                 <select class="form-control" id="statKon" name="statKon" required>
                                                     <option value=0>Sehat</option>
@@ -231,7 +231,7 @@
                                                     <option value=4>Hamil atau menyusui</option>
                                                     <option value=5>Difabel</option>
                                                 </select>
-                                            </div>
+                                            </div> -->
 
                                             <div class="form-group">
                                                 <label for="statPos">Status</label>
@@ -333,6 +333,9 @@
                                     <th>Kondisi Psikologi</th>
                                     @endauth
                                     <th>Status</th>
+                                    @auth('psikolog')
+                                    <th>Status Pulang</th>
+                                    @endauth
                                     @if(Auth::guard('web')->check() || Auth::guard('karyawan')->check())
                                     <th>Aksi</th>
                                     @endauth
@@ -452,16 +455,57 @@
                                         <?php
                                         $statPos = $pengungsi->statPos;
                                         if ($statPos === 0) {
-                                            echo "<span class='badge badge-danger'>Keluar</span>";
+                                            echo "<span class='badge badge-danger' style='font-size: 14px'>Keluar</span>";
                                         } else if ($statPos === 1) {
-                                            echo "<span class='badge badge-success'>Di Posko</span>";
+                                            echo "<span class='badge badge-success' style='font-size: 14px'>Di Posko</span>";
                                         }else if ($statPos === 2) {
-                                            echo "<span class='badge badge-danger'>Pencarian</span>";
+                                            echo "<span class='badge badge-danger' style='font-size: 14px'>Pencarian</span>";
                                         }else {
-                                            echo "<span class='badge badge-warning'>Belum diisi</span>";
+                                            echo "<span class='badge badge-warning' style='font-size: 14px'>Belum diisi</span>";
                                         }
                                         ?>
                                     </td>
+
+                                    @auth('psikolog')
+                                    <td>
+                                        <?php
+                                            $bolehPulang = false;
+
+                                            // Cek apakah semua status tidak null
+                                            if (
+                                                !is_null($pengungsi->statusBencana) &&
+                                                !is_null($pengungsi->statKon) &&
+                                                !is_null($pengungsi->statusRumah) &&
+                                                !is_null($pengungsi->statusSekitar) &&
+                                                !is_null($pengungsi->statusPsikologis)
+                                            ) {
+                                                // Lanjutkan cek logika boleh pulang
+                                                if (
+                                                    $pengungsi->statusBencana == 3 &&
+                                                    $pengungsi->statKon != 3 &&
+                                                    $pengungsi->statusRumah != 3 &&
+                                                    $pengungsi->statusSekitar != 3 &&
+                                                    $pengungsi->statusPsikologis == 1
+                                                ) {
+                                                    $bolehPulang = true;
+                                                }
+                                            }
+
+                                            // Tampilkan badge
+                                            if ($bolehPulang) {
+                                                echo "<span class='badge badge-success' style='font-size: 14px'>Boleh Pulang</span>";
+                                            } else {
+                                                echo "<span class='badge badge-danger' style='font-size: 14px'>Belum Pulang</span>";
+                                            }
+                                        ?>
+                                        <a href="#" class="btn btn-primary btn-xs" style="font-size: 14px;"
+                                            data-toggle="modal"
+                                            data-target="#modal-cekPulang-{{$pengungsi->idPengungsi}}"><i
+                                                class="fas fa-eye">
+                                            </i> Detail </a>
+                                    </td>
+                                    @endauth
+
                                     @if(Auth::guard('web')->check() || Auth::guard('karyawan')->check())
                                     <td>
                                         <div class="btn-group">
@@ -664,8 +708,7 @@
                                                             </div>
                                                             @endauth
 
-                                                            @if(Auth::guard('web')->check() ||
-                                                            Auth::guard('medis')->check())
+                                                            @auth('medis')
                                                             <div class="form-group">
                                                                 <label for="statKon">Kondisi</label>
                                                                 <select class="form-control" id="statKon" name="statKon"
@@ -889,8 +932,7 @@
                                                         </div>
                                                         @endauth
 
-                                                        @if(Auth::guard('web')->check() ||
-                                                        Auth::guard('medis')->check())
+                                                        @auth('medis')
                                                         <div class="form-group">
                                                             <label for="statKon">Kondisi</label>
                                                             <select class="form-control" id="statKon" name="statKon"
@@ -1282,7 +1324,7 @@
                     </button>
                 </div>
 
-               
+
                 <div class="modal-body">
                     <div class="table-responsive">
                         <table id="example2" class="table table-bordered table-hover">
@@ -1304,28 +1346,28 @@
                             <tbody>
                                 @php $m = 1; @endphp
                                 <tr>
-                                @php
+                                    @php
                                     $jawabanMap = [
-                                        0 => 'Tidak Pernah',
-                                        1 => 'Sedikit',
-                                        2 => 'Beberapa Kali',
-                                        3 => 'Sering',
-                                        4 => 'Selalu'
+                                    0 => 'Tidak Pernah',
+                                    1 => 'Sedikit',
+                                    2 => 'Beberapa Kali',
+                                    3 => 'Sering',
+                                    4 => 'Selalu'
                                     ];
                                     $ekspresiWajah = [
-                                        0 => 'Marah',
-                                        1 => 'Senang',
-                                        2 => 'Netral',
-                                        3 => 'Sedih',
-                                        4 => 'Terkejut'
+                                    0 => 'Marah',
+                                    1 => 'Senang',
+                                    2 => 'Netral',
+                                    3 => 'Sedih',
+                                    4 => 'Terkejut'
                                     ];
                                     $statusPsiko = [
-                                        0 => 'Belum Baik',
-                                        1 => 'Baik'
+                                    0 => 'Belum Baik',
+                                    1 => 'Baik'
                                     ];
-                                @endphp
-                                   @foreach($konpsiko as $keys => $pengungsis)
-                                   @if ($pengungsis->idPengungsi == $pengungsi->idPengungsi)
+                                    @endphp
+                                    @foreach($konpsiko as $keys => $pengungsis)
+                                    @if ($pengungsis->idPengungsi == $pengungsi->idPengungsi)
                                     <td>{{ $m++ }}</td>
                                     <td>{{ $pengungsis->waktuPsiko }}</td>
                                     <td>{{ $jawabanMap[$pengungsis->jawaban1] ?? 'Tidak diketahui' }}</td>
@@ -1339,6 +1381,169 @@
                                 </tr>
                                 @endif
                                 @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    @endforeach
+
+    @foreach ($data as $key => $pengungsis)
+    <div class="modal fade" id="modal-cekPulang-{{$pengungsis->idPengungsi}}">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Detail Keputusan Kepulangan <b>{{ $pengungsi->nama }}</b></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <!-- <th>No</th> -->
+                                    <th>Kondisi Bencana</th>
+                                    <th>Kondisi Fisik</th>
+                                    <th>Kondisi Rumah</th>
+                                    <th>Kondisi Sekitar Rumah</th>
+                                    <th>Kondisi Psikologis</th>
+                                    <th>Status Pulang</th>
+                                </tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="margin-bottom: 6px;">
+                                            <?php
+                                            $statBen = $pengungsis->statusBencana;
+                                            if ($statBen === 1) {
+                                                echo "<span class='badge badge-danger' style='font-size: 14px'>Siaga</span>";
+                                            } else if ($statBen == 2) {
+                                                echo "<span class='badge badge-danger' style='font-size: 14px' >Tanggap Darurat</span>";
+                                            }else if ($statBen == 3) {
+                                                echo "<span class='badge badge-success' style='font-size: 14px' >Pemulihan</span>";
+                                            }else if ($statBen == 0) {
+                                                echo "<span class='badge badge-info' style='font-size: 14px' >Selesai</span>";
+                                            }else{
+                                                echo "-";
+                                            }
+                                            ?>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="margin-bottom: 6px;">
+                                            <?php
+                                            $statFis = $pengungsis->statKon;
+                                            if ($statFis === 0) {
+                                                echo "<span class='badge badge-success' style='font-size: 14px'>Sehat</span>";
+                                            } else if ($statFis == 1) {
+                                                echo "<span class='badge badge-info' style='font-size: 14px'>Luka Ringan</span>";
+                                            } else if ($statFis == 2) {
+                                                echo "<span class='badge badge-info' style='font-size: 14px'>Luka Sedang</span>";
+                                            } else if ($statFis == 3) {
+                                                echo "<span class='badge badge-danger' style='font-size: 14px'>Luka Berat</span>";
+                                            } else if ($statFis== 4) {
+                                                echo "<span class='badge badge-info' style='font-size: 14px'>Hamil atau Menyusui</span>";
+                                            } else if ($statFis == 5) {
+                                                echo "<span class='badge badge-info' style='font-size: 14px'>Difabel</span>";
+                                            }else{
+                                                echo "-";
+                                            }
+                                            ?>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="margin-bottom: 6px;">
+                                            <?php
+                                            $statRum = $pengungsis->statusRumah;
+                                            if ($statRum === 0) {
+                                                echo "<span class='badge badge-success' style='font-size: 14px'>Aman</span>";
+                                            } else if ($statRum == 1) {
+                                                echo "<span class='badge badge-info' style='font-size: 14px'>Rusak Ringan</span>";
+                                            } else if ($statRum == 2) {
+                                                echo "<span class='badge badge-info' style='font-size: 14px'>Rusak Sedang</span>";
+                                            } else if ($statFis == 3) {
+                                                echo "<span class='badge badge-danger' style='font-size: 14px'>Rusak Berat</span>";
+                                            } else{
+                                                echo "-";
+                                            }
+                                            ?>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="margin-bottom: 6px;">
+                                            <?php
+                                        $statSek = $pengungsis->statusSekitar;
+                                        if ($statSek === 0) {
+                                            echo "<span class='badge badge-success' style='font-size: 14px'>Aman</span>";
+                                        } else if ($statSek == 1) {
+                                            echo "<span class='badge badge-info' style='font-size: 14px'>Rusak Ringan</span>";
+                                        } else if ($statSek == 2) {
+                                            echo "<span class='badge badge-info' style='font-size: 14px'>Rusak Sedang</span>";
+                                        } else if ($statSek == 3) {
+                                            echo "<span class='badge badge-danger' style='font-size: 14px'>Rusak Berat</span>";
+                                        } else{
+                                            echo "-";
+                                        }
+                                        ?>
+                                        </div>
+                                    </td>
+                                    <td>
+                                            <div style="margin-bottom: 6px;">
+                                                <?php
+                                                $statPsiko = $pengungsis->statusPsikologis;
+                                                if ($statPsiko === 0) {
+                                                    echo "<span class='badge badge-danger' style='font-size: 14px'>Belum Baik</span>";
+                                                } else if ($statPsiko == 1) {
+                                                    echo "<span class='badge badge-success' style='font-size: 14px'>Baik</span>";
+                                                } else {
+                                                    echo "-";
+                                                }
+                                                ?>
+                                            </div>
+                                    </td>
+                                    <td>
+                                                <?php
+                                                    $bolehPulang = false;
+
+                                                    // Cek apakah semua status tidak null
+                                                    if (
+                                                        !is_null($pengungsis->statusBencana) &&
+                                                        !is_null($pengungsis->statKon) &&
+                                                        !is_null($pengungsis->statusRumah) &&
+                                                        !is_null($pengungsis->statusSekitar) &&
+                                                        !is_null($pengungsis->statusPsikologis)
+                                                    ) {
+                                                        // Lanjutkan cek logika boleh pulang
+                                                        if (
+                                                            $pengungsis->statusBencana == 3 &&
+                                                            $pengungsis->statKon != 3 &&
+                                                            $pengungsis->statusRumah != 3 &&
+                                                            $pengungsis->statusSekitar != 3 &&
+                                                            $pengungsis->statusPsikologis == 1
+                                                        ) {
+                                                            $bolehPulang = true;
+                                                        }
+                                                    }
+
+                                                    // Tampilkan badge
+                                                    if ($bolehPulang) {
+                                                        echo "<span class='badge badge-success' style='font-size: 14px'>Boleh Pulang</span>";
+                                                    } else {
+                                                        echo "<span class='badge badge-danger' style='font-size: 14px'>Belum Pulang</span>";
+                                                    }
+                                                ?>
+                                            </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
